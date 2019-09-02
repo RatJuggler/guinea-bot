@@ -10,14 +10,22 @@ class GuineaPig:
         self.thirst = thirst
 
     def is_tired(self, state):
+        # We won't sleep if we are hungry or thirsty.
+        if self.is_hungry(state) or self.is_thirsty():
+            return False
         if state == "SLEEPING":
-            return self.tired > 20
+            # If we are already sleeping, carry on sleeping.
+            return self.tired > 30
         else:
             return self.tired > 80
 
     def is_hungry(self, state):
+        # We won't eat if we are thirsty.
+        if self.is_thirsty():
+            return False
         if state == "EATING":
-            return self.hunger > 20
+            # If already eating, keep on eating.
+            return self.hunger > 30
         else:
             return self.hunger > 80
 
@@ -26,7 +34,7 @@ class GuineaPig:
 
     @staticmethod
     def outside_bounds(attribute):
-        return attribute < 0 or attribute > 110
+        return attribute < 0 or attribute > 130
 
     def apply_changes(self, changes):
         self.tired += changes[0]
@@ -57,9 +65,9 @@ class Passive(State):
 
     def transition(self, gp: GuineaPig):
         gp.apply_changes(self.changes)
-        if not gp.is_tired(self.state) or gp.is_hungry(self.state) or gp.is_thirsty():
+        if not gp.is_tired(self.state):
             new_state = "AWAKE"
-        elif random.randint(1, 10) > 3:
+        elif random.randint(1, 10) > 8:
             new_state = "STANDBY"
         else:
             new_state = "SLEEPING"
@@ -93,7 +101,7 @@ if __name__ == "__main__":
     m.add_state("SLEEPING", Passive, [-20, 3, 1])
     m.add_state("AWAKE", Active, [5, 5, 2])
     m.add_state("STANDBY", Passive, [1, 3, 1])
-    m.add_state("EATING", Active, [5, -20, 4])
+    m.add_state("EATING", Active, [5, -10, 4])
     m.add_state("DRINKING", Active, [5, 5, -80])
     m.add_state("WANDERING", Active, [10, 10, 5])
     m.run("SLEEPING", GuineaPig(20, 10, 10), 2000, 15)
