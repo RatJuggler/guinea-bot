@@ -1,11 +1,10 @@
-from statemachine import StateMachine
 import random
 
 
 class GuineaPig:
 
-    def __init__(self, state, tired, hunger, thirst):
-        self.state = state.upper()
+    def __init__(self, start_state, tired, hunger, thirst):
+        self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
