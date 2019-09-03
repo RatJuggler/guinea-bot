@@ -1,6 +1,6 @@
 import random
 
-from twitter_api import tweet
+from .twitter_api import tweet
 
 
 class GuineaPig:

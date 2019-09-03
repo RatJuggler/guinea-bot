@@ -1,5 +1,5 @@
-from statemachine import StateMachine
-from guineapig import GuineaPig, GuineaPigActive, GuineaPigPassive
+from .statemachine import StateMachine
+from .guineapig import GuineaPig, GuineaPigActive, GuineaPigPassive
 
 
 def build_guinea_pig_machine():
