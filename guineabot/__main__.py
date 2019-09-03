@@ -16,6 +16,7 @@ def build_guinea_pig_machine():
 def simulate_guinea_pig():
     gp_machine = build_guinea_pig_machine()
     gp_machine.run(GuineaPig("SLEEPING", 20, 10, 10))
+    gp_machine.stats()
 
 
 if __name__ == "__main__":
