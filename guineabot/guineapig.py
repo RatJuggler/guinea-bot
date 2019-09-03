@@ -56,11 +56,12 @@ class GuineaPig:
             print("Rogue: " + str(self))
             raise OverflowError
 
-    def new_state(self, state):
-        self.state = state.upper()
-        for state in self.tweets:
-            if state["state"] == self.state:
-                tweet(random.choice(state["tweets"]))
+    def update_state(self, new_state):
+        if self.state != new_state:
+            self.state = new_state
+            for state in self.tweets:
+                if state["state"] == self.state:
+                    tweet(random.choice(state["tweets"]))
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
@@ -90,7 +91,7 @@ class GuineaPigPassive(GuineaPigState):
             new_state = "THINKING"
         else:
             new_state = "SLEEPING"
-        gp.new_state(new_state)
+        gp.update_state(new_state)
         return gp
 
 
@@ -113,5 +114,5 @@ class GuineaPigActive(GuineaPigState):
             new_state = "THINKING"
         else:
             new_state = "AWAKE"
-        gp.new_state(new_state)
+        gp.update_state(new_state)
         return gp
