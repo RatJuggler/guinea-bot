@@ -1,4 +1,5 @@
 import json
+import pathlib
 import random
 
 from .twitter_api import tweet
@@ -6,14 +7,19 @@ from .twitter_api import tweet
 
 class GuineaPig:
 
+    @staticmethod
+    def __load_tweets():
+        tweets_file = pathlib.Path(__file__).parent / "guinea_pig_tweets.json"
+        with tweets_file.open('r') as f:
+            tweets = json.load(f)
+        return tweets["states"]
+
     def __init__(self, start_state, tired, hunger, thirst):
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
-        with open('guinea_pig_tweets.json', 'r') as f:
-            tweet_file = json.load(f)
-        self.tweets = tweet_file["states"]
+        self.tweets = self.__load_tweets()
 
     def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
