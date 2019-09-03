@@ -21,14 +21,14 @@ class StateMachine:
     def run(self, condition, days, interval):
         ticks = (24 * 60) // interval
         print("Days: {0}, Interval: {1} mins, Ticks: {2}".format(days, interval, ticks))
-        for run in range(days):
+        for day in range(days):
+            print("Day: {0}".format(day))
             for i in range(ticks):
                 new_state = condition.state
                 print("{0} >> {1}".format(self.format_time(i, interval), str(condition)))
                 state = self.states[new_state]
                 self.counts[new_state] += 1
                 condition = state.transition(condition)
-            print("Run: {0} - {1}".format(run, str(condition)))
         for state in self.counts:
             print("{0:9} : {1:04.2f}% - {2}".format(state, self.counts[state] / (ticks * days) * 100,
                                                     self.format_time(self.counts[state] // days, interval)))

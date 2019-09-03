@@ -10,21 +10,21 @@ class GuineaPig:
         self.hunger = hunger
         self.thirst = thirst
 
-    def is_tired(self, state):
+    def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
-        if self.is_hungry(state) or self.is_thirsty():
+        if self.is_hungry() or self.is_thirsty():
             return False
-        if state == "SLEEPING":
+        if self.state == "SLEEPING":
             # If we are already sleeping, carry on sleeping.
             return self.tired > 30
         else:
             return self.tired > 80
 
-    def is_hungry(self, state):
+    def is_hungry(self):
         # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
-        if state == "EATING":
+        if self.state == "EATING":
             # If already eating, keep on eating.
             return self.hunger > 30
         else:
@@ -53,7 +53,7 @@ class GuineaPig:
             .format(self.state, self.hunger, self.thirst, self.tired)
 
 
-class State:
+class GuineaPigState:
 
     def __init__(self, state, changes):
         self.state = state
@@ -63,14 +63,14 @@ class State:
         pass
 
 
-class Passive(State):
+class GuineaPigPassive(GuineaPigState):
 
     def __init__(self, state, changes):
-        super(Passive, self).__init__(state, changes)
+        super(GuineaPigPassive, self).__init__(state, changes)
 
     def transition(self, gp: GuineaPig):
         gp.update(self.changes)
-        if not gp.is_tired(self.state):
+        if not gp.is_tired():
             new_state = "AWAKE"
         elif random.randint(1, 10) > 8:
             new_state = "STANDBY"
@@ -80,16 +80,16 @@ class Passive(State):
         return gp
 
 
-class Active(State):
+class GuineaPigActive(GuineaPigState):
 
     def __init__(self, state, changes):
-        super(Active, self).__init__(state, changes)
+        super(GuineaPigActive, self).__init__(state, changes)
 
     def transition(self, gp: GuineaPig):
         gp.update(self.changes)
-        if gp.is_tired(self.state):
+        if gp.is_tired():
             new_state = "SLEEPING"
-        elif gp.is_hungry(self.state):
+        elif gp.is_hungry():
             new_state = "EATING"
         elif gp.is_thirsty():
             new_state = "DRINKING"
@@ -105,10 +105,10 @@ class Active(State):
 
 if __name__ == "__main__":
     m = StateMachine()
-    m.add_state("SLEEPING", Passive, [-20, 3, 1])
-    m.add_state("AWAKE", Active, [5, 5, 2])
-    m.add_state("STANDBY", Passive, [1, 3, 1])
-    m.add_state("EATING", Active, [5, -10, 4])
-    m.add_state("DRINKING", Active, [5, 5, -80])
-    m.add_state("WANDERING", Active, [10, 10, 5])
+    m.add_state("SLEEPING", GuineaPigPassive, [-20, 3, 1])
+    m.add_state("AWAKE", GuineaPigActive, [5, 5, 2])
+    m.add_state("STANDBY", GuineaPigPassive, [1, 3, 1])
+    m.add_state("EATING", GuineaPigActive, [5, -10, 4])
+    m.add_state("DRINKING", GuineaPigActive, [5, 5, -80])
+    m.add_state("WANDERING", GuineaPigActive, [10, 10, 5])
     m.run(GuineaPig("SLEEPING", 20, 10, 10), 2000, 15)
