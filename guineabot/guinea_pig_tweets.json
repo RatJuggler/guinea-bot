@@ -1,0 +1,52 @@
+{
+  "states": [
+    {
+      "state": "SLEEPING",
+      "tweets": [
+        "I am mostly sleeping.",
+        "Zzzzzzz",
+        "Time for a short nap."
+      ]
+    },
+    {
+      "state": "AWAKE",
+      "tweets": [
+          "I am mostly awake.",
+          "Is it dinner time yet?"
+      ]
+    },
+    {
+      "state": "THINKING",
+      "tweets": [
+          "I am mostly thinking.",
+          "In standby mode.",
+          "I think therefore I am a Guinea Pig."
+      ]
+    },
+    {
+      "state": "EATING",
+      "tweets": [
+          "I am mostly eating.",
+          "Mmmm hay.",
+          "Mmmm nuggets.",
+          "Mmmm salad."
+      ]
+    },
+    {
+      "state": "DRINKING",
+      "tweets": [
+          "I am mostly drinking.",
+          "Chewing water."
+      ]
+    },
+    {
+      "state": "WANDERING",
+      "tweets": [
+          "I am mostly wandering.",
+          "What's under this chair.",
+          "Under this sofa is very interesting.",
+          "This floor goes on for miles."
+      ]
+    }
+  ]
+}
