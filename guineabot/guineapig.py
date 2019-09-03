@@ -1,5 +1,7 @@
 import random
 
+from twitter_api import tweet
+
 
 class GuineaPig:
 
@@ -46,6 +48,7 @@ class GuineaPig:
 
     def new_state(self, state):
         self.state = state.upper()
+        tweet("I am mostly {0}...".format(self.state))
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
@@ -72,7 +75,7 @@ class GuineaPigPassive(GuineaPigState):
         if not gp.is_tired():
             new_state = "AWAKE"
         elif random.randint(1, 10) > 8:
-            new_state = "STANDBY"
+            new_state = "THINKING"
         else:
             new_state = "SLEEPING"
         gp.new_state(new_state)
@@ -95,7 +98,7 @@ class GuineaPigActive(GuineaPigState):
         elif random.randint(1, 10) > 8:
             new_state = "WANDERING"
         elif random.randint(1, 10) > 1:
-            new_state = "STANDBY"
+            new_state = "THINKING"
         else:
             new_state = "AWAKE"
         gp.new_state(new_state)
