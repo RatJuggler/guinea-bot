@@ -21,4 +21,10 @@ def create_twitter_api():
 
 def tweet(message):
     twitter_api = create_twitter_api()
-    twitter_api.update_status(message)
+    try:
+        twitter_api.update_status(message)
+    except tweepy.TweepError as error:
+        if error.api_code == 187:
+            print('Duplicate tweet discarded.')
+        else:
+            raise error
