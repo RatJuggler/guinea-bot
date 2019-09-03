@@ -1,3 +1,4 @@
+from time import sleep
 
 
 class StateMachine:
@@ -29,6 +30,7 @@ class StateMachine:
             state = self.states[new_state]
             self.counts[new_state] += 1
             data = state.transition(data)
+            sleep(self.interval)
 
     def stats(self):
         for state in self.counts:
