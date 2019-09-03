@@ -101,14 +101,3 @@ class GuineaPigActive(GuineaPigState):
             new_state = "AWAKE"
         gp.new_state(new_state)
         return gp
-
-
-if __name__ == "__main__":
-    m = StateMachine()
-    m.add_state("SLEEPING", GuineaPigPassive, [-20, 3, 1])
-    m.add_state("AWAKE", GuineaPigActive, [5, 5, 2])
-    m.add_state("STANDBY", GuineaPigPassive, [1, 3, 1])
-    m.add_state("EATING", GuineaPigActive, [5, -10, 4])
-    m.add_state("DRINKING", GuineaPigActive, [5, 5, -80])
-    m.add_state("WANDERING", GuineaPigActive, [10, 10, 5])
-    m.run(GuineaPig("SLEEPING", 20, 10, 10), 2000, 15)
