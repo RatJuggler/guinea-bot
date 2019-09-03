@@ -1,3 +1,4 @@
+import json
 import random
 
 from .twitter_api import tweet
@@ -10,6 +11,9 @@ class GuineaPig:
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
+        with open('guinea_pig_tweets.json', 'r') as f:
+            tweet_file = json.load(f)
+        self.tweets = tweet_file["states"]
 
     def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
@@ -48,7 +52,9 @@ class GuineaPig:
 
     def new_state(self, state):
         self.state = state.upper()
-        tweet("I am mostly {0}...".format(self.state))
+        for state in self.tweets:
+            if state["state"] == self.state:
+                tweet(random.choice(state["tweets"]))
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
