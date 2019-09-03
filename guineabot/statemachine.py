@@ -30,7 +30,7 @@ class StateMachine:
             state = self.states[new_state]
             self.counts[new_state] += 1
             data = state.transition(data)
-            sleep(self.interval)
+            sleep(self.interval * 60)
 
     def stats(self):
         for state in self.counts:
