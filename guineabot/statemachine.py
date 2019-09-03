@@ -18,18 +18,17 @@ class StateMachine:
         minutes = total_minutes - (hours * 60)
         return "{0:02d}:{1:02d}".format(hours, minutes)
 
-    def run(self, start_state, cargo, days, interval):
+    def run(self, condition, days, interval):
         ticks = (24 * 60) // interval
         print("Days: {0}, Interval: {1} mins, Ticks: {2}".format(days, interval, ticks))
-        new_state = start_state
         for run in range(days):
             for i in range(ticks):
-                new_state = new_state.upper()
-                print("{0} >> {1:9} - {2}".format(self.format_time(i, interval), new_state, str(cargo)))
+                new_state = condition.state
+                print("{0} >> {1}".format(self.format_time(i, interval), str(condition)))
                 state = self.states[new_state]
                 self.counts[new_state] += 1
-                (new_state, cargo) = state.transition(cargo)
-            print("Run: {0} - {1}".format(run, str(cargo)))
+                condition = state.transition(condition)
+            print("Run: {0} - {1}".format(run, str(condition)))
         for state in self.counts:
             print("{0:9} : {1:04.2f}% - {2}".format(state, self.counts[state] / (ticks * days) * 100,
                                                     self.format_time(self.counts[state] // days, interval)))

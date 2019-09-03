@@ -4,7 +4,8 @@ import random
 
 class GuineaPig:
 
-    def __init__(self, tired, hunger, thirst):
+    def __init__(self, state, tired, hunger, thirst):
+        self.state = state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
@@ -36,7 +37,7 @@ class GuineaPig:
     def outside_bounds(attribute):
         return attribute < 0 or attribute > 130
 
-    def apply_changes(self, changes):
+    def update(self, changes):
         self.tired += changes[0]
         self.hunger += changes[1]
         self.thirst += changes[2]
@@ -44,8 +45,12 @@ class GuineaPig:
             print("Rogue: " + str(self))
             raise OverflowError
 
+    def new_state(self, state):
+        self.state = state.upper()
+
     def __str__(self):
-        return "GuineaPig:(Hunger: {0}, Thirst:{1}, Tired:{2})".format(self.hunger, self.thirst, self.tired)
+        return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
+            .format(self.state, self.hunger, self.thirst, self.tired)
 
 
 class State:
@@ -64,14 +69,15 @@ class Passive(State):
         super(Passive, self).__init__(state, changes)
 
     def transition(self, gp: GuineaPig):
-        gp.apply_changes(self.changes)
+        gp.update(self.changes)
         if not gp.is_tired(self.state):
             new_state = "AWAKE"
         elif random.randint(1, 10) > 8:
             new_state = "STANDBY"
         else:
             new_state = "SLEEPING"
-        return new_state, gp
+        gp.new_state(new_state)
+        return gp
 
 
 class Active(State):
@@ -80,7 +86,7 @@ class Active(State):
         super(Active, self).__init__(state, changes)
 
     def transition(self, gp: GuineaPig):
-        gp.apply_changes(self.changes)
+        gp.update(self.changes)
         if gp.is_tired(self.state):
             new_state = "SLEEPING"
         elif gp.is_hungry(self.state):
@@ -93,7 +99,8 @@ class Active(State):
             new_state = "STANDBY"
         else:
             new_state = "AWAKE"
-        return new_state, gp
+        gp.new_state(new_state)
+        return gp
 
 
 if __name__ == "__main__":
@@ -104,4 +111,4 @@ if __name__ == "__main__":
     m.add_state("EATING", Active, [5, -10, 4])
     m.add_state("DRINKING", Active, [5, 5, -80])
     m.add_state("WANDERING", Active, [10, 10, 5])
-    m.run("SLEEPING", GuineaPig(20, 10, 10), 2000, 15)
+    m.run(GuineaPig("SLEEPING", 20, 10, 10), 2000, 15)
