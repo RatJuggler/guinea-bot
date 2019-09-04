@@ -8,18 +8,18 @@ from .twitter_api import tweet
 class GuineaPig:
 
     @staticmethod
-    def __load_tweets():
-        tweets_file = pathlib.Path(__file__).parent / "guinea_pig_tweets.json"
-        with tweets_file.open('r') as f:
-            tweets = json.load(f)
-        return tweets["states"]
+    def __load_sayings():
+        sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
+        with sayings_file.open('r') as f:
+            sayings = json.load(f)
+        return sayings["states"]
 
     def __init__(self, start_state, tired, hunger, thirst):
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
-        self.tweets = self.__load_tweets()
+        self.sayings = self.__load_sayings()
 
     def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
@@ -59,9 +59,9 @@ class GuineaPig:
     def update_state(self, new_state):
         if self.state != new_state:
             self.state = new_state
-            for state in self.tweets:
+            for state in self.sayings:
                 if state["state"] == self.state:
-                    tweet(random.choice(state["tweets"]))
+                    tweet(random.choice(state["sayings"]))
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\

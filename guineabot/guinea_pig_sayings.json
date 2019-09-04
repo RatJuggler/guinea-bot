@@ -2,7 +2,7 @@
   "states": [
     {
       "state": "SLEEPING",
-      "tweets": [
+      "sayings": [
         "I am mostly sleeping.",
         "Zzzzzzz",
         "Time for a short nap."
@@ -10,14 +10,14 @@
     },
     {
       "state": "AWAKE",
-      "tweets": [
+      "sayings": [
           "I am mostly awake.",
           "Is it dinner time yet?"
       ]
     },
     {
       "state": "THINKING",
-      "tweets": [
+      "sayings": [
           "I am mostly thinking.",
           "In standby mode.",
           "I think therefore I am a Guinea Pig."
@@ -25,7 +25,7 @@
     },
     {
       "state": "EATING",
-      "tweets": [
+      "sayings": [
           "I am mostly eating.",
           "Mmmm hay.",
           "Mmmm nuggets.",
@@ -34,14 +34,14 @@
     },
     {
       "state": "DRINKING",
-      "tweets": [
+      "sayings": [
           "I am mostly drinking.",
           "Chewing water."
       ]
     },
     {
       "state": "WANDERING",
-      "tweets": [
+      "sayings": [
           "I am mostly wandering.",
           "What's under this chair.",
           "Under this sofa is very interesting.",
