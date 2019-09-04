@@ -66,7 +66,7 @@ class GuineaPig:
         if self.state != new_state:
             self.state = new_state
             # Limit when we tweet and find friends.
-            if random.randint(1, 10) == 1:
+            if random.randint(1, 10) > 8:
                 self.say_something()
             elif random.randint(1, 300) == 1:
                 find_new_friend(self.friends)
@@ -83,32 +83,6 @@ class GuineaPigState:
         self.changes = changes
 
     def transition(self, gp: GuineaPig):
-        pass
-
-
-class GuineaPigPassive(GuineaPigState):
-
-    def __init__(self, state, changes):
-        super(GuineaPigPassive, self).__init__(state, changes)
-
-    def transition(self, gp: GuineaPig):
-        gp.update(self.changes)
-        if not gp.is_tired():
-            new_state = "AWAKE"
-        elif random.randint(1, 10) > 8:
-            new_state = "THINKING"
-        else:
-            new_state = "SLEEPING"
-        gp.update_state(new_state)
-        return gp
-
-
-class GuineaPigActive(GuineaPigState):
-
-    def __init__(self, state, changes):
-        super(GuineaPigActive, self).__init__(state, changes)
-
-    def transition(self, gp: GuineaPig):
         gp.update(self.changes)
         if gp.is_tired():
             new_state = "SLEEPING"
@@ -116,9 +90,9 @@ class GuineaPigActive(GuineaPigState):
             new_state = "EATING"
         elif gp.is_thirsty():
             new_state = "DRINKING"
-        elif random.randint(1, 10) > 8:
+        elif random.randint(1, 10) > 5:
             new_state = "WANDERING"
-        elif random.randint(1, 10) > 1:
+        elif random.randint(1, 10) > 8:
             new_state = "THINKING"
         else:
             new_state = "AWAKE"
