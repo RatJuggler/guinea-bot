@@ -5,22 +5,27 @@
       "sayings": [
         "I am mostly sleeping.",
         "Zzzzzzz",
-        "Time for a short nap."
+        "Time for a short nap.",
+        "Snoozing."
       ]
     },
     {
       "state": "AWAKE",
       "sayings": [
           "I am mostly awake.",
-          "Is it dinner time yet?"
+          "In standby mode.",
+          "Wheek, wheek!",
+          "I solemnly swear that I am up to no good."
       ]
     },
     {
       "state": "THINKING",
       "sayings": [
           "I am mostly thinking.",
-          "In standby mode.",
-          "I think therefore I am a Guinea Pig."
+          "I think therefore I am a Guinea Pig.",
+          "Is it dinner time yet?",
+          "I just got lost in thought.",
+          "The answer is 42.",
       ]
     },
     {
@@ -45,7 +50,10 @@
           "I am mostly wandering.",
           "What's under this chair.",
           "Under this sofa is very interesting.",
-          "This floor goes on for miles."
+          "This floor goes on for miles.",
+          "Wandering here.",
+          "Wandering there.",
+          "Popcorn time!"
       ]
     }
   ]
