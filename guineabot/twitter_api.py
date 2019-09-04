@@ -1,4 +1,5 @@
 import os
+import re
 import tweepy
 
 
@@ -19,12 +20,35 @@ def create_twitter_api():
     return api
 
 
-def tweet(message):
-    twitter_api = create_twitter_api()
+def tweet(message, api=None):
+    if not api:
+        api = create_twitter_api()
     try:
-        twitter_api.update_status(message)
+        api.update_status(message)
     except tweepy.TweepError as error:
         if error.api_code == 187:
-            print('Duplicate tweet discarded.')
+            print("Duplicate tweet discarded!")
         else:
             raise error
+
+
+def get_current_friends():
+    return create_twitter_api().friends_ids()
+
+
+def good_name(name):
+    return re.search(r"guinea\s*pig", name, re.IGNORECASE)
+
+
+def find_new_friend(friends):
+    page_no = 0
+    api = create_twitter_api()
+    while page_no < 100:
+        page = api.search_users("guinea pig", 20, page_no)
+        for new_friend in page:
+            if new_friend.id not in friends and good_name(new_friend.name) or good_name(new_friend.screen_name):
+                new_friend.follow()
+                friends.append(new_friend.id)
+                tweet("I've decided to follow {0}.".format(new_friend.name), api)
+        page_no += 1
+    tweet("I can't find any new friends.", api)

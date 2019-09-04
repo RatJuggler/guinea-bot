@@ -2,7 +2,7 @@ import json
 import pathlib
 import random
 
-from .twitter_api import tweet
+from .twitter_api import tweet, get_current_friends, find_new_friend
 
 
 class GuineaPig:
@@ -20,6 +20,7 @@ class GuineaPig:
         self.hunger = hunger
         self.thirst = thirst
         self.sayings = self.__load_sayings()
+        self.friends = get_current_friends()
 
     def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
@@ -56,12 +57,19 @@ class GuineaPig:
             print("Rogue: " + str(self))
             raise OverflowError
 
+    def say_something(self):
+        for state in self.sayings:
+            if state["state"] == self.state:
+                tweet(random.choice(state["sayings"]))
+
     def update_state(self, new_state):
         if self.state != new_state:
             self.state = new_state
-            for state in self.sayings:
-                if state["state"] == self.state:
-                    tweet(random.choice(state["sayings"]))
+            # Limit when we tweet and find friends.
+            if random.randint(1, 10) == 1:
+                self.say_something()
+            elif random.randint(1, 300) == 1:
+                find_new_friend(self.friends)
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
