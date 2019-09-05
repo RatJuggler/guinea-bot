@@ -15,7 +15,8 @@
           "I am mostly awake.",
           "In standby mode.",
           "Wheek, wheek!",
-          "I solemnly swear that I am up to no good."
+          "I solemnly swear that I am up to no good.",
+          "Checking for condors."
       ]
     },
     {
@@ -26,6 +27,7 @@
           "Is it dinner time yet?",
           "I just got lost in thought.",
           "The answer is 42.",
+          "Did I just hear the fridge open?"
       ]
     },
     {
@@ -34,7 +36,9 @@
           "I am mostly eating.",
           "Mmmm hay.",
           "Mmmm nuggets.",
-          "Mmmm salad."
+          "Mmmm salad.",
+          "Mmmm cucumber.",
+          "Mmmm apple."
       ]
     },
     {
