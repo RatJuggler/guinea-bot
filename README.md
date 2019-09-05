@@ -6,5 +6,5 @@ guinea pig. Randomly tweets what it is doing on each state change. Also searches
 will randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state.
-Tweeting is limited to a 1 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
+Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
 limited to a 1 in 200 chance.
