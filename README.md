@@ -8,3 +8,43 @@ will randomly follow one.
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state.
 Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
 limited to a 1 in 200 chance.
+
+# Install as a service
+
+The `guinea-bot.service` file can be copied to `/etc/systemd/system` to create a systemd unit service. A configuration
+file also needs to be created to hold the Twitter access keys.
+```
+$ sudo systemctl edit guinea-bot
+```
+Add an entry to the generated file like so:
+```
+[Service]
+Environment="TWITTER_CONSUMER_KEY=<your consumer key here>"
+Environment="TWITTER_CONSUMER_SECRET=<your consumer secret here>"
+Environment="TWITTER_ACCESS_TOKEN=<your access token here>"
+Environment="TWITTER_ACCESS_TOKEN_SECRET=<your access token secret here>"
+```
+Reload the service files after changes or when new:
+```
+$ sudo systemctl daemon-reload
+```
+Enable the service:
+```
+$ sudo systemctl enable guinea-bot.service
+```
+Start the service:
+```
+$ sudo systemctl start guinea-bot.service
+```
+Check the status of the service:
+```
+$ sudo systemctl status guinea-bot.service
+```
+Stop the service:
+```
+$ sudo systemctl stop guinea-bot.service
+```
+Tail service's log:
+```
+$ sudo journalctl -f -u guinea-bot.service
+```

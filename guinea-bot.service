@@ -1,0 +1,12 @@
+[Unit]
+Description=Guinea-Bot Service
+After=multi-user.target
+
+[Service]
+WorkingDirectory=/home/pi/
+Type=simple
+ExecStart=/usr/bin/python3 -m guineabot
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
