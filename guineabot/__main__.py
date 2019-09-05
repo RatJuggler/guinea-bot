@@ -1,5 +1,10 @@
+import logging
+
 from .statemachine import StateMachine
 from .guineapig import GuineaPig, GuineaPigState
+
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def build_guinea_pig_machine():

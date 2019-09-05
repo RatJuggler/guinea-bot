@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 
@@ -30,14 +31,15 @@ class StateMachine:
     def run(self, data):
         for i in range(self.run_time):
             new_state = data.state
-            print("{0} >> {1}".format(self.format_days_time(i), str(data)))
+            logging.info("{0} >> {1}".format(self.format_days_time(i), str(data)))
             state = self.states[new_state]
             self.counts[new_state] += 1
             data = state.transition(data)
             sleep(self.interval * 60)
 
     def stats(self):
-        print("\n\n\nState     : Time spent in state (% and daily avg.)")
+        logging.info("\n\n\nState     : Time spent in state (% and daily avg.)")
         for state in self.counts:
-            print("{0:9} : {1:04.2f}% - {2}".format(state, self.counts[state] / self.run_time * 100,
-                                                    self.format_time(self.counts[state] * self.interval // self.days)))
+            percentage = self.counts[state] / self.run_time * 100
+            average = self.format_time(self.counts[state] * self.interval // self.days)
+            logging.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))

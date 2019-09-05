@@ -1,4 +1,5 @@
 import json
+import logging
 import pathlib
 import random
 
@@ -54,7 +55,7 @@ class GuineaPig:
         self.hunger += changes[1]
         self.thirst += changes[2]
         if self.outside_bounds(self.tired) or self.outside_bounds(self.hunger) or self.outside_bounds(self.thirst):
-            print("Rogue: " + str(self))
+            logging.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
 
     def say_something(self):

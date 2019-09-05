@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import tweepy
@@ -14,9 +15,9 @@ def create_twitter_api():
     api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
     try:
         api.verify_credentials()
-    except Exception as e:
-        print("Error creating Twitter API: {0}".format(e))
-        raise e
+    except Exception as error:
+        logging.error("Error creating Twitter API!", error)
+        raise error
     return api
 
 
@@ -25,11 +26,12 @@ def tweet(message, api=None):
         api = create_twitter_api()
     try:
         api.update_status(message)
-        print("Tweeted: {0}".format(message))
+        logging.info("Tweeted: {0}".format(message))
     except tweepy.TweepError as error:
         if error.api_code == 187:
-            print("Duplicate tweet discarded!")
+            logging.warning("Duplicate tweet discarded!")
         else:
+            logging.error("Error trying to tweet!", error)
             raise error
 
 
