@@ -7,12 +7,24 @@ will randomly follow one.
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state.
 Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
-limited to a 1 in 200 chance.
+limited to a 1 in 180 chance.
 
 # Install as a service
 
-The `guinea-bot.service` file can be copied to `/etc/systemd/system` to create a systemd unit service. A configuration
-file also needs to be created to hold the Twitter access keys.
+Checkout the source code from here:
+```
+$ git clone https://github.com/RatJuggler/guinea-bot.git
+$ cd guinea-bot
+```
+Then install/update the bot as a Python package:
+```
+$ sudo pip3 install -U .
+```
+The `guinea-bot.service` file can now be copied to `/etc/systemd/system` to create a systemd unit service. 
+```
+$ cp guinea-bot.service /etc/systemd/system
+```
+A configuration file also needs to be created to hold the Twitter access keys.
 ```
 $ sudo systemctl edit guinea-bot
 ```
