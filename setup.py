@@ -14,6 +14,9 @@ setup(
     python_requires='>=3.5.3',
     url='https://github.com/RatJuggler/guinea-bot',
     packages=find_packages(exclude=['tests']),
+    package_data={
+        'guineabot': ['guinea_pig_sayings.json'],
+    },
     entry_points={
         'console_scripts': [
             'guineabot = guineabot.__main__:simulate_guinea_pig',
