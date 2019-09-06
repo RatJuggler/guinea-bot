@@ -3,9 +3,8 @@ Description=Guinea-Bot Service
 After=multi-user.target
 
 [Service]
-WorkingDirectory=/home/pi/
 Type=simple
-ExecStart=/usr/bin/python3 -m guineabot
+ExecStart=/bin/bash -c /usr/local/bin/guineabot
 Restart=always
 
 [Install]
