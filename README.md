@@ -9,6 +9,9 @@ Tweets are selected from a JSON file, loaded on startup, that contains a variety
 Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
 limited to a 1 in 180 chance.
 
+The state machine prioritises sleeping and eating but the internal attributes can drive it form any state to any state,
+see the code for the exact rules.
+
 ![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/go-states.png)
 
 # Install as a service
