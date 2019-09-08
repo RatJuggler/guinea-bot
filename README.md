@@ -1,18 +1,19 @@
 # guinea-bot
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
-Uses a very simple state machine, which changes state every 15 minutes, to emulate the exciting and busy life of a
-guinea pig. Randomly tweets what it is doing on each state change. Also searches for other "guinea pig" accounts and 
-will randomly follow one. 
+It uses a very simple state machine, which changes state every 15 minutes, to emulate the exciting and busy life of a
+guinea pig. It randomly tweets what it is doing on each state change and may also searches for other "guinea pig"
+accounts and randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state.
 Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
 then there is a further 1 in 10 chance of trying to follow a new account. 
 
-The state machine prioritises sleeping and eating but the internal attributes can drive it form any state to any state,
-see the code for the exact rules.
+The state machine prioritises sleeping and eating but the internal attributes can drive it from any state to any state,
+see the code for the exact rules. Sleeping is used as the start state but there is no classical end state. The state
+machine is currently coded to run for a fixed number of days, after which the guinea pig dies :cry:.
 
-![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/go-states.png)
+![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/gp-states.png)
 
 # Install as a service
 
