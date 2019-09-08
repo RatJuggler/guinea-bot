@@ -6,8 +6,8 @@ guinea pig. Randomly tweets what it is doing on each state change. Also searches
 will randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state.
-Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day, similarly following is
-limited to a 1 in 180 chance.
+Tweeting is limited to a 3 in 10 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
+then there is a further 1 in 10 chance of trying to follow a new account. 
 
 The state machine prioritises sleeping and eating but the internal attributes can drive it form any state to any state,
 see the code for the exact rules.

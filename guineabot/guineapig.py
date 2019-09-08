@@ -69,7 +69,7 @@ class GuineaPig:
             # Limit when we tweet and find friends.
             if random.randint(1, 10) > 7:
                 self.say_something()
-            elif random.randint(1, 180) == 1:
+            elif random.randint(1, 10) == 1:
                 find_new_friend(self.friends)
 
     def __str__(self):
