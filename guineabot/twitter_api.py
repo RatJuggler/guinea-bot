@@ -53,5 +53,6 @@ def find_new_friend(friends):
                 new_friend.follow()
                 friends.append(new_friend.id)
                 tweet("I've decided to follow {0}.".format(new_friend.name), api)
+                return
         page_no += 1
     tweet("I can't find any new friends.", api)
