@@ -16,7 +16,8 @@
           "In standby mode.",
           "Wheek, wheek!",
           "I solemnly swear that I am up to no good.",
-          "Checking for condors."
+          "Checking for condors.",
+          "I'm furious, someone else is in the best bed."
       ]
     },
     {
@@ -28,7 +29,8 @@
           "I just got lost in thought.",
           "The answer is 42.",
           "Did I just hear the fridge open?",
-          "Vacuum cleaners worry me."
+          "Vacuum cleaners worry me.",
+          "Where's room service? This cage needs a clean."
       ]
     },
     {
@@ -46,7 +48,8 @@
       "state": "DRINKING",
       "sayings": [
           "I am mostly drinking.",
-          "Chewing water."
+          "Chewing water.",
+          "Glug, glug, glug."
       ]
     },
     {
@@ -56,10 +59,13 @@
           "What's under this chair.",
           "Under this sofa is very interesting.",
           "This floor goes on for miles.",
+          "Back to the piggy house.",
           "Wandering here.",
           "Wandering there.",
           "Popcorn time!",
-          "I'm just going to march off over here."
+          "I'm just going to march off over here.",
+          "Piggy patrol, quick trot!",
+          "Quick, back to the piggy bunker!"
       ]
     }
   ]
