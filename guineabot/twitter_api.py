@@ -49,7 +49,7 @@ def find_new_friend(friends):
     while page_no < 100:
         page = api.search_users("guinea pig", 20, page_no)
         for new_friend in page:
-            if new_friend.id not in friends and good_name(new_friend.name) or good_name(new_friend.screen_name):
+            if new_friend.id not in friends and (good_name(new_friend.name) or good_name(new_friend.screen_name)):
                 new_friend.follow()
                 friends.append(new_friend.id)
                 tweet("I've decided to follow {0}.".format(new_friend.name), api)
