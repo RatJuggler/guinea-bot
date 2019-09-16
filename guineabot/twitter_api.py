@@ -35,17 +35,23 @@ def tweet(message, api=None):
             raise error
 
 
-def get_current_friends():
-    return create_twitter_api().friends_ids()
+def get_current_friends(api=None):
+    if not api:
+        api = create_twitter_api()
+    return api.friends_ids()
 
 
 def good_name(name):
     return re.search(r"guinea\s*pig", name, re.IGNORECASE)
 
 
-def find_new_friend(friends):
+def find_new_friend(friends, api=None):
     page_no = 0
-    api = create_twitter_api()
+    if not api:
+        api = create_twitter_api()
+    if not friends or len(friends) == 0:
+        logging.warning("Expected more friends: {0}".format(friends))
+        friends = get_current_friends(api)
     while page_no < 100:
         page = api.search_users("guinea pig", 20, page_no)
         for new_friend in page:
