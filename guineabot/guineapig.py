@@ -1,7 +1,7 @@
 import json
 import logging
 import pathlib
-import random
+from random import choice, randint
 
 from .twitter_api import tweet, get_current_friends, find_new_friend
 
@@ -61,15 +61,15 @@ class GuineaPig:
     def say_something(self):
         for state in self.sayings:
             if state["state"] == self.state:
-                tweet(random.choice(state["sayings"]))
+                tweet(choice(state["sayings"]))
 
     def update_state(self, new_state):
         if self.state != new_state:
             self.state = new_state
             # Limit when we tweet and find friends.
-            if random.randint(1, 10) > 8:
+            if randint(1, 10) > 8:
                 self.say_something()
-            elif random.randint(1, 50) == 1:
+            elif randint(1, 50) == 1:
                 find_new_friend(self.friends)
 
     def __str__(self):
@@ -91,9 +91,9 @@ class GuineaPigState:
             new_state = "EATING"
         elif gp.is_thirsty():
             new_state = "DRINKING"
-        elif random.randint(1, 10) > 5:
+        elif randint(1, 10) > 5:
             new_state = "WANDERING"
-        elif random.randint(1, 10) > 8:
+        elif randint(1, 10) > 8:
             new_state = "THINKING"
         else:
             new_state = "AWAKE"
