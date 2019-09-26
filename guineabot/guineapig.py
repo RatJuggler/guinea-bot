@@ -1,9 +1,10 @@
 import json
+import glob
 import logging
 import pathlib
 from random import choice, randint
 
-from .twitter_api import tweet, get_current_friends, find_new_friend
+from .twitter_api import tweet, tweet_with_photo, get_current_friends, find_new_friend
 
 
 class GuineaPig:
@@ -15,12 +16,19 @@ class GuineaPig:
             sayings = json.load(f)
         return sayings["states"]
 
+    @staticmethod
+    def __load_photos():
+        # TODO Hard coded path!
+        path = "/home/pi/Pictures/Piggies"
+        return [f for f in glob.glob(path + "/*.jpg", recursive=False)]
+
     def __init__(self, start_state, tired, hunger, thirst):
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
         self.sayings = self.__load_sayings()
+        self.photos = self.__load_photos()
         self.friends = get_current_friends()
 
     def is_tired(self):
@@ -58,17 +66,19 @@ class GuineaPig:
             logging.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
 
-    def say_something(self):
+    def get_saying_for_state(self, state_to_find):
         for state in self.sayings:
-            if state["state"] == self.state:
-                tweet(choice(state["sayings"]))
+            if state["state"] == state_to_find:
+                return choice(state["sayings"])
 
     def update_state(self, new_state):
         if self.state != new_state:
             self.state = new_state
             # Limit when we tweet and find friends.
             if randint(1, 10) > 8:
-                self.say_something()
+                tweet(self.get_saying_for_state(self.state))
+            elif randint(1, 50) == 1:
+                tweet_with_photo(self.get_saying_for_state("PHOTOS"), choice(self.photos))
             elif randint(1, 50) == 1:
                 find_new_friend(self.friends)
 
