@@ -6,7 +6,8 @@
         "I am mostly sleeping.",
         "Zzzzzzz",
         "Time for a short nap.",
-        "Snoozing."
+        "Snoozing.",
+        "Just need another forty winks."
       ]
     },
     {
@@ -30,7 +31,8 @@
           "The answer is 42.",
           "Did I just hear the fridge open?",
           "Vacuum cleaners worry me.",
-          "Where's room service? This cage needs a clean."
+          "Where's room service? This cage needs a clean.",
+          "Did I just hear the back door open?"
       ]
     },
     {
@@ -65,8 +67,15 @@
           "Popcorn time!",
           "I'm just going to march off over here.",
           "Piggy patrol, quick trot!",
-          "Quick, back to the piggy bunker!"
+          "Quick, back to the piggy bunker!",
+          "Is that the ceiling or am I under a table?"
       ]
     }
+  ],
+  "photos": [
+    "What's going on here?",
+    "A random photo from the archives.",
+    "I remember this.",
+    "I don't remember this."
   ]
 }
