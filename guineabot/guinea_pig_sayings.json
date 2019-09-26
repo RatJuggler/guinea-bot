@@ -70,12 +70,15 @@
           "Quick, back to the piggy bunker!",
           "Is that the ceiling or am I under a table?"
       ]
+    },
+    {
+      "state": "PHOTOS",
+      "sayings": [
+          "What's going on here?",
+          "A random photo from the archives.",
+          "I remember this.",
+          "I don't remember this."
+      ]
     }
-  ],
-  "photos": [
-    "What's going on here?",
-    "A random photo from the archives.",
-    "I remember this.",
-    "I don't remember this."
   ]
 }
