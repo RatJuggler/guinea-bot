@@ -35,6 +35,21 @@ def tweet(message, api=None):
             raise error
 
 
+def tweet_with_photo(message, photo, api=None):
+    if not api:
+        api = create_twitter_api()
+    try:
+        media = api.media_upload(photo)
+        api.update_status(message, media_ids=[media.media_id])
+        logging.info("Tweeted: {0} {1}".format(message, photo))
+    except tweepy.TweepError as error:
+        if error.api_code == 187:
+            logging.warning("Duplicate photo tweet discarded!")
+        else:
+            logging.error("Error trying to tweet with photo!", error)
+            raise error
+
+
 def get_current_friends(api=None):
     if not api:
         api = create_twitter_api()
