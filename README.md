@@ -8,7 +8,7 @@ or search for other "guinea pig" accounts and randomly follow one.
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. A
 list of the photos to use is also loaded on startup, see the code to change the folder photos are read from.
 
-Tweeting is limited to a 2 in 10 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
+Tweeting is limited to a 1 in 5 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
 then there is a further 1 in 50 chance of tweeting a photo followed by a further 1 in 50 chance of trying to follow a
 new account.
 
