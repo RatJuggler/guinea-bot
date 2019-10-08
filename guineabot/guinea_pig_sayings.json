@@ -13,71 +13,83 @@
     {
       "state": "AWAKE",
       "sayings": [
-          "I am mostly awake.",
-          "In standby mode.",
-          "Wheek, wheek!",
-          "I solemnly swear that I am up to no good.",
-          "Checking for condors.",
-          "I'm furious, someone else is in the best bed."
+        "I am mostly awake.",
+        "In standby mode.",
+        "Wheek, wheek!",
+        "I solemnly swear that I am up to no good.",
+        "Checking for condors.",
+        "I'm furious, someone else is in the best bed.",
+        "Standing round daydreaming.",
+        "Lurking.",
+        "Gazing vacantly into space.",
+        "Time to check which bed is free.",
+        "Looking thoughtful.",
+        "Vague squeaking.",
+        "Poo, poo everywhere."
       ]
     },
     {
       "state": "THINKING",
       "sayings": [
-          "I am mostly thinking.",
-          "I think therefore I am a Guinea Pig.",
-          "Is it dinner time yet?",
-          "I just got lost in thought.",
-          "The answer is 42.",
-          "Did I just hear the fridge open?",
-          "Vacuum cleaners worry me.",
-          "Where's room service? This cage needs a clean.",
-          "Did I just hear the back door open?"
+        "I am mostly thinking.",
+        "I think therefore I am a Guinea Pig.",
+        "Is it dinner time yet?",
+        "I just got lost in thought.",
+        "The answer is 42.",
+        "Did I just hear the fridge open?",
+        "Vacuum cleaners worry me.",
+        "Where's room service? This cage needs a clean.",
+        "Did I just hear the back door open?"
       ]
     },
     {
       "state": "EATING",
       "sayings": [
-          "I am mostly eating.",
-          "Mmmm hay.",
-          "Mmmm nuggets.",
-          "Mmmm salad.",
-          "Mmmm cucumber.",
-          "Mmmm apple."
+        "I am mostly eating.",
+        "Mmmm hay.",
+        "Mmmm nuggets.",
+        "Mmmm salad.",
+        "Mmmm cucumber.",
+        "Mmmm apple.",
+        "Mmmm cardboard.",
+        "Mmmm newspaper."
       ]
     },
     {
       "state": "DRINKING",
       "sayings": [
-          "I am mostly drinking.",
-          "Chewing water.",
-          "Glug, glug, glug."
+        "I am mostly drinking.",
+        "Chewing water.",
+        "Glug, glug, glug."
       ]
     },
     {
       "state": "WANDERING",
       "sayings": [
-          "I am mostly wandering.",
-          "What's under this chair.",
-          "Under this sofa is very interesting.",
-          "This floor goes on for miles.",
-          "Back to the piggy house.",
-          "Wandering here.",
-          "Wandering there.",
-          "Popcorn time!",
-          "I'm just going to march off over here.",
-          "Piggy patrol, quick trot!",
-          "Quick, back to the piggy bunker!",
-          "Is that the ceiling or am I under a table?"
+        "I am mostly wandering.",
+        "What's under this chair.",
+        "Under this sofa is very interesting.",
+        "This floor goes on for miles.",
+        "Back to the piggy house.",
+        "Wandering here.",
+        "Wandering there.",
+        "Popcorn time!",
+        "I'm just going to march off over here.",
+        "Piggy patrol, quick trot!",
+        "Quick, back to the piggy bunker!",
+        "Is that the ceiling or am I under a table?",
+        "Jump in the hay!",
+        "Jump out of the hay!",
+        "Hmmm, yes the floor here is made out of floor."
       ]
     },
     {
       "state": "PHOTOS",
       "sayings": [
-          "What's going on here?",
-          "A random photo from the archives.",
-          "I remember this.",
-          "I don't remember this."
+        "What's going on here?",
+        "A random photo from the archives.",
+        "I remember this.",
+        "I don't remember this."
       ]
     }
   ]
