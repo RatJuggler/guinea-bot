@@ -3,11 +3,11 @@
     {
       "state": "SLEEPING",
       "sayings": [
-        "I am mostly sleeping.",
-        "Zzzzzzz",
-        "Time for a short nap.",
-        "Snoozing.",
-        "Just need another forty winks."
+        "I am mostly sleeping. \uD83D\uDE34",
+        "Zzzzzzz \uD83D\uDCA4",
+        "Time for a short nap. \uD83D\uDE34",
+        "Snoozing. \uD83D\uDCA4",
+        "Just need another forty winks. \uD83D\uDE34"
       ]
     },
     {
@@ -17,29 +17,32 @@
         "In standby mode.",
         "Wheek, wheek!",
         "I solemnly swear that I am up to no good.",
-        "Checking for condors.",
-        "I'm furious, someone else is in the best bed.",
+        "Checking for condors. \uD83E\uDD85",
+        "I'm furious, someone else is in the best bed. \uD83D\uDE20",
         "Standing round daydreaming.",
         "Lurking.",
         "Gazing vacantly into space.",
-        "Time to check which bed is free.",
+        "Time to check which bed is free. \uD83D\uDECF️",
         "Looking thoughtful.",
         "Vague squeaking.",
-        "Poo, poo everywhere."
+        "Poo, poo everywhere. \uD83D\uDCA9",
+        "I'll chew this piece of furniture until I get what I want."
       ]
     },
     {
       "state": "THINKING",
       "sayings": [
-        "I am mostly thinking.",
+        "I am mostly thinking. \uD83E\uDD14",
         "I think therefore I am a Guinea Pig.",
-        "Is it dinner time yet?",
+        "Is it dinner time yet? \uD83D\uDD70️",
         "I just got lost in thought.",
         "The answer is 42.",
         "Did I just hear the fridge open?",
         "Vacuum cleaners worry me.",
-        "Where's room service? This cage needs a clean.",
-        "Did I just hear the back door open?"
+        "Where's room service? This cage needs a clean. \uD83E\uDDF9",
+        "Did I just hear the back door open?",
+        "Did I just hear the clatter of cutlery? \uD83C\uDF74",
+        "I do NOT like fireworks. \uD83D\uDE1F"
       ]
     },
     {
@@ -48,19 +51,20 @@
         "I am mostly eating.",
         "Mmmm hay.",
         "Mmmm nuggets.",
-        "Mmmm salad.",
-        "Mmmm cucumber.",
-        "Mmmm apple.",
-        "Mmmm cardboard.",
-        "Mmmm newspaper."
+        "Mmmm salad. \uD83E\uDD57",
+        "Mmmm cucumber. \uD83E\uDD52",
+        "Mmmm apple. \uD83C\uDF4E",
+        "Mmmm cardboard. \uD83D\uDCE6",
+        "Mmmm newspaper. \uD83D\uDCF0"
       ]
     },
     {
       "state": "DRINKING",
       "sayings": [
-        "I am mostly drinking.",
+        "I am mostly drinking. \uD83D\uDEB0",
         "Chewing water.",
-        "Glug, glug, glug."
+        "Glug, glug, glug.",
+        "Slurp, slurp, slurp. 🥤\uD83E\uDD64🥤"
       ]
     },
     {
@@ -68,12 +72,12 @@
       "sayings": [
         "I am mostly wandering.",
         "What's under this chair.",
-        "Under this sofa is very interesting.",
+        "Under this sofa is very interesting. \uD83D\uDECB️",
         "This floor goes on for miles.",
-        "Back to the piggy house.",
+        "Back to the piggy house. \uD83C\uDFE0",
         "Wandering here.",
         "Wandering there.",
-        "Popcorn time!",
+        "Popcorn time! \uD83C\uDF7F",
         "I'm just going to march off over here.",
         "Piggy patrol, quick trot!",
         "Quick, back to the piggy bunker!",
