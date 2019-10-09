@@ -12,7 +12,7 @@ class GuineaPig:
     @staticmethod
     def __load_sayings():
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
-        with sayings_file.open('r') as f:
+        with sayings_file.open('r', encoding='utf-8') as f:
             sayings = json.load(f)
         return sayings["states"]
 
