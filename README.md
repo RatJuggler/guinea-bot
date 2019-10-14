@@ -1,8 +1,9 @@
 # guinea-bot
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
-It uses a very simple state machine, which changes state every 15 minutes, to emulate the exciting and busy life of a
-guinea pig. It randomly tweets what it is doing on each state change and may also post a random picture from its archive
+It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than 
+deterministic). A change of state is triggered every 15 minutes to emulate the exciting and busy life of a guinea pig. 
+It randomly tweets what it is doing on each state change and may also post a random picture from its archive
 or search for other "guinea pig" accounts and randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. A
