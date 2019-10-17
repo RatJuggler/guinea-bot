@@ -75,9 +75,9 @@ class GuineaPig:
         if self.state != new_state:
             self.state = new_state
             # Limit when we tweet and find friends.
-            if randint(1, 10) > 8:
+            if randint(1, 5) == 1:
                 tweet(self.get_saying_for_state(self.state))
-            elif randint(1, 50) == 1:
+            elif randint(1, 40) == 1:
                 tweet_with_photo(self.get_saying_for_state("PHOTOS"), choice(self.photos))
             elif randint(1, 50) == 1:
                 find_new_friend(self.friends)
