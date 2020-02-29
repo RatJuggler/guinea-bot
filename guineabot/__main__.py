@@ -1,5 +1,8 @@
 import click
 import logging
+import os.path
+
+from click import Context, Option
 
 from .statemachine import StateMachine
 from .guineapig import GuineaPig, GuineaPigState
@@ -16,10 +19,24 @@ def configure_logging(loglevel: str) -> None:
     logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
+# noinspection PyUnusedLocal
+def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
+    """
+    Validate that the photos folder supplied exists.
+    :param ctx: see callbacks for click options
+    :param param: see callbacks for click options
+    :param value: see callbacks for click options
+    :return: Validated photos folder otherwise a click.BadParameter exception is raised
+    """
+    if not os.path.isdir(value):
+        raise click.BadParameter(value)
+    return value
+
+
 def build_guinea_pig_machine() -> StateMachine:
     """
     Initialise the state machine.
-    :return: StateMachine instance with states configured.
+    :return: StateMachine instance with states configured
     """
     sm = StateMachine(15, 2000)
     sm.add_state("SLEEPING", GuineaPigState, [-20, 3, 1])
@@ -35,14 +52,14 @@ def build_guinea_pig_machine() -> StateMachine:
     Guinea Pig Twitter bot.
                     """)
 @click.version_option()
-@click.option('-p', '--photos-folder', 'photos', type=click.STRING,
-              help="The folder containing photos to Tweet.", default="~/Pictures", show_default=True)
+@click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
+              help="The folder containing photos to Tweet.", default="/home/user/Pictures/Piggies", show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
 def simulate_guinea_pig(photos: str, level: str) -> None:
     """
     Guinea Pig Twitter bot.
-    :param photos: Folder containing photos to use in some Tweets.
+    :param photos: Folder containing photos to use in some Tweets
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :return: No meaningful return.
     """
