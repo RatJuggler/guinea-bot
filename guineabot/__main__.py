@@ -61,14 +61,14 @@ def build_guinea_pig_machine() -> StateMachine:
 def simulate_guinea_pig(photos: str, level: str) -> None:
     """
     Guinea Pig Twitter bot.
-    :param photos: Folder containing photos to use in some Tweets
+    :param photos: Optional path to folder containing photos to use in some Tweets
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :return: No meaningful return.
     """
     configure_logging(level)
     logging.info("Booting guinea pig...")
     gp_machine = build_guinea_pig_machine()
-    a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10)
+    a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10, photos)
     logging.info("It's alive!")
     gp_machine.run(a_guinea_pig)
     gp_machine.stats()

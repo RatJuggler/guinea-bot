@@ -17,18 +17,16 @@ class GuineaPig:
         return sayings["states"]
 
     @staticmethod
-    def __load_photos():
-        # TODO Hard coded path!
-        path = "/home/pi/Pictures/Piggies"
+    def __load_photos(path):
         return [f for f in glob.glob(path + "/*.jpg", recursive=False)]
 
-    def __init__(self, start_state, tired, hunger, thirst):
+    def __init__(self, start_state, tired, hunger, thirst, photos_path):
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
         self.sayings = self.__load_sayings()
-        self.photos = self.__load_photos()
+        self.photos = self.__load_photos(photos_path)
         self.friends = get_current_friends()
 
     def is_tired(self):
