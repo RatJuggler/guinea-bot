@@ -5,7 +5,15 @@ from .statemachine import StateMachine
 from .guineapig import GuineaPig, GuineaPigState
 
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+def configure_logging(loglevel: str) -> None:
+    """
+    Configure basic logging to the console.
+    :param loglevel: level name from the command line or default
+    :return: No meaningful return
+    """
+    if logging.getLevelName(loglevel) == "Level {0}".format(loglevel):
+        raise ValueError('Invalid log level: %s' % loglevel)
+    logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def build_guinea_pig_machine():
@@ -27,7 +35,8 @@ def build_guinea_pig_machine():
               help="The folder containing photos to Tweet.", default="~/Pictures", show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
-def simulate_guinea_pig():
+def simulate_guinea_pig(photos, level):
+    configure_logging(level)
     logging.info("Booting guinea pig...")
     gp_machine = build_guinea_pig_machine()
     a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10)
