@@ -16,7 +16,11 @@ def configure_logging(loglevel: str) -> None:
     logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def build_guinea_pig_machine():
+def build_guinea_pig_machine() -> StateMachine:
+    """
+    Initialise the state machine.
+    :return: StateMachine instance with states configured.
+    """
     sm = StateMachine(15, 2000)
     sm.add_state("SLEEPING", GuineaPigState, [-20, 3, 1])
     sm.add_state("AWAKE", GuineaPigState, [5, 5, 2])
@@ -35,7 +39,13 @@ def build_guinea_pig_machine():
               help="The folder containing photos to Tweet.", default="~/Pictures", show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
-def simulate_guinea_pig(photos, level):
+def simulate_guinea_pig(photos: str, level: str) -> None:
+    """
+    Guinea Pig Twitter bot.
+    :param photos: Folder containing photos to use in some Tweets.
+    :param level: Set a logging level; DEBUG, INFO or WARNING
+    :return: No meaningful return.
+    """
     configure_logging(level)
     logging.info("Booting guinea pig...")
     gp_machine = build_guinea_pig_machine()
