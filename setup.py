@@ -23,6 +23,7 @@ setup(
         ]
     },
     install_requires=[
+        'click ==7.0',
         'tweepy ==3.8.0'
     ],
     license='MIT',

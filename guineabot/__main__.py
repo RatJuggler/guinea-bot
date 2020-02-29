@@ -1,3 +1,4 @@
+import click
 import logging
 
 from .statemachine import StateMachine
@@ -18,6 +19,14 @@ def build_guinea_pig_machine():
     return sm
 
 
+@click.command(help="""
+    Guinea Pig Twitter bot.
+                    """)
+@click.version_option()
+@click.option('-p', '--photos-folder', 'photos', type=click.STRING,
+              help="The folder containing photos to Tweet.", default="~/Pictures", show_default=True)
+@click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
+              help="Show additional logging information.", default="INFO", show_default=True)
 def simulate_guinea_pig():
     logging.info("Booting guinea pig...")
     gp_machine = build_guinea_pig_machine()
