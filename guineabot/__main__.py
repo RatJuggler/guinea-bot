@@ -22,12 +22,14 @@ def configure_logging(loglevel: str) -> None:
 # noinspection PyUnusedLocal
 def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
     """
-    Validate that the photos folder supplied exists.
+    Validate that the photos folder supplied exists, empty string is valid if no value supplied.
     :param ctx: see callbacks for click options
     :param param: see callbacks for click options
     :param value: see callbacks for click options
     :return: Validated photos folder otherwise a click.BadParameter exception is raised
     """
+    if value is None:
+        return ""
     if not os.path.isdir(value):
         raise click.BadParameter(value)
     return value
@@ -53,7 +55,7 @@ def build_guinea_pig_machine() -> StateMachine:
                     """)
 @click.version_option()
 @click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
-              help="The folder containing photos to Tweet.", default="/home/user/Pictures/Piggies", show_default=True)
+              help="Folder containing photos to Tweet.", show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
 def simulate_guinea_pig(photos: str, level: str) -> None:
