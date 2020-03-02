@@ -19,7 +19,7 @@ class TwitterService:
         if self.quiet:
             logging.info("Quiet Mode On!")
 
-    def create_twitter_api(self) -> API:
+    def __get_api(self) -> API:
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
         auth.set_access_token(self.access_token, self.access_token_secret)
         api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
@@ -35,7 +35,7 @@ class TwitterService:
             logging.info("Would have tweeted: {0}".format(message))
             return
         if not api:
-            api = self.create_twitter_api()
+            api = self.__get_api()
         try:
             api.update_status(message)
             logging.info("Tweeted: {0}".format(message))
@@ -51,7 +51,7 @@ class TwitterService:
             logging.info("Would have tweeted: {0} {1}".format(message, photo_path))
             return
         if not api:
-            api = self.create_twitter_api()
+            api = self.__get_api()
         try:
             media = api.media_upload(photo_path)
             api.update_status(message, media_ids=[media.media_id])
@@ -67,11 +67,11 @@ class TwitterService:
         if self.quiet:
             return []
         if not api:
-            api = self.create_twitter_api()
+            api = self.__get_api()
         return api.friends_ids()
 
     @staticmethod
-    def good_name(name: str) -> bool:
+    def __good_name(name: str) -> bool:
         return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
 
     def find_new_friend(self, friends: List[int], api: API = None) -> None:
@@ -80,14 +80,14 @@ class TwitterService:
             return
         page_no = 0
         if not api:
-            api = self.create_twitter_api()
+            api = self.__get_api()
         if not friends or len(friends) == 0:
             logging.warning("Expected more friends: {0}".format(friends))
             friends = self.get_current_friends(api)
         while page_no < 100:
             page = api.search_users("guinea pig", 20, page_no)
             for new_friend in page:
-                if new_friend.id not in friends and (self.good_name(new_friend.name) or self.good_name(new_friend.screen_name)):
+                if new_friend.id not in friends and (self.__good_name(new_friend.name) or self.__good_name(new_friend.screen_name)):
                     new_friend.follow()
                     friends.append(new_friend.id)
                     self.tweet("I've decided to follow {0}.".format(new_friend.name), api)
