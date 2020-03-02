@@ -1,4 +1,5 @@
 import logging
+from abc import ABC, abstractmethod
 
 from time import sleep
 from typing import Generic, TypeVar
@@ -6,25 +7,27 @@ from typing import Generic, TypeVar
 T = TypeVar('T')
 
 
-class State:
+class State(ABC):
     """
     States are used to configure the StateMachine.
     """
 
-    def get_name(self) -> str:
+    def __init__(self, name: str) -> None:
         """
-        The states name.
-        :return: State name
-        """
-        pass
 
+        :param name: The state name
+        """
+        self.name = name
+        super().__init__()
+
+    @abstractmethod
     def transition(self, data: Generic[T]) -> str:
         """
         A transition to the next state.
-        :param data: Object which informs the transition on the next state.
-        :return: The next state (not necessarily different to the current state)
+        :param data: Object which informs the transition to the next state.
+        :return: The name of the next state (not necessarily different to the current state)
         """
-        pass
+        raise NotImplementedError
 
 
 class StateMachine:
@@ -54,9 +57,8 @@ class StateMachine:
         :param new_state: State to add
         :return: No meaningful return
         """
-        name = new_state.get_name()
-        self.__states[name] = new_state
-        self.__counts[name] = 0
+        self.__states[new_state.name] = new_state
+        self.__counts[new_state.name] = 0
 
     @staticmethod
     def __format_time(total_minutes: int) -> str:
@@ -80,19 +82,19 @@ class StateMachine:
         total_minutes -= days * 24 * 60
         return "Day: {0:4,d} - {1}".format(days, self.__format_time(total_minutes))
 
-    def run(self, start_state: str, data: Generic[T]) -> None:
+    def run(self, start_state_name: str, data: Generic[T]) -> None:
         """
         Run the state machine.
-        :param start_state: Initial state
+        :param start_state_name: Initial state
         :param data: Object which informs the state transition on the next state.
         :return: No meaningful return
         """
-        new_state = start_state
+        new_state_name = start_state_name
         for tick in range(self.__ticks):
             logging.debug("{0} >> {1}".format(self.__format_days_time(tick), str(data)))
-            state = self.__states[new_state]
-            self.__counts[new_state] += 1
-            new_state = state.transition(data)
+            state = self.__states[new_state_name]
+            self.__counts[new_state_name] += 1
+            new_state_name = state.transition(data)
             if not self.__accelerated:
                 sleep(self.__interval * 60)
 

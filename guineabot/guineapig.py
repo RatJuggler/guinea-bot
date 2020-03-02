@@ -96,15 +96,12 @@ class GuineaPig:
 
 class GuineaPigState(State):
 
-    def __init__(self, state: str, changes: List[int]) -> None:
-        self.__state = state.upper()
+    def __init__(self, state_name: str, changes: List[int]) -> None:
         self.__changes = changes
-
-    def get_name(self) -> str:
-        return self.__state
+        super(GuineaPigState, self).__init__(state_name.upper())
 
     def transition(self, gp: GuineaPig) -> str:
-        gp.update(self.__state, self.__changes)
+        gp.update(self.name, self.__changes)
         if gp.is_tired():
             new_state = "SLEEPING"
         elif gp.is_hungry():
