@@ -6,6 +6,7 @@ import pathlib
 from random import choice, randint
 from typing import List, Dict
 
+from guineapig_state import SLEEPING, EATING
 from twitter_api import TwitterService
 
 
@@ -39,7 +40,7 @@ class GuineaPig:
         # We won't sleep if we are hungry or thirsty.
         if self.is_hungry() or self.is_thirsty():
             return False
-        if self.__state == "SLEEPING":
+        if self.__state == SLEEPING:
             # If we are already sleeping, carry on sleeping.
             return self.__tired > 30
         else:
@@ -49,7 +50,7 @@ class GuineaPig:
         # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
-        if self.__state == "EATING":
+        if self.__state == EATING:
             # If already eating, keep on eating.
             return self.__hunger > 30
         else:
