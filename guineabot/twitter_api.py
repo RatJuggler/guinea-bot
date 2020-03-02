@@ -10,14 +10,44 @@ from tweepy import API
 
 class TwitterService:
 
-    def __init__(self, quiet: bool) -> None:
-        self.quiet = quiet
+    def tweet(self, message: str, api: API = None) -> None:
+        pass
+
+    def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
+        pass
+
+    def get_current_friends(self, api: API = None) -> List[int]:
+        pass
+
+    def find_new_friend(self, friends: List[int], api: API = None) -> None:
+        pass
+
+
+class TwitterServiceQuiet(TwitterService):
+
+    def __init__(self) -> None:
+        logging.info("Quiet Mode On!")
+
+    def tweet(self, message: str, api: API = None) -> None:
+        logging.info("Would have tweeted: {0}".format(message))
+
+    def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
+        logging.info("Would have tweeted: {0} {1}".format(message, photo_path))
+
+    def get_current_friends(self, api: API = None) -> List[int]:
+        return []
+
+    def find_new_friend(self, friends: List[int], api: API = None) -> None:
+        logging.info("Would have looked for a new friend!")
+
+
+class TwitterServiceLive(TwitterService):
+
+    def __init__(self) -> None:
         self.consumer_key = os.getenv("TWITTER_CONSUMER_KEY")
         self.consumer_secret = os.getenv("TWITTER_CONSUMER_SECRET")
         self.access_token = os.getenv("TWITTER_ACCESS_TOKEN")
         self.access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-        if self.quiet:
-            logging.info("Quiet Mode On!")
 
     def __get_api(self) -> API:
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
@@ -31,9 +61,6 @@ class TwitterService:
         return api
 
     def tweet(self, message: str, api: API = None) -> None:
-        if self.quiet:
-            logging.info("Would have tweeted: {0}".format(message))
-            return
         if not api:
             api = self.__get_api()
         try:
@@ -47,9 +74,6 @@ class TwitterService:
                 raise error
 
     def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
-        if self.quiet:
-            logging.info("Would have tweeted: {0} {1}".format(message, photo_path))
-            return
         if not api:
             api = self.__get_api()
         try:
@@ -64,8 +88,6 @@ class TwitterService:
                 raise error
 
     def get_current_friends(self, api: API = None) -> List[int]:
-        if self.quiet:
-            return []
         if not api:
             api = self.__get_api()
         return api.friends_ids()
@@ -75,9 +97,6 @@ class TwitterService:
         return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
 
     def find_new_friend(self, friends: List[int], api: API = None) -> None:
-        if self.quiet:
-            logging.info("Would have looked for a new friend!")
-            return
         page_no = 0
         if not api:
             api = self.__get_api()

@@ -4,7 +4,7 @@ import os.path
 
 from click import Context, Option
 
-from twitter_api import TwitterService
+from .twitter_api import TwitterServiceQuiet, TwitterServiceLive
 from .statemachine import StateMachine
 from .guineapig import GuineaPig, GuineaPigState
 
@@ -72,7 +72,11 @@ def simulate_guinea_pig(photos: str, level: str, quiet: bool) -> None:
     configure_logging(level)
     logging.info("Booting guinea pig...")
     gp_machine = build_guinea_pig_machine()
-    a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10, photos, TwitterService(quiet))
+    if quiet:
+        service = TwitterServiceQuiet()
+    else:
+        service = TwitterServiceLive()
+    a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10, photos, service)
     logging.info("It's alive!")
     gp_machine.run("SLEEPING", a_guinea_pig)
     gp_machine.stats()
