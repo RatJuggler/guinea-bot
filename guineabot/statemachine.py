@@ -42,7 +42,7 @@ class StateMachine:
     def run(self, start_state: str, data: Generic[T]) -> None:
         new_state = start_state
         for i in range(self.__run_time):
-            logging.info("{0} >> {1}".format(self.__format_days_time(i), str(data)))
+            logging.debug("{0} >> {1}".format(self.__format_days_time(i), str(data)))
             state = self.__states[new_state]
             self.__counts[new_state] += 1
             new_state = state.transition(data)
