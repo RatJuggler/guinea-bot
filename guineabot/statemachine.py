@@ -36,13 +36,13 @@ class StateMachine:
         total_minutes -= days * 24 * 60
         return "Day: {0:4,d} - {1}".format(days, self.format_time(total_minutes))
 
-    def run(self, data) -> None:
+    def run(self, start_state: str, data) -> None:
+        new_state = start_state
         for i in range(self.run_time):
-            new_state = data.state
             logging.info("{0} >> {1}".format(self.format_days_time(i), str(data)))
             state = self.states[new_state]
             self.counts[new_state] += 1
-            data = state.transition(data)
+            new_state = state.transition(data)
             sleep(self.interval * 60)
 
     def stats(self) -> None:

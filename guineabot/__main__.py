@@ -74,7 +74,7 @@ def simulate_guinea_pig(photos: str, level: str, quiet: bool) -> None:
     gp_machine = build_guinea_pig_machine()
     a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10, photos, TwitterService(quiet))
     logging.info("It's alive!")
-    gp_machine.run(a_guinea_pig)
+    gp_machine.run("SLEEPING", a_guinea_pig)
     gp_machine.stats()
 
 

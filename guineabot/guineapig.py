@@ -96,7 +96,7 @@ class GuineaPigState(State):
         self.state = state
         self.changes = changes
 
-    def transition(self, gp: GuineaPig) -> GuineaPig:
+    def transition(self, gp: GuineaPig) -> str:
         gp.update(self.changes)
         if gp.is_tired():
             new_state = "SLEEPING"
@@ -111,4 +111,4 @@ class GuineaPigState(State):
         else:
             new_state = "AWAKE"
         gp.update_state(new_state)
-        return gp
+        return new_state
