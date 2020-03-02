@@ -44,14 +44,14 @@ class TwitterServiceQuiet(TwitterService):
 class TwitterServiceLive(TwitterService):
 
     def __init__(self) -> None:
-        self.consumer_key = os.getenv("TWITTER_CONSUMER_KEY")
-        self.consumer_secret = os.getenv("TWITTER_CONSUMER_SECRET")
-        self.access_token = os.getenv("TWITTER_ACCESS_TOKEN")
-        self.access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        self.__consumer_key = os.getenv("TWITTER_CONSUMER_KEY")
+        self.__consumer_secret = os.getenv("TWITTER_CONSUMER_SECRET")
+        self.__access_token = os.getenv("TWITTER_ACCESS_TOKEN")
+        self.__access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
 
     def __get_api(self) -> API:
-        auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        auth.set_access_token(self.access_token, self.access_token_secret)
+        auth = tweepy.OAuthHandler(self.__consumer_key, self.__consumer_secret)
+        auth.set_access_token(self.__access_token, self.__access_token_secret)
         api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         try:
             api.verify_credentials()
