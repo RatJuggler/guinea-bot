@@ -6,7 +6,6 @@ import pathlib
 from random import choice, randint
 from typing import List, Dict
 
-from statemachine import State
 from twitter_api import TwitterService
 
 
@@ -92,26 +91,3 @@ class GuineaPig:
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
             .format(self.__state, self.__hunger, self.__thirst, self.__tired)
-
-
-class GuineaPigState(State):
-
-    def __init__(self, state_name: str, changes: List[int]) -> None:
-        self.__changes = changes
-        super(GuineaPigState, self).__init__(state_name.upper())
-
-    def transition(self, gp: GuineaPig) -> str:
-        gp.update(self.get_name(), self.__changes)
-        if gp.is_tired():
-            new_state = "SLEEPING"
-        elif gp.is_hungry():
-            new_state = "EATING"
-        elif gp.is_thirsty():
-            new_state = "DRINKING"
-        elif randint(1, 10) > 5:
-            new_state = "WANDERING"
-        elif randint(1, 10) > 8:
-            new_state = "THINKING"
-        else:
-            new_state = "AWAKE"
-        return new_state

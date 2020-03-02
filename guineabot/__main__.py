@@ -4,9 +4,10 @@ import os.path
 
 from click import Context, Option
 
-from .twitter_api import TwitterServiceQuiet, TwitterServiceLive
+from .guineapig import GuineaPig
+from .guineapig_state import GuineaPigState, SLEEPING, AWAKE, THINKING, EATING, DRINKING, WANDERING
 from .statemachine import StateMachine
-from .guineapig import GuineaPig, GuineaPigState
+from .twitter_api import TwitterServiceQuiet, TwitterServiceLive
 
 
 def configure_logging(loglevel: str) -> None:
@@ -44,12 +45,12 @@ def build_guinea_pig_machine(duration: int, accelerated: bool) -> StateMachine:
     :return: StateMachine instance with states configured
     """
     sm = StateMachine(duration, 15, accelerated)
-    sm.add_state(GuineaPigState("SLEEPING", [-20, 3, 1]))
-    sm.add_state(GuineaPigState("AWAKE", [5, 5, 2]))
-    sm.add_state(GuineaPigState("THINKING", [1, 3, 1]))
-    sm.add_state(GuineaPigState("EATING", [5, -10, 4]))
-    sm.add_state(GuineaPigState("DRINKING", [5, 5, -80]))
-    sm.add_state(GuineaPigState("WANDERING", [10, 10, 5]))
+    sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
+    sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
+    sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
+    sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
+    sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
+    sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
     return sm
 
 
@@ -88,9 +89,9 @@ def simulate_guinea_pig(accelerated: bool, duration: int, photos: str, level: st
         service = TwitterServiceQuiet()
     else:
         service = TwitterServiceLive()
-    a_guinea_pig = GuineaPig("SLEEPING", 20, 10, 10, photos, service)
+    a_guinea_pig = GuineaPig(SLEEPING, 20, 10, 10, photos, service)
     logging.info("It's alive!")
-    gp_machine.run("SLEEPING", a_guinea_pig)
+    gp_machine.run(SLEEPING, a_guinea_pig)
     gp_machine.stats()
 
 
