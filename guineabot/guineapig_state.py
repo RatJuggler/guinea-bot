@@ -1,5 +1,5 @@
 from .guineapig import GuineaPig
-from .statemachine import State
+from .statemachine import State, StateMachine
 
 from random import randint
 from typing import List
@@ -11,6 +11,20 @@ DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
+
+
+def add_guinea_pig_states(sm: StateMachine) -> None:
+    """
+    Populate a state machine with a guinea pig simulation.
+    :param sm: A state machine instance
+    :return: No meaningful return.
+    """
+    sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
+    sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
+    sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
+    sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
+    sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
+    sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
 
 
 class GuineaPigState(State):
