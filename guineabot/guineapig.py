@@ -2,33 +2,38 @@ import json
 import glob
 import logging
 import pathlib
+
 from random import choice, randint
+from typing import List, Dict
+
+from twitter_api import TwitterService
 
 
 class GuineaPig:
 
     @staticmethod
-    def __load_sayings():
+    def __load_sayings() -> List[Dict[str, List[str]]]:
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
         with sayings_file.open('r', encoding='utf-8') as f:
             sayings = json.load(f)
         return sayings["states"]
 
     @staticmethod
-    def __load_photos(path):
-        return [f for f in glob.glob(path + "/*.jpg", recursive=False)]
+    def __load_photos(path_to_photos: str) -> List[str]:
+        return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
-    def __init__(self, start_state, tired, hunger, thirst, photos_path, twitter_service):
+    def __init__(self, start_state: str, tired: int, hunger: int, thirst: int,
+                 path_to_photos: str, twitter_service: TwitterService) -> None:
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
         self.sayings = self.__load_sayings()
-        self.photos = self.__load_photos(photos_path)
+        self.photos = self.__load_photos(path_to_photos)
         self.twitter_service = twitter_service
         self.friends = self.twitter_service.get_current_friends()
 
-    def is_tired(self):
+    def is_tired(self) -> bool:
         # We won't sleep if we are hungry or thirsty.
         if self.is_hungry() or self.is_thirsty():
             return False
@@ -38,7 +43,7 @@ class GuineaPig:
         else:
             return self.tired > 80
 
-    def is_hungry(self):
+    def is_hungry(self) -> bool:
         # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
@@ -48,14 +53,14 @@ class GuineaPig:
         else:
             return self.hunger > 80
 
-    def is_thirsty(self):
+    def is_thirsty(self) -> bool:
         return self.thirst > 80
 
     @staticmethod
-    def outside_bounds(attribute):
+    def outside_bounds(attribute) -> bool:
         return attribute < 0 or attribute > 130
 
-    def update(self, changes):
+    def update(self, changes: List[int]) -> None:
         self.tired += changes[0]
         self.hunger += changes[1]
         self.thirst += changes[2]
@@ -63,12 +68,12 @@ class GuineaPig:
             logging.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
 
-    def get_saying_for_state(self, state_to_find):
+    def get_saying_for_state(self, state_to_find: str) -> str:
         for state in self.sayings:
             if state["state"] == state_to_find:
                 return choice(state["sayings"])
 
-    def update_state(self, new_state):
+    def update_state(self, new_state: str) -> None:
         if self.state != new_state:
             self.state = new_state
             # Limit when we tweet and find friends.
@@ -86,11 +91,11 @@ class GuineaPig:
 
 class GuineaPigState:
 
-    def __init__(self, state, changes):
+    def __init__(self, state: str, changes: List[int]):
         self.state = state
         self.changes = changes
 
-    def transition(self, gp: GuineaPig):
+    def transition(self, gp: GuineaPig) -> GuineaPig:
         gp.update(self.changes)
         if gp.is_tired():
             new_state = "SLEEPING"
