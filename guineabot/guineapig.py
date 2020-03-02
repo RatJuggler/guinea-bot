@@ -6,6 +6,7 @@ import pathlib
 from random import choice, randint
 from typing import List, Dict
 
+from statemachine import State
 from twitter_api import TwitterService
 
 
@@ -89,7 +90,7 @@ class GuineaPig:
             .format(self.state, self.hunger, self.thirst, self.tired)
 
 
-class GuineaPigState:
+class GuineaPigState(State):
 
     def __init__(self, state: str, changes: List[int]):
         self.state = state

@@ -4,6 +4,12 @@ from time import sleep
 from typing import Callable, List
 
 
+class State:
+
+    def transition(self, data):
+        pass
+
+
 class StateMachine:
 
     def __init__(self, interval: int, days: int) -> None:
