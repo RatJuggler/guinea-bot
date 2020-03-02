@@ -21,6 +21,8 @@ class GuineaPig:
 
     @staticmethod
     def __load_photos(path_to_photos: str) -> List[str]:
+        if path_to_photos == "":
+            return []
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
     def __init__(self, start_state: str, tired: int, hunger: int, thirst: int,
@@ -71,7 +73,8 @@ class GuineaPig:
         if randint(1, 5) == 1:
             self.twitter_service.tweet(self.__get_saying_for_state(self.state))
         elif randint(1, 40) == 1:
-            self.twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.photos))
+            if len(self.photos) > 0:
+                self.twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.photos))
         elif randint(1, 50) == 1:
             self.twitter_service.find_new_friend(self.friends)
 
