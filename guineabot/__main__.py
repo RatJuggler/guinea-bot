@@ -36,12 +36,13 @@ def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
     return value
 
 
-def build_guinea_pig_machine() -> StateMachine:
+def build_guinea_pig_machine(duration: int) -> StateMachine:
     """
     Initialise the state machine.
+    :param duration: The number of days the bot should run for
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(15, 2000)
+    sm = StateMachine(15, duration)
     sm.add_state("SLEEPING", GuineaPigState, [-20, 3, 1])
     sm.add_state("AWAKE", GuineaPigState, [5, 5, 2])
     sm.add_state("THINKING", GuineaPigState, [1, 3, 1])
@@ -55,15 +56,18 @@ def build_guinea_pig_machine() -> StateMachine:
     Guinea Pig Twitter bot.
                     """)
 @click.version_option()
-@click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
-              help="Folder containing photos to Tweet.", show_default=True)
+@click.option('-d', '--duration', type=click.IntRange(1, 2920),
+              help="How many guinea pig days the bot should run for.", default=2000, show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
+@click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
+              help="Folder containing photos to Tweet.", show_default=True)
 @click.option('-q', '--quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
-def simulate_guinea_pig(photos: str, level: str, quiet: bool) -> None:
+def simulate_guinea_pig(duration: int, photos: str, level: str, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
+    :param duration: The number of days the bot should run for
     :param photos: Optional path to folder containing photos to use in some Tweets
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :param quiet: Run without invoking the Twitter API
@@ -71,7 +75,7 @@ def simulate_guinea_pig(photos: str, level: str, quiet: bool) -> None:
     """
     configure_logging(level)
     logging.info("Booting guinea pig...")
-    gp_machine = build_guinea_pig_machine()
+    gp_machine = build_guinea_pig_machine(duration)
     if quiet:
         service = TwitterServiceQuiet()
     else:
