@@ -25,6 +25,9 @@ class TwitterService:
         return api
 
     def tweet(self, message, api=None):
+        if self.quiet:
+            logging.info("Would have tweeted: {0}".format(message))
+            return
         if not api:
             api = self.create_twitter_api()
         try:
@@ -38,6 +41,9 @@ class TwitterService:
                 raise error
 
     def tweet_with_photo(self, message, photo, api=None):
+        if self.quiet:
+            logging.info("Would have tweeted: {0} {1}".format(message, photo))
+            return
         if not api:
             api = self.create_twitter_api()
         try:
@@ -52,6 +58,8 @@ class TwitterService:
                 raise error
 
     def get_current_friends(self, api=None):
+        if self.quiet:
+            return []
         if not api:
             api = self.create_twitter_api()
         return api.friends_ids()
@@ -60,6 +68,9 @@ class TwitterService:
         return re.search(r"guinea\s*pig", name, re.IGNORECASE)
 
     def find_new_friend(self, friends, api=None):
+        if self.quiet:
+            logging.info("Would have looked for a new friend!")
+            return
         page_no = 0
         if not api:
             api = self.create_twitter_api()
