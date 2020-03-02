@@ -7,7 +7,7 @@ is doing on each state change and may also post a random picture from its archiv
 randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. For photos to
-be tweeted the path to a folder of jpg files must be set using the command line option on startup, a list of the photos available
+be tweeted the path to a folder of `.jpg` files must be set using the command line option on startup, a list of the photos available
 to use is then loaded on startup.
 
 Tweeting is limited to a 1 in 5 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
@@ -48,7 +48,7 @@ Options:
                                   [default: False]
   --help                          Show this message and exit.
 ```
-You can use the `-p` option to run without using the Twitter API but to make it fully functional you will need to set up a Twitter 
+You can use the `-q` option to run without using the Twitter API but to make it fully functional you will need to set up a Twitter 
 account and apply for access [here](https://developer.twitter.com/en/apply-for-access). You'll then need to make the following
 tokens available to run it:
 ```
