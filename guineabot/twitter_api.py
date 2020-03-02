@@ -1,7 +1,11 @@
 import logging
 import os
 import re
+
+from typing import List
+
 import tweepy
+from tweepy import API
 
 
 class TwitterService:
@@ -12,8 +16,10 @@ class TwitterService:
         self.consumer_secret = os.getenv("TWITTER_CONSUMER_SECRET")
         self.access_token = os.getenv("TWITTER_ACCESS_TOKEN")
         self.access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        if self.quiet:
+            logging.info("Quiet Mode On!")
 
-    def create_twitter_api(self):
+    def create_twitter_api(self) -> API:
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
         auth.set_access_token(self.access_token, self.access_token_secret)
         api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
@@ -24,7 +30,7 @@ class TwitterService:
             raise error
         return api
 
-    def tweet(self, message, api=None):
+    def tweet(self, message: str, api: API = None) -> None:
         if self.quiet:
             logging.info("Would have tweeted: {0}".format(message))
             return
@@ -40,16 +46,16 @@ class TwitterService:
                 logging.error("Error trying to tweet!", error)
                 raise error
 
-    def tweet_with_photo(self, message, photo, api=None):
+    def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
         if self.quiet:
-            logging.info("Would have tweeted: {0} {1}".format(message, photo))
+            logging.info("Would have tweeted: {0} {1}".format(message, photo_path))
             return
         if not api:
             api = self.create_twitter_api()
         try:
-            media = api.media_upload(photo)
+            media = api.media_upload(photo_path)
             api.update_status(message, media_ids=[media.media_id])
-            logging.info("Tweeted: {0} {1}".format(message, photo))
+            logging.info("Tweeted: {0} {1}".format(message, photo_path))
         except tweepy.TweepError as error:
             if error.api_code == 187:
                 logging.warning("Duplicate photo tweet discarded!")
@@ -57,17 +63,18 @@ class TwitterService:
                 logging.error("Error trying to tweet with photo!", error)
                 raise error
 
-    def get_current_friends(self, api=None):
+    def get_current_friends(self, api: API = None) -> List[int]:
         if self.quiet:
             return []
         if not api:
             api = self.create_twitter_api()
         return api.friends_ids()
 
-    def good_name(self, name):
-        return re.search(r"guinea\s*pig", name, re.IGNORECASE)
+    @staticmethod
+    def good_name(name: str) -> bool:
+        return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
 
-    def find_new_friend(self, friends, api=None):
+    def find_new_friend(self, friends: List[int], api: API = None) -> None:
         if self.quiet:
             logging.info("Would have looked for a new friend!")
             return
