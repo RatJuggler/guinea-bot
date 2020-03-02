@@ -1,7 +1,7 @@
 import logging
 
 from time import sleep
-from typing import Callable, List, Generic, TypeVar
+from typing import Generic, TypeVar
 
 T = TypeVar('T')
 
@@ -10,6 +10,13 @@ class State:
     """
     States are used to configure the StateMachine.
     """
+
+    def get_name(self) -> str:
+        """
+        The states name.
+        :return: State name
+        """
+        pass
 
     def transition(self, data: Generic[T]) -> str:
         """
@@ -40,16 +47,14 @@ class StateMachine:
         self.__states = {}
         self.__counts = {}
 
-    def add_state(self, name: str, handler: Callable, changes: List[int]) -> None:
+    def add_state(self, new_state: State) -> None:
         """
         Add a new state to this machine instance.
-        :param name: State name
-        :param handler: State handler
-        :param changes:
-        :return:
+        :param new_state: State to add
+        :return: No meaningful return
         """
-        name = name.upper()
-        self.__states[name] = handler(name, changes)
+        name = new_state.get_name()
+        self.__states[name] = new_state
         self.__counts[name] = 0
 
     @staticmethod

@@ -96,9 +96,12 @@ class GuineaPig:
 
 class GuineaPigState(State):
 
-    def __init__(self, state: str, changes: List[int]):
-        self.__state = state
+    def __init__(self, state: str, changes: List[int]) -> None:
+        self.__state = state.upper()
         self.__changes = changes
+
+    def get_name(self) -> str:
+        return self.__state
 
     def transition(self, gp: GuineaPig) -> str:
         gp.update(self.__state, self.__changes)

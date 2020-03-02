@@ -44,12 +44,12 @@ def build_guinea_pig_machine(duration: int, accelerated: bool) -> StateMachine:
     :return: StateMachine instance with states configured
     """
     sm = StateMachine(duration, 15, accelerated)
-    sm.add_state("SLEEPING", GuineaPigState, [-20, 3, 1])
-    sm.add_state("AWAKE", GuineaPigState, [5, 5, 2])
-    sm.add_state("THINKING", GuineaPigState, [1, 3, 1])
-    sm.add_state("EATING", GuineaPigState, [5, -10, 4])
-    sm.add_state("DRINKING", GuineaPigState, [5, 5, -80])
-    sm.add_state("WANDERING", GuineaPigState, [10, 10, 5])
+    sm.add_state(GuineaPigState("SLEEPING", [-20, 3, 1]))
+    sm.add_state(GuineaPigState("AWAKE", [5, 5, 2]))
+    sm.add_state(GuineaPigState("THINKING", [1, 3, 1]))
+    sm.add_state(GuineaPigState("EATING", [5, -10, 4]))
+    sm.add_state(GuineaPigState("DRINKING", [5, 5, -80]))
+    sm.add_state(GuineaPigState("WANDERING", [10, 10, 5]))
     return sm
 
 
