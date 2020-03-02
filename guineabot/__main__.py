@@ -58,11 +58,14 @@ def build_guinea_pig_machine() -> StateMachine:
               help="Folder containing photos to Tweet.", show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
-def simulate_guinea_pig(photos: str, level: str) -> None:
+@click.option('-q', '--quiet', default=False, is_flag=True,
+              help="Run without invoking the Twitter API.", show_default=True)
+def simulate_guinea_pig(photos: str, level: str, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
     :param photos: Optional path to folder containing photos to use in some Tweets
     :param level: Set a logging level; DEBUG, INFO or WARNING
+    :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
     """
     configure_logging(level)
