@@ -4,8 +4,6 @@ import logging
 import pathlib
 from random import choice, randint
 
-from .twitter_api import tweet, tweet_with_photo, get_current_friends, find_new_friend
-
 
 class GuineaPig:
 
@@ -20,14 +18,15 @@ class GuineaPig:
     def __load_photos(path):
         return [f for f in glob.glob(path + "/*.jpg", recursive=False)]
 
-    def __init__(self, start_state, tired, hunger, thirst, photos_path):
+    def __init__(self, start_state, tired, hunger, thirst, photos_path, twitter_service):
         self.state = start_state.upper()
         self.tired = tired
         self.hunger = hunger
         self.thirst = thirst
         self.sayings = self.__load_sayings()
         self.photos = self.__load_photos(photos_path)
-        self.friends = get_current_friends()
+        self.twitter_service = twitter_service
+        self.friends = self.twitter_service.get_current_friends()
 
     def is_tired(self):
         # We won't sleep if we are hungry or thirsty.
@@ -74,11 +73,11 @@ class GuineaPig:
             self.state = new_state
             # Limit when we tweet and find friends.
             if randint(1, 5) == 1:
-                tweet(self.get_saying_for_state(self.state))
+                self.twitter_service.tweet(self.get_saying_for_state(self.state))
             elif randint(1, 40) == 1:
-                tweet_with_photo(self.get_saying_for_state("PHOTOS"), choice(self.photos))
+                self.twitter_service.tweet_with_photo(self.get_saying_for_state("PHOTOS"), choice(self.photos))
             elif randint(1, 50) == 1:
-                find_new_friend(self.friends)
+                self.twitter_service.find_new_friend(self.friends)
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
