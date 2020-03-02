@@ -27,81 +27,81 @@ class GuineaPig:
 
     def __init__(self, start_state: str, tired: int, hunger: int, thirst: int,
                  path_to_photos: str, twitter_service: TwitterService) -> None:
-        self.state = start_state.upper()
-        self.tired = tired
-        self.hunger = hunger
-        self.thirst = thirst
-        self.sayings = self.__load_sayings()
-        self.photos = self.__load_photos(path_to_photos)
-        self.twitter_service = twitter_service
-        self.friends = self.twitter_service.get_current_friends()
+        self.__state = start_state.upper()
+        self.__tired = tired
+        self.__hunger = hunger
+        self.__thirst = thirst
+        self.__sayings = self.__load_sayings()
+        self.__photos = self.__load_photos(path_to_photos)
+        self.__twitter_service = twitter_service
+        self.__friends = self.__twitter_service.get_current_friends()
 
     def is_tired(self) -> bool:
         # We won't sleep if we are hungry or thirsty.
         if self.is_hungry() or self.is_thirsty():
             return False
-        if self.state == "SLEEPING":
+        if self.__state == "SLEEPING":
             # If we are already sleeping, carry on sleeping.
-            return self.tired > 30
+            return self.__tired > 30
         else:
-            return self.tired > 80
+            return self.__tired > 80
 
     def is_hungry(self) -> bool:
         # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
-        if self.state == "EATING":
+        if self.__state == "EATING":
             # If already eating, keep on eating.
-            return self.hunger > 30
+            return self.__hunger > 30
         else:
-            return self.hunger > 80
+            return self.__hunger > 80
 
     def is_thirsty(self) -> bool:
-        return self.thirst > 80
+        return self.__thirst > 80
 
     @staticmethod
     def outside_bounds(attribute) -> bool:
         return attribute < 0 or attribute > 130
 
     def __get_saying_for_state(self, state_to_find: str) -> str:
-        for state in self.sayings:
+        for state in self.__sayings:
             if state["state"] == state_to_find:
                 return choice(state["sayings"])
 
     def __tweet_state(self) -> None:
         # Limit when we tweet and find friends.
         if randint(1, 5) == 1:
-            self.twitter_service.tweet(self.__get_saying_for_state(self.state))
+            self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
         elif randint(1, 40) == 1:
-            if len(self.photos) > 0:
-                self.twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.photos))
+            if len(self.__photos) > 0:
+                self.__twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.__photos))
         elif randint(1, 50) == 1:
-            self.twitter_service.find_new_friend(self.friends)
+            self.__twitter_service.find_new_friend(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> None:
-        self.tired += changes[0]
-        self.hunger += changes[1]
-        self.thirst += changes[2]
-        if self.outside_bounds(self.tired) or self.outside_bounds(self.hunger) or self.outside_bounds(self.thirst):
+        self.__tired += changes[0]
+        self.__hunger += changes[1]
+        self.__thirst += changes[2]
+        if self.outside_bounds(self.__tired) or self.outside_bounds(self.__hunger) or self.outside_bounds(self.__thirst):
             logging.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
-        if self.state != new_state:
-            self.state = new_state
+        if self.__state != new_state:
+            self.__state = new_state
             self.__tweet_state()
 
     def __str__(self):
         return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
-            .format(self.state, self.hunger, self.thirst, self.tired)
+            .format(self.__state, self.__hunger, self.__thirst, self.__tired)
 
 
 class GuineaPigState(State):
 
     def __init__(self, state: str, changes: List[int]):
-        self.state = state
-        self.changes = changes
+        self.__state = state
+        self.__changes = changes
 
     def transition(self, gp: GuineaPig) -> str:
-        gp.update(self.state, self.changes)
+        gp.update(self.__state, self.__changes)
         if gp.is_tired():
             new_state = "SLEEPING"
         elif gp.is_hungry():
