@@ -23,6 +23,13 @@ class TwitterService:
         pass
 
 
+def get_twitter_service(quiet: bool) -> TwitterService:
+    if quiet:
+        return TwitterServiceQuiet()
+    else:
+        return TwitterServiceLive()
+
+
 class TwitterServiceQuiet(TwitterService):
 
     def __init__(self) -> None:

@@ -7,7 +7,7 @@ from click import Context, Option
 from .guineapig import GuineaPig
 from .guineapig_state import add_guinea_pig_states, SLEEPING
 from .statemachine import StateMachine
-from .twitter_api import TwitterServiceQuiet, TwitterServiceLive
+from .twitter_api import get_twitter_service
 
 
 def configure_logging(loglevel: str) -> None:
@@ -80,11 +80,7 @@ def simulate_guinea_pig(accelerated: bool, duration: int, photos: str, level: st
         logging.info("Accelerated running, quiet mode enforced.")
         quiet = True
     gp_machine = build_guinea_pig_machine(duration, accelerated)
-    if quiet:
-        service = TwitterServiceQuiet()
-    else:
-        service = TwitterServiceLive()
-    a_guinea_pig = GuineaPig(SLEEPING, 20, 10, 10, photos, service)
+    a_guinea_pig = GuineaPig(SLEEPING, 20, 10, 10, photos, get_twitter_service(quiet))
     logging.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
     gp_machine.stats()
