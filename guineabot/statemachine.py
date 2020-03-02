@@ -43,7 +43,8 @@ class StateMachine:
         self.__duration = duration
         self.__interval = interval
         self.__accelerated = accelerated
-        self.__run_time = (self.__duration * 24 * 60) // self.__interval
+        # Calculate the number of interval ticks over the duration.
+        self.__ticks = (self.__duration * 24 * 60) // self.__interval
         self.__states = {}
         self.__counts = {}
 
@@ -68,13 +69,13 @@ class StateMachine:
         minutes = total_minutes - (hours * 60)
         return "{0:02d}:{1:02d}".format(hours, minutes)
 
-    def __format_days_time(self, ticks: int) -> str:
+    def __format_days_time(self, tick: int) -> str:
         """
-        Format ticks into days, hours and minutes
-        :param ticks:
+        Format tick into days, hours and minutes
+        :param tick: The tick of elapsed intervals
         :return: String of ticks in DD - HH:MM format
         """
-        total_minutes = ticks * self.__interval
+        total_minutes = tick * self.__interval
         days = total_minutes // (24 * 60)
         total_minutes -= days * 24 * 60
         return "Day: {0:4,d} - {1}".format(days, self.__format_time(total_minutes))
@@ -87,8 +88,8 @@ class StateMachine:
         :return: No meaningful return
         """
         new_state = start_state
-        for i in range(self.__run_time):
-            logging.debug("{0} >> {1}".format(self.__format_days_time(i), str(data)))
+        for tick in range(self.__ticks):
+            logging.debug("{0} >> {1}".format(self.__format_days_time(tick), str(data)))
             state = self.__states[new_state]
             self.__counts[new_state] += 1
             new_state = state.transition(data)
@@ -102,6 +103,6 @@ class StateMachine:
         """
         logging.info("Dumping stats...\n                                 State     : Time spent in state (% and daily avg.)")
         for state in self.__counts:
-            percentage = self.__counts[state] / self.__run_time * 100
+            percentage = self.__counts[state] / self.__ticks * 100
             average = self.__format_time(self.__counts[state] * self.__interval // self.__duration)
             logging.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
