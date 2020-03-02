@@ -6,7 +6,7 @@ from typing import Callable, List
 
 class State:
 
-    def transition(self, data):
+    def transition(self, data) -> str:
         pass
 
 
@@ -25,21 +25,21 @@ class StateMachine:
         self.counts[name] = 0
 
     @staticmethod
-    def format_time(total_minutes: int) -> str:
+    def __format_time(total_minutes: int) -> str:
         hours = total_minutes // 60
         minutes = total_minutes - (hours * 60)
         return "{0:02d}:{1:02d}".format(hours, minutes)
 
-    def format_days_time(self, ticks: int) -> str:
+    def __format_days_time(self, ticks: int) -> str:
         total_minutes = ticks * self.interval
         days = total_minutes // (24 * 60)
         total_minutes -= days * 24 * 60
-        return "Day: {0:4,d} - {1}".format(days, self.format_time(total_minutes))
+        return "Day: {0:4,d} - {1}".format(days, self.__format_time(total_minutes))
 
     def run(self, start_state: str, data) -> None:
         new_state = start_state
         for i in range(self.run_time):
-            logging.info("{0} >> {1}".format(self.format_days_time(i), str(data)))
+            logging.info("{0} >> {1}".format(self.__format_days_time(i), str(data)))
             state = self.states[new_state]
             self.counts[new_state] += 1
             new_state = state.transition(data)
@@ -49,5 +49,5 @@ class StateMachine:
         logging.info("\n\n\nState     : Time spent in state (% and daily avg.)")
         for state in self.counts:
             percentage = self.counts[state] / self.run_time * 100
-            average = self.format_time(self.counts[state] * self.interval // self.days)
+            average = self.__format_time(self.counts[state] * self.interval // self.days)
             logging.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
