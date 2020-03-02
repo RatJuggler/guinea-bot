@@ -101,7 +101,7 @@ class GuineaPigState(State):
         super(GuineaPigState, self).__init__(state_name.upper())
 
     def transition(self, gp: GuineaPig) -> str:
-        gp.update(self.name, self.__changes)
+        gp.update(self.get_name(), self.__changes)
         if gp.is_tired():
             new_state = "SLEEPING"
         elif gp.is_hungry():

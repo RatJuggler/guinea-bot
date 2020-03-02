@@ -14,11 +14,18 @@ class State(ABC):
 
     def __init__(self, name: str) -> None:
         """
-
+        Initialise a State instance.
         :param name: The state name
         """
-        self.name = name
+        self.__name = name
         super().__init__()
+
+    def get_name(self) -> str:
+        """
+        The name of the state.
+        :return: The state name
+        """
+        return self.__name
 
     @abstractmethod
     def transition(self, data: Generic[T]) -> str:
@@ -57,8 +64,8 @@ class StateMachine:
         :param new_state: State to add
         :return: No meaningful return
         """
-        self.__states[new_state.name] = new_state
-        self.__counts[new_state.name] = 0
+        self.__states[new_state.get_name()] = new_state
+        self.__counts[new_state.get_name()] = 0
 
     @staticmethod
     def __format_time(total_minutes: int) -> str:
