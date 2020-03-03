@@ -1,16 +1,8 @@
-from .guineapig import GuineaPig
+from .guineapig import GuineaPig, SLEEPING, EATING, DRINKING, WANDERING, THINKING, AWAKE
 from .statemachine import State, StateMachine
 
 from random import randint
 from typing import List
-
-# Current guinea pig states.
-SLEEPING = "SLEEPING"
-EATING = "EATING"
-DRINKING = "DRINKING"
-WANDERING = "WANDERING"
-THINKING = "THINKING"
-AWAKE = "AWAKE"
 
 
 class GuineaPigState(State):
