@@ -2,9 +2,9 @@
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
 It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic). 
-A change of state is triggered every 15 minutes to emulate the exciting and busy life of a guinea pig. It randomly tweets what it 
-is doing on each state change and may also post a random picture from its archive or search for other "guinea pig" accounts and 
-randomly follow one. 
+A change of state is triggered every 15 minutes (by default) to emulate the exciting and busy life of a guinea pig. It randomly 
+tweets what it is doing on each state change and may also post a random picture from its archive or search for other "guinea pig" 
+accounts and randomly follow one. 
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. For photos to
 be tweeted the path to a folder of `.jpg` files must be set using the command line option on startup, a list of the photos available
@@ -40,10 +40,17 @@ Usage: guineabot [OPTIONS]
 
 Options:
   --version                       Show the version and exit.
-  -p, --photos-folder TEXT        Folder containing photos to Tweet.
+  -a, --accelerated               Don't run in pseudo real-time, forces quiet
+                                  mode to prevent Twitter API rate limit
+                                  triggering.  [default: False]
+  -d, --duration INTEGER RANGE    How many guinea pig days the bot should run
+                                  for.  [default: 2000]
+  -i, --interval INTEGER RANGE    The interval between changes in guinea pig
+                                  activity (state), in minutes.  [default: 15]
   -l, --log-level [DEBUG|INFO|WARNING]
                                   Show additional logging information.
                                   [default: INFO]
+  -p, --photos-folder TEXT        Folder containing photos to Tweet.
   -q, --quiet                     Run without invoking the Twitter API.
                                   [default: False]
   --help                          Show this message and exit.
@@ -58,9 +65,10 @@ TWITTER_ACCESS_TOKEN
 TWITTER_ACCESS_TOKEN_SECRET
 ```
 ## Installing as a service
-Copy the `guinea-bot.service` file to `/etc/systemd/system` to create a systemd unit service. 
+First edit the `guinea-bot.service` file and add any command line options you need. Then copy the file to `/etc/systemd/system` to 
+create a systemd unit service. 
 ```
-$ cp guinea-bot.service /etc/systemd/system
+$ sudo cp guinea-bot.service /etc/systemd/system
 ```
 A configuration file also needs to be created to hold the Twitter access keys.
 ```
