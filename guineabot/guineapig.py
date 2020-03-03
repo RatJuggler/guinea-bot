@@ -1,11 +1,11 @@
 import json
 import glob
-import logging
 import pathlib
 
 from random import choice, randint
 from typing import List, Dict
 
+from .smt_logging import smt_logger
 from .statemachine import StateMachine, State
 from .twitter_api import TwitterService
 
@@ -92,7 +92,7 @@ class GuineaPig:
         self.__hunger += changes[1]
         self.__thirst += changes[2]
         if self.outside_bounds(self.__tired) or self.outside_bounds(self.__hunger) or self.outside_bounds(self.__thirst):
-            logging.error("Rogue Pig: {0}".format(str(self)))
+            smt_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
         if self.__state != new_state:
             self.__state = new_state

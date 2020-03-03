@@ -1,4 +1,3 @@
-import logging
 import os
 import re
 
@@ -6,6 +5,8 @@ from typing import List
 
 import tweepy
 from tweepy import API
+
+from .smt_logging import smt_logger
 
 
 class TwitterService:
@@ -33,19 +34,19 @@ def get_twitter_service(quiet: bool) -> TwitterService:
 class TwitterServiceQuiet(TwitterService):
 
     def __init__(self) -> None:
-        logging.info("Quiet Mode On!")
+        smt_logger.info("Quiet Mode On!")
 
     def tweet(self, message: str, api: API = None) -> None:
-        logging.info("Would have tweeted: {0}".format(message))
+        smt_logger.info("Would have tweeted: {0}".format(message))
 
     def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
-        logging.info("Would have tweeted: {0} {1}".format(message, photo_path))
+        smt_logger.info("Would have tweeted: {0} {1}".format(message, photo_path))
 
     def get_current_friends(self, api: API = None) -> List[int]:
         return []
 
     def find_new_friend(self, friends: List[int], api: API = None) -> None:
-        logging.info("Would have looked for a new friend!")
+        smt_logger.info("Would have looked for a new friend!")
 
 
 class TwitterServiceLive(TwitterService):
@@ -63,7 +64,7 @@ class TwitterServiceLive(TwitterService):
         try:
             api.verify_credentials()
         except Exception as error:
-            logging.error("Error creating Twitter API!", error)
+            smt_logger.error("Error creating Twitter API!", error)
             raise error
         return api
 
@@ -72,12 +73,12 @@ class TwitterServiceLive(TwitterService):
             api = self.__get_api()
         try:
             api.update_status(message)
-            logging.info("Tweeted: {0}".format(message))
+            smt_logger.info("Tweeted: {0}".format(message))
         except tweepy.TweepError as error:
             if error.api_code == 187:
-                logging.warning("Duplicate tweet discarded!")
+                smt_logger.warning("Duplicate tweet discarded!")
             else:
-                logging.error("Error trying to tweet!", error)
+                smt_logger.error("Error trying to tweet!", error)
                 raise error
 
     def tweet_with_photo(self, message: str, photo_path: str, api: API = None) -> None:
@@ -86,12 +87,12 @@ class TwitterServiceLive(TwitterService):
         try:
             media = api.media_upload(photo_path)
             api.update_status(message, media_ids=[media.media_id])
-            logging.info("Tweeted: {0} {1}".format(message, photo_path))
+            smt_logger.info("Tweeted: {0} {1}".format(message, photo_path))
         except tweepy.TweepError as error:
             if error.api_code == 187:
-                logging.warning("Duplicate photo tweet discarded!")
+                smt_logger.warning("Duplicate photo tweet discarded!")
             else:
-                logging.error("Error trying to tweet with photo!", error)
+                smt_logger.error("Error trying to tweet with photo!", error)
                 raise error
 
     def get_current_friends(self, api: API = None) -> List[int]:
@@ -108,7 +109,7 @@ class TwitterServiceLive(TwitterService):
         if not api:
             api = self.__get_api()
         if not friends or len(friends) == 0:
-            logging.warning("Expected more friends: {0}".format(friends))
+            smt_logger.warning("Expected more friends: {0}".format(friends))
             friends = self.get_current_friends(api)
         while page_no < 100:
             page = api.search_users("guinea pig", 20, page_no)

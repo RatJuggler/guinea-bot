@@ -1,23 +1,12 @@
 import click
-import logging
 import os.path
 
 from click import Context, Option
 
+from .smt_logging import configure_logging, smt_logger
 from .guineapig import GuineaPig, SLEEPING, add_guinea_pig_states
 from .statemachine import StateMachine
 from .twitter_api import get_twitter_service
-
-
-def configure_logging(loglevel: str) -> None:
-    """
-    Configure basic logging to the console.
-    :param loglevel: level name from the command line or default
-    :return: No meaningful return
-    """
-    if logging.getLevelName(loglevel) == "Level {0}".format(loglevel):
-        raise ValueError('Invalid log level: %s' % loglevel)
-    logging.basicConfig(level=loglevel, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # noinspection PyUnusedLocal
@@ -78,13 +67,13 @@ def simulate_guinea_pig(accelerated: bool, duration: int, interval: int, photos:
     :return: No meaningful return.
     """
     configure_logging(level)
-    logging.info("Booting guinea pig...")
+    smt_logger.info("Booting guinea pig...")
     if accelerated:
-        logging.info("Accelerated running, quiet mode enforced.")
+        smt_logger.info("Accelerated running, quiet mode enforced.")
         quiet = True
     gp_machine = build_guinea_pig_machine(duration, interval, accelerated)
     a_guinea_pig = GuineaPig(SLEEPING, 20, 10, 10, photos, get_twitter_service(quiet))
-    logging.info("It's alive!")
+    smt_logger.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
     gp_machine.stats()
 

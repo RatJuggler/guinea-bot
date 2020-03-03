@@ -1,8 +1,8 @@
-import logging
 from abc import ABC, abstractmethod
-
 from time import sleep
 from typing import Generic, TypeVar
+
+from .smt_logging import smt_logger
 
 T = TypeVar('T')
 
@@ -68,9 +68,9 @@ class StateMachine:
         self.__counts[new_state.get_name()] = 0
 
     @staticmethod
-    def __format_time(total_minutes: int) -> str:
+    def __format_sm_time(total_minutes: int) -> str:
         """
-        Format total minutes
+        Format minutes of state machine time.
         :param total_minutes: to format
         :return: String of total minutes in HH:MM format
         """
@@ -78,16 +78,16 @@ class StateMachine:
         minutes = total_minutes - (hours * 60)
         return "{0:02d}:{1:02d}".format(hours, minutes)
 
-    def __format_days_time(self, tick: int) -> str:
+    def __format_sm_day_time(self, tick: int) -> str:
         """
-        Format tick into days, hours and minutes
+        Format tick into days, hours and minutes of state machine time.
         :param tick: The tick of elapsed intervals
-        :return: String of ticks in DD - HH:MM format
+        :return: String of ticks in DAY - HH:MM format
         """
         total_minutes = tick * self.__interval
         days = total_minutes // (24 * 60)
         total_minutes -= days * 24 * 60
-        return "Day: {0:4,d} - {1}".format(days, self.__format_time(total_minutes))
+        return "SMT: {0:d} - {1}".format(days, self.__format_sm_time(total_minutes))
 
     def run(self, start_state_name: str, data: Generic[T]) -> None:
         """
@@ -98,7 +98,8 @@ class StateMachine:
         """
         new_state_name = start_state_name
         for tick in range(self.__ticks):
-            logging.debug("{0} >> {1}".format(self.__format_days_time(tick), str(data)))
+            smt_logger.set_smt(self.__format_sm_day_time(tick))
+            smt_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
@@ -110,8 +111,9 @@ class StateMachine:
         Log stats on time spent in each state.
         :return: No meaningful return
         """
-        logging.info("Dumping stats...\n                                 State     : Time spent in state (% and daily avg.)")
+        smt_logger.set_smt('COMPLETED')
+        smt_logger.info("Dumping stats...\n                                 State     >> Time spent in state (% and daily avg.)")
         for state in self.__counts:
             percentage = self.__counts[state] / self.__ticks * 100
-            average = self.__format_time(self.__counts[state] * self.__interval // self.__duration)
-            logging.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
+            average = self.__format_sm_time(self.__counts[state] * self.__interval // self.__duration)
+            smt_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
