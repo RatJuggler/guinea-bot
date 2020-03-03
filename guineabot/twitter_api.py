@@ -23,7 +23,7 @@ class TwitterService:
     def find_new_friend(self, friends: List[int]) -> List[int]:
         pass
 
-    def prune_friends(self) -> List[int]:
+    def prune_friends(self, friends: List[int]) -> List[int]:
         pass
 
 
@@ -52,8 +52,8 @@ class TwitterServiceQuiet(TwitterService):
         smt_logger.info("Would have looked for a new friend!")
         return []
 
-    def prune_friends(self) -> List[int]:
-        smt_logger.info("Would have pruned friends!")
+    def prune_friends(self, friends: List[int]) -> List[int]:
+        smt_logger.info("Would have tried to pruned friends!")
         return []
 
 
@@ -109,9 +109,6 @@ class TwitterServiceLive(TwitterService):
 
     def find_new_friend(self, friends: List[int]) -> List[int]:
         page_no = 0
-        if not friends or len(friends) == 0:
-            smt_logger.warning("Expected more friends: {0}".format(friends))
-            friends = self.get_current_friends()
         while page_no < 100:
             page = self.__api.search_users("guinea pig", 20, page_no)
             for new_friend in page:
@@ -124,5 +121,13 @@ class TwitterServiceLive(TwitterService):
         self.tweet("I can't find any new friends.",)
         return friends
 
-    def prune_friends(self):
-        pass
+    def prune_friends(self, friends: List[int]) -> List[int]:
+        for relationship in self.__api.lookup_friendships(friends):
+            print(relationship.id, relationship.name, relationship.screen_name, relationship.is_following,
+                  relationship.is_followed_by)
+            if not (self.__good_name(relationship.name) or self.__good_name(relationship.screen_name)):
+                if relationship.is_followed_by:
+                    print("*** Mute")
+                else:
+                    print('*** Un-follow')
+        return friends
