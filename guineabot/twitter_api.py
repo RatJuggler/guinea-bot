@@ -23,6 +23,9 @@ class TwitterService:
     def find_new_friend(self, friends: List[int], api: API = None) -> None:
         pass
 
+    def prune_friends(self):
+        pass
+
 
 def get_twitter_service(quiet: bool) -> TwitterService:
     if quiet:
@@ -47,6 +50,9 @@ class TwitterServiceQuiet(TwitterService):
 
     def find_new_friend(self, friends: List[int], api: API = None) -> None:
         smt_logger.info("Would have looked for a new friend!")
+
+    def prune_friends(self):
+        smt_logger.info("Would have pruned friends!")
 
 
 class TwitterServiceLive(TwitterService):
@@ -104,7 +110,7 @@ class TwitterServiceLive(TwitterService):
     def __good_name(name: str) -> bool:
         return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
 
-    def find_new_friend(self, friends: List[int], api: API = None) -> None:
+    def find_new_friend(self, friends: List[int], api: API = None) -> List[int]:
         page_no = 0
         if not api:
             api = self.__get_api()
@@ -118,6 +124,10 @@ class TwitterServiceLive(TwitterService):
                     new_friend.follow()
                     friends.append(new_friend.id)
                     self.tweet("I've decided to follow {0}.".format(new_friend.name), api)
-                    return
+                    return friends
             page_no += 1
         self.tweet("I can't find any new friends.", api)
+        return friends
+
+    def prune_friends(self):
+        pass

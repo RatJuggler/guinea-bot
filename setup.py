@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='guineabot',
-    version='0.0.3',
+    version='0.0.4',
     description='A guinea pig Twitter bot.',
     long_description=long_description,
     long_description_content_type='text/markdown',
