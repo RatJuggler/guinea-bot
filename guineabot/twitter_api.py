@@ -107,12 +107,16 @@ class TwitterServiceLive(TwitterService):
     def __good_name(name: str) -> bool:
         return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
 
+    @classmethod
+    def __friendship_test(cls, name: str, screen_name: str) -> bool:
+        return cls.__good_name(name) or cls.__good_name(screen_name)
+
     def find_new_friend(self, friends: List[int]) -> List[int]:
         page_no = 0
         while page_no < 100:
             page = self.__api.search_users("guinea pig", 20, page_no)
             for new_friend in page:
-                if new_friend.id not in friends and (self.__good_name(new_friend.name) or self.__good_name(new_friend.screen_name)):
+                if new_friend.id not in friends and self.__friendship_test(new_friend.name, new_friend.screen_name):
                     new_friend.follow()
                     friends.append(new_friend.id)
                     self.tweet("I've decided to follow {0}.".format(new_friend.name))
@@ -122,12 +126,14 @@ class TwitterServiceLive(TwitterService):
         return friends
 
     def prune_friends(self, friends: List[int]) -> List[int]:
-        for relationship in self.__api.lookup_friendships(friends):
-            print(relationship.id, relationship.name, relationship.screen_name, relationship.is_following,
-                  relationship.is_followed_by)
-            if not (self.__good_name(relationship.name) or self.__good_name(relationship.screen_name)):
-                if relationship.is_followed_by:
-                    print("*** Mute")
+        for friendship in self.__api.lookup_friendships(friends):
+            print(friendship.id, friendship.name, friendship.screen_name, friendship.is_following, friendship.is_followed_by)
+            if not self.__friendship_test(friendship.name, friendship.screen_name):
+                if friendship.is_followed_by:
+                    self.__api.create_mute(friendship.id)
+                    smt_logger.info("Muted: {0} - {1}".format(friendship.name, friendship.screen_name))
                 else:
-                    print('*** Un-follow')
+                    self.__api.destroy_friendship(friendship.id)
+                    friends.remove(friendship)
+                    smt_logger.info("Un-followed: {0} - {1}".format(friendship.name, friendship.screen_name))
         return friends
