@@ -4,8 +4,7 @@ import os.path
 
 from click import Context, Option
 
-from .guineapig import GuineaPig, SLEEPING
-from .guineapig_state import add_guinea_pig_states
+from .guineapig import GuineaPig, SLEEPING, add_guinea_pig_states
 from .statemachine import StateMachine
 from .twitter_api import get_twitter_service
 
