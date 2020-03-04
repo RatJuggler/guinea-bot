@@ -65,8 +65,8 @@ TWITTER_ACCESS_TOKEN
 TWITTER_ACCESS_TOKEN_SECRET
 ```
 ## Installing as a service
-First edit the `guinea-bot.service` file and add any command line options you need. Then copy the file to `/etc/systemd/system` to 
-create a systemd unit service. 
+First edit the `guinea-bot.service` file and add any command line options you need, making sure to keep them within the command 
+quotes. Then copy the file to `/etc/systemd/system` to create a systemd unit service. 
 ```
 $ sudo cp guinea-bot.service /etc/systemd/system
 ```
