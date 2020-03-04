@@ -127,13 +127,11 @@ class TwitterServiceLive(TwitterService):
 
     def prune_friends(self, friends: List[int]) -> List[int]:
         for friendship in self.__api.lookup_friendships(friends):
-            print(friendship.id, friendship.name, friendship.screen_name, friendship.is_following, friendship.is_followed_by)
             if not self.__friendship_test(friendship.name, friendship.screen_name):
                 if friendship.is_followed_by:
                     self.__api.create_mute(friendship.id)
                     smt_logger.info("Muted: {0} - {1}".format(friendship.name, friendship.screen_name))
                 else:
                     self.__api.destroy_friendship(friendship.id)
-                    friends.remove(friendship)
                     smt_logger.info("Un-followed: {0} - {1}".format(friendship.name, friendship.screen_name))
-        return friends
+        return self.get_current_friends()
