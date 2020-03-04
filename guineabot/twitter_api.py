@@ -108,6 +108,8 @@ class TwitterServiceLive(TwitterService):
     """
     Live version of the TwitterService.
     Invokes the Twitter API using the Tweepy module.
+    TODO: Improve new friend search and friendship testing.
+    TODO: Optimise for a larger numbers of friends.
     """
 
     def __init__(self) -> None:
