@@ -7,7 +7,14 @@
         "Zzzzzzz \uD83D\uDCA4",
         "Time for a short nap. \uD83D\uDE34",
         "Snoozing. \uD83D\uDCA4",
-        "Just need another forty winks. \uD83D\uDE34"
+        "Just need another forty winks. \uD83D\uDE34",
+        "I'm sure I don't need any beauty sleep. \uD83D\uDE34",
+        "Power pignapping. \uD83D\uDE34",
+        "Siesta time already? \uD83D\uDE34",
+        "Dozing. \uD83D\uDCA4",
+        "And rest. \uD83D\uDCA4",
+        "Having a kip. \uD83D\uDCA4",
+        "Slumbering. \uD83D\uDCA4"
       ]
     },
     {
@@ -32,7 +39,13 @@
         "Poo, poo everywhere. \uD83D\uDCA9",
         "I'll chew this piece of furniture until I get what I want.",
         "I would like, if I may, to take you on a strange journey.",
-        "Listen to them — the guinea pigs in the night. What music they make!"
+        "Listen to them — the guinea pigs in the night. What music they make!",
+        "It's a long way to the top.",
+        "I have a bad feeling about this.",
+        "Fly, you fools!",
+        "I have a constant fear that something's always near.",
+        "Being a guinea pig is hard work.",
+        "I am not a furry potato."
       ]
     },
     {
@@ -51,7 +64,16 @@
         "I do NOT like fireworks. \uD83D\uDE1F",
         "There's no place like home.",
         "Do guinea pigs dream of hay?",
-        "It's been a funny sort of day, hasn't it?"
+        "It's been a funny sort of day, hasn't it?",
+        "I live my way.",
+        "It's a small world.",
+        "Did you ever stop to think, and forget to start again?",
+        "If I look confused it is because I am thinking.",
+        "Time is an illusion. Lunchtime doubly so.",
+        "I have a cunning plan.",
+        "Llamas are bigger than frogs.",
+        "My brain hurts.",
+        "Are you suggesting that coconuts migrate?"
       ]
     },
     {
@@ -64,16 +86,30 @@
         "Mmmm cucumber. \uD83E\uDD52",
         "Mmmm apple. \uD83C\uDF4E",
         "Mmmm cardboard. \uD83D\uDCE6",
-        "Mmmm newspaper. \uD83D\uDCF0"
+        "Mmmm newspaper. \uD83D\uDCF0",
+        "Time for a snack.",
+        "Furious nibbling.",
+        "Gracefully grazing.",
+        "Munch, munch, munch.",
+        "Must be time for elevenses.",
+        "I'll have a lettuce sandwich.",
+        "It's always lunchtime somewhere.",
+        "But what about second breakfast?",
+        "I eat when I'm upset, okay?",
+        "Just one more wafer-thin piece of cucumber."
       ]
     },
     {
       "state": "DRINKING",
       "sayings": [
         "I am mostly drinking. \uD83D\uDEB0",
-        "Chewing water.",
-        "Glug, glug, glug.",
-        "Slurp, slurp, slurp. 🥤\uD83E\uDD64🥤"
+        "Chewing water. \uD83E\uDD64",
+        "Glug, glug, glug. \uD83D\uDEB0",
+        "Slurp, slurp, slurp. 🥤\uD83E\uDD64🥤",
+        "Quaffing. 🥤🥤\uD83E\uDD64",
+        "Just wetting my whistle. \uD83D\uDEB0",
+        "Knocking back the H\u2082O.",
+        "Chug, chug, chug. \uD83D\uDEB0"
       ]
     },
     {
@@ -93,7 +129,14 @@
         "Is that the ceiling or am I under a table?",
         "Jump in the hay!",
         "Jump out of the hay!",
-        "Hmmm, yes the floor here is made out of floor."
+        "Hmmm, yes the floor here is made out of floor.",
+        "Off for a stroll.",
+        "Ambling about.",
+        "Time for a quick saunter.",
+        "Walk this way.",
+        "Pottering about.",
+        "Meandering about.",
+        "Dance, dance."
       ]
     },
     {
@@ -104,7 +147,15 @@
         "I remember this.",
         "I don't remember this.",
         "Good times.",
-        "It was the best of times."
+        "It was the best of times.",
+        "Is this my best side?",
+        "Thanks for memories.",
+        "Just reminiscing.",
+        "A trip down memory lane.",
+        "Harking back to the days.",
+        "As I recollect.",
+        "Looking back.",
+        "Remember tomorrow."
       ]
     }
   ]
