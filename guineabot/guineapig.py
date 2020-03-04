@@ -24,6 +24,7 @@ class GuineaPig:
     @staticmethod
     def __load_sayings() -> List[Dict[str, List[str]]]:
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
+        smt_logger.info("Loading sayings from: {0}".format(sayings_file))
         with sayings_file.open('r', encoding='utf-8') as f:
             sayings = json.load(f)
         return sayings["states"]
@@ -32,6 +33,7 @@ class GuineaPig:
     def __load_photos(path_to_photos: str) -> List[str]:
         if path_to_photos == "":
             return []
+        smt_logger.info("Loading photos from: {0}".format(path_to_photos))
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
     def __init__(self, start_state: str, tired: int, hunger: int, thirst: int,
