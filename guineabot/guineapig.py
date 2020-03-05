@@ -24,11 +24,12 @@ class GuineaPig:
     A guinea pig.
     """
 
-    def __init__(self, name: str, start_state: str, tired: int, hunger: int, thirst: int,
+    def __init__(self, name: str, age: Age, start_state: str, tired: int, hunger: int, thirst: int,
                  sayings: Sayings, photos: Photos, twitter_service: TwitterService) -> None:
         """
         Initialise the guinea pig state.
         :param name: Name of the guinea pig bot
+        :param age: Age tracker
         :param start_state: Initial state
         :param tired: Initial value of tired attribute
         :param hunger: Initial value of hunger attribute
@@ -38,6 +39,7 @@ class GuineaPig:
         :param twitter_service: Twitter service to use
         """
         self.__name = name
+        self.__age = age
         self.__state = start_state.upper()
         self.__tired = tired
         self.__hunger = hunger
@@ -196,12 +198,13 @@ def build_guinea_pig_machine(age: Age) -> StateMachine:
     return sm
 
 
-def create_guinea_pig(name: str, path_to_photos: str, quiet: bool) -> GuineaPig:
+def create_guinea_pig(name: str, age: Age, path_to_photos: str, quiet: bool) -> GuineaPig:
     """
     Create a new guinea pig instance.
     :param name: Of the guinea pig
+    :param age: Age tracker
     :param path_to_photos: Path to folder of photos for tweeting
     :param quiet: Run without invoking the Twitter API
     :return: A new instance of a guinea pig
     """
-    return GuineaPig(name, SLEEPING, 20, 10, 10, Sayings(), Photos(path_to_photos), get_twitter_service(quiet))
+    return GuineaPig(name, age, SLEEPING, 20, 10, 10, Sayings(), Photos(path_to_photos), get_twitter_service(quiet))
