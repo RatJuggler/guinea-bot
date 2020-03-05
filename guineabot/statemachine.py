@@ -69,7 +69,6 @@ class StateMachine:
         """
         new_state_name = start_state_name
         while self.__age.increase():
-            age_logger.set_age(self.__age)
             age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1

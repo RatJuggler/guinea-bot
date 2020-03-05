@@ -136,6 +136,7 @@ class GuineaPig:
             age_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
         self.__tweet_state(new_state)
+        age_logger.set_age(self.__age)
 
     def __str__(self) -> str:
         """
