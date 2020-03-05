@@ -6,8 +6,7 @@ import os.path
 from click import Context, Option
 
 from .smt_logging import configure_logging, smt_logger
-from .guineapig import SLEEPING, add_guinea_pig_states, create_guinea_pig
-from .statemachine import StateMachine
+from .guineapig import SLEEPING, create_guinea_pig, build_guinea_pig_machine
 
 
 # noinspection PyUnusedLocal
@@ -38,19 +37,6 @@ def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
     if not os.path.isdir(value):
         raise click.BadParameter(value)
     return value
-
-
-def build_guinea_pig_machine(duration: int, interval: int, accelerated: bool) -> StateMachine:
-    """
-    Initialise the state machine.
-    :param duration: The number of days the bot should run for
-    :param interval: The time between changes in state, in minutes
-    :param accelerated: Don't run in real-time
-    :return: StateMachine instance with states configured
-    """
-    sm = StateMachine(duration, interval, accelerated)
-    add_guinea_pig_states(sm)
-    return sm
 
 
 @click.command(help="""

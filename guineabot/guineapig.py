@@ -179,18 +179,22 @@ class GuineaPigState(State):
         return new_state
 
 
-def add_guinea_pig_states(sm: StateMachine) -> None:
+def build_guinea_pig_machine(duration: int, interval: int, accelerated: bool) -> StateMachine:
     """
-    Populate a state machine with a guinea pig simulation.
-    :param sm: A state machine instance
-    :return: No meaningful return.
+    Initialise the state machine.
+    :param duration: The number of days the bot should run for
+    :param interval: The time between changes in state, in minutes
+    :param accelerated: Don't run in real-time
+    :return: StateMachine instance with states configured
     """
+    sm = StateMachine(duration, interval, accelerated)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
     sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
     sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
     sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
+    return sm
 
 
 def create_guinea_pig(name: str, path_to_photos: str, quiet: bool) -> GuineaPig:
