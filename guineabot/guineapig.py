@@ -17,17 +17,22 @@ DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
+# Sayings for photo tweets.
+PHOTOS = "PHOTOS"
 
 
 class GuineaPig:
 
     @staticmethod
-    def __load_sayings() -> List[Dict[str, List[str]]]:
+    def __load_sayings() -> Dict[str, List[str]]:
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
         smt_logger.info("Loading sayings from: {0}".format(sayings_file))
         with sayings_file.open('r', encoding='utf-8') as f:
-            sayings = json.load(f)
-        return sayings["states"]
+            sayings_loaded = json.load(f)
+        state_sayings = {}
+        for state in sayings_loaded['states']:
+            state_sayings[state['state']] = state['sayings']
+        return state_sayings
 
     @staticmethod
     def __load_photos(path_to_photos: str) -> List[str]:
@@ -76,9 +81,7 @@ class GuineaPig:
         return attribute < 0 or attribute > 130
 
     def __get_saying_for_state(self, state_to_find: str) -> str:
-        for state in self.__sayings:
-            if state["state"] == state_to_find:
-                return choice(state["sayings"])
+        return choice(self.__sayings[state_to_find])
 
     def __tweet_state(self, new_state: str) -> None:
         if self.__state != new_state:
@@ -87,7 +90,7 @@ class GuineaPig:
                 self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
         elif randint(1, 60) == 1:
             if len(self.__photos) > 0:
-                self.__twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.__photos))
+                self.__twitter_service.tweet_with_photo(self.__get_saying_for_state(PHOTOS), choice(self.__photos))
         elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
 
