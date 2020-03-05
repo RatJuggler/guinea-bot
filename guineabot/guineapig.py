@@ -129,7 +129,8 @@ class GuineaPig:
 
     def __tweet_state(self, new_state: str) -> None:
         """
-        Tweet, tweet with photo or find new friends.
+        Tweet, tweet with photo, find new friends or prune existing friends.
+        This is limited using random checks to prevent the timeline being flooded and from accumulating friends too quickly.
         :param new_state: drives tweet selection
         :return: No meaningful return
         """
@@ -142,6 +143,8 @@ class GuineaPig:
                 self.__twitter_service.tweet_with_photo(self.__get_saying_for_state(PHOTOS), choice(self.__photos))
         elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
+        elif randint(1, 200) == 1:
+            self.__friends = self.__twitter_service.prune_friends(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> None:
         """
