@@ -17,7 +17,7 @@ DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
-# Sayings for photo tweets.
+# Special state for sayings for photo tweets.
 PHOTOS = "PHOTOS"
 
 
@@ -78,9 +78,9 @@ class GuineaPig:
     def is_tired(self) -> bool:
         """
         Decide if the guinea pig is tired.
+        We won't sleep if we are hungry or thirsty.
         :return: True if tired, otherwise False
         """
-        # We won't sleep if we are hungry or thirsty.
         if self.is_hungry() or self.is_thirsty():
             return False
         if self.__state == SLEEPING:
@@ -92,9 +92,9 @@ class GuineaPig:
     def is_hungry(self) -> bool:
         """
         Decide if the guinea pig is hungry.
+        We won't eat if we are thirsty.
         :return: True if hungry, otherwise False
         """
-        # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
         if self.__state == EATING:
