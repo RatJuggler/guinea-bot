@@ -1,6 +1,7 @@
 from random import randint
 from typing import List
 
+from .age import Age
 from .photos import Photos
 from .sayings import Sayings
 from .age_logging import age_logger
@@ -179,15 +180,13 @@ class GuineaPigState(State):
         return new_state
 
 
-def build_guinea_pig_machine(duration: int, interval: int, accelerated: bool) -> StateMachine:
+def build_guinea_pig_machine(age: Age) -> StateMachine:
     """
     Initialise the state machine.
-    :param duration: The number of days the bot should run for
-    :param interval: The time between changes in state, in minutes
-    :param accelerated: Don't run in real-time
+    :param age: Age tracker
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(duration, interval, accelerated)
+    sm = StateMachine(age)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))

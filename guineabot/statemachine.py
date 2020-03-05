@@ -43,14 +43,11 @@ class StateMachine:
     interval of minutes.
     """
 
-    def __init__(self, duration: int, interval: int, accelerated: bool) -> None:
+    def __init__(self, age: Age) -> None:
         """
         Initialise a StateMachine instance.
-        :param duration: How long the state machine will run for in days
-        :param interval: The time interval between state transitions in minutes
-        :param accelerated: Don't wait for the time interval
         """
-        self.__age = Age(duration, interval, accelerated)
+        self.__age = age
         self.__states = {}
         self.__counts = {}
 

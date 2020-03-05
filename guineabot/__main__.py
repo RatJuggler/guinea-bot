@@ -5,6 +5,7 @@ import os.path
 
 from click import Context, Option
 
+from age import Age
 from .age_logging import configure_logging, age_logger
 from .guineapig import SLEEPING, create_guinea_pig, build_guinea_pig_machine
 
@@ -79,7 +80,8 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
         duration = randint(1460, 2920)  # 4-8 years.
     age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
-    gp_machine = build_guinea_pig_machine(duration, interval, accelerated)
+    age = Age(duration, interval, accelerated)
+    gp_machine = build_guinea_pig_machine(age)
     a_guinea_pig = create_guinea_pig(name, photos, quiet)
     age_logger.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
