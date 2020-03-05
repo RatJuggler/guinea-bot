@@ -1,3 +1,5 @@
+from random import randint
+
 import click
 import os.path
 
@@ -46,9 +48,9 @@ def build_guinea_pig_machine(duration: int, interval: int, accelerated: bool) ->
               help="Don't run in pseudo real-time, forces quiet mode to prevent Twitter API rate limit triggering.",
               show_default=True)
 @click.option('-d', '--duration', 'duration', type=click.IntRange(1, 2920),
-              help="How many guinea pig days the bot should run for.", default=2000, show_default=True)
+              help="How many days the bot should run for (guinea pig lifespan), random if not set.", show_default=False)
 @click.option('-i', '--interval', 'interval', type=click.IntRange(1, 1440),
-              help="The interval between changes in guinea pig activity (state), in minutes.", default=15, show_default=True)
+              help="The interval between changes in state (guinea pig activity), in minutes.", default=15, show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
 @click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
@@ -61,7 +63,7 @@ def simulate_guinea_pig(accelerated: bool, duration: int, interval: int, photos:
     :param accelerated: Don't run in pseudo real-time
     :param duration: The number of days the bot should run for
     :param interval: The time between changes in state, in minutes
-    :param photos: Optional path to folder containing photos to use in some Tweets
+    :param photos: Optional path to folder containing photos to use in some Tweets\\
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
@@ -71,6 +73,10 @@ def simulate_guinea_pig(accelerated: bool, duration: int, interval: int, photos:
     if accelerated:
         smt_logger.info("Accelerated running, quiet mode enforced.")
         quiet = True
+    if duration is None:
+        duration = randint(1460, 2920)  # 4-8 years.
+    smt_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
+    smt_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     gp_machine = build_guinea_pig_machine(duration, interval, accelerated)
     a_guinea_pig = GuineaPig(SLEEPING, 20, 10, 10, photos, get_twitter_service(quiet))
     smt_logger.info("It's alive!")
