@@ -82,13 +82,22 @@ class GuineaPig:
         return self.__thirst > 80
 
     @staticmethod
-    def outside_bounds(attribute) -> bool:
+    def __outside_bounds(attribute) -> bool:
         """
-        Reasonable check for guinea pig attributes.
+        Reasonable check for guinea pig attribute.
         :param attribute: To check
         :return: True if outside expected range, otherwise False
         """
         return attribute < 0 or attribute > 130
+
+    def __rogue_pig(self) -> bool:
+        """
+        Check if any attributes have gone outside of a reasonable range.
+        :return: True anything outside of reasonable range, otherwise False
+        """
+        return self.__outside_bounds(self.__tired) or \
+            self.__outside_bounds(self.__hunger) or \
+            self.__outside_bounds(self.__thirst)
 
     def __tweet_state(self, new_state: str) -> None:
         """
@@ -120,7 +129,7 @@ class GuineaPig:
         self.__tired += changes[0]
         self.__hunger += changes[1]
         self.__thirst += changes[2]
-        if self.outside_bounds(self.__tired) or self.outside_bounds(self.__hunger) or self.outside_bounds(self.__thirst):
+        if self.__rogue_pig():
             smt_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
         self.__tweet_state(new_state)
