@@ -7,7 +7,7 @@ from click import Context, Option
 
 from age import Age
 from .age_logging import configure_logging, age_logger
-from .guineapig import SLEEPING, create_guinea_pig, build_guinea_pig_machine
+from .guineapig import create_guinea_pig, build_guinea_pig_machine
 
 
 # noinspection PyUnusedLocal
@@ -82,9 +82,9 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     age = Age(duration, interval, accelerated)
     gp_machine = build_guinea_pig_machine()
-    a_guinea_pig = create_guinea_pig(name, age, photos, quiet)
+    guinea_pig = create_guinea_pig(name, age, photos, quiet)
     age_logger.info("It's alive!")
-    gp_machine.run(SLEEPING, a_guinea_pig)
+    gp_machine.run(guinea_pig)
     gp_machine.stats(age)
 
 

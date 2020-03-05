@@ -203,7 +203,7 @@ def build_guinea_pig_machine() -> StateMachine:
     Initialise the state machine.
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(END)
+    sm = StateMachine(SLEEPING, END)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))

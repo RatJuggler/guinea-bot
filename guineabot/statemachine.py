@@ -42,11 +42,13 @@ class StateMachine:
     A simple state machine driven by state transitions from the State interface.
     """
 
-    def __init__(self, end_state_name: str) -> None:
+    def __init__(self, start_state_name: str, end_state_name: str) -> None:
         """
         Initialise a StateMachine instance.
+        :param start_state_name: Initial state
         :param end_state_name: Termination state
         """
+        self.__start_state_name = start_state_name
         self.__end_state_name = end_state_name
         self.__states = {}
         self.__counts = {}
@@ -60,14 +62,13 @@ class StateMachine:
         self.__states[new_state.get_name()] = new_state
         self.__counts[new_state.get_name()] = 0
 
-    def run(self, start_state_name: str, data: Generic[T]) -> None:
+    def run(self, data: Generic[T]) -> None:
         """
         Run the state machine.
-        :param start_state_name: Initial state
         :param data: Object which informs the state transition on the next state.
         :return: No meaningful return
         """
-        new_state_name = start_state_name
+        new_state_name = self.__start_state_name
         while new_state_name != self.__end_state_name:
             age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
