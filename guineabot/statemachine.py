@@ -74,13 +74,14 @@ class StateMachine:
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
 
-    def stats(self) -> None:
+    def stats(self, age: Age) -> None:
         """
         Log stats on time spent in each state.
+        :param age: Age tracker to generate stats from
         :return: No meaningful return
         """
         age_logger.set_age('COMPLETED')
         age_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
         for state in self.__counts:
-            percentage, average = self.__age.stats(self.__counts[state])
+            percentage, average = age.stats(self.__counts[state])
             age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))

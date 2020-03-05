@@ -85,7 +85,7 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     a_guinea_pig = create_guinea_pig(name, age, photos, quiet)
     age_logger.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
-    gp_machine.stats()
+    gp_machine.stats(age)
 
 
 if __name__ == "__main__":
