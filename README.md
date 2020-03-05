@@ -2,21 +2,22 @@
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
 It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic). 
-A change of state is triggered every 15 minutes (by default) to emulate the exciting and busy life of a guinea pig. It randomly 
-tweets what it is doing on each state change and may also post a random picture from its archive or search for other "guinea pig" 
-accounts and randomly follow one. 
+The guinea pig has an internal aging mechanism and as it ages a change of state is triggered every 15 minutes (by default) to 
+emulate its exciting and busy life. It will randomly tweet what it is doing on each state change and may also post a random picture 
+from its archive or search for other "guinea pig" accounts and randomly follow one.
 
 Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. For photos to
 be tweeted the path to a folder of `.jpg` files must be set using the command line option on startup, a list of the photos available
 to use is then loaded on startup.
 
-Tweeting is limited to a 1 in 5 chance as it's very easy to generate hundreds of tweets a day. If nothing is tweeted
-then there is a further 1 in 50 chance of tweeting a photo (if there are any) followed by a further 1 in 50 chance of trying to 
-follow a new account.
+Tweeting is limited to a 1 in 5 chance as it's very easy to generate hundreds of tweets a day. If the state does't change then 
+there is a 1 in 60 chance of tweeting a photo (if there are any) or a 1 in 60 chance of trying to follow a new account or a 1 in
+200 chance of pruning the friends list. Pruning involves removing friends who no longer pass the friendship test, unless they are
+following back, in which case they are muted.
 
-The state machine prioritises sleeping and eating but the internal attributes can drive it from any state to any state,
-see the code for the exact rules. Sleeping is used as the start state but there is no classical end state. The state
-machine is currently coded to run for a fixed number of days, after which the guinea pig dies :cry:.
+The state changes prioritise sleeping and eating but the internal attributes can drive it from any state to any state (see the code 
+for the exact rules). Sleeping is used as the start state and the end state can be reached at any time as the guinea pig ages and
+reaches its lifespan duration and dies :cry:.
 
 ![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/gp-states.png)
 
@@ -43,13 +44,15 @@ Options:
   -a, --accelerated               Don't run in pseudo real-time, forces quiet
                                   mode to prevent Twitter API rate limit
                                   triggering.  [default: False]
-  -d, --duration INTEGER RANGE    How many guinea pig days the bot should run
-                                  for.  [default: 2000]
-  -i, --interval INTEGER RANGE    The interval between changes in guinea pig
-                                  activity (state), in minutes.  [default: 15]
+  -d, --duration INTEGER RANGE    How many days the bot should run for (guinea
+                                  pig lifespan), random if not set.
+  -i, --interval INTEGER RANGE    The interval between changes in state
+                                  (guinea pig activity), in minutes.
+                                  [default: 15]
   -l, --log-level [DEBUG|INFO|WARNING]
                                   Show additional logging information.
                                   [default: INFO]
+  -n, --name TEXT                 Give the bot a name.  [default: Holly]
   -p, --photos-folder TEXT        Folder containing photos to Tweet.
   -q, --quiet                     Run without invoking the Twitter API.
                                   [default: False]
