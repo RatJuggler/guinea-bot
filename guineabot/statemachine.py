@@ -112,7 +112,7 @@ class StateMachine:
         :return: No meaningful return
         """
         smt_logger.set_smt('COMPLETED')
-        smt_logger.info("Dumping stats...\n                                 State     >> Time spent in state (% and daily avg.)")
+        smt_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
         for state in self.__counts:
             percentage = self.__counts[state] / self.__ticks * 100
             average = self.__format_sm_time(self.__counts[state] * self.__interval // self.__duration)
