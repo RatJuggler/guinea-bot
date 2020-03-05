@@ -22,9 +22,16 @@ PHOTOS = "PHOTOS"
 
 
 class GuineaPig:
+    """
+    A guinea pig.
+    """
 
     @staticmethod
     def __load_sayings() -> Dict[str, List[str]]:
+        """
+        Load sayings from JSON file, see: guinea-pig-sayings-scheme.json
+        :return: Dict of sayings for each state
+        """
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
         smt_logger.info("Loading sayings from: {0}".format(sayings_file))
         with sayings_file.open('r', encoding='utf-8') as f:
@@ -36,6 +43,11 @@ class GuineaPig:
 
     @staticmethod
     def __load_photos(path_to_photos: str) -> List[str]:
+        """
+        Load a list of the photos available to tweet.
+        :param path_to_photos: Path to folder of jpg files
+        :return: List of full paths to each photo
+        """
         if path_to_photos == "":
             return []
         smt_logger.info("Loading photos from: {0}".format(path_to_photos))
@@ -43,6 +55,16 @@ class GuineaPig:
 
     def __init__(self, name: str, start_state: str, tired: int, hunger: int, thirst: int,
                  path_to_photos: str, twitter_service: TwitterService) -> None:
+        """
+        Initialise the guinea pig state.
+        :param name: Name of the guinea pig bot
+        :param start_state: Initial state
+        :param tired: Initial value of tired attribute
+        :param hunger: Initial value of hunger attribute
+        :param thirst: Initial value of thirst attribute
+        :param path_to_photos: Path to folder of photos for tweeting
+        :param twitter_service: Twitter service to use
+        """
         self.__name = name
         self.__state = start_state.upper()
         self.__tired = tired
@@ -54,6 +76,10 @@ class GuineaPig:
         self.__friends = self.__twitter_service.get_current_friends()
 
     def is_tired(self) -> bool:
+        """
+        Decide if the guinea pig is tired.
+        :return: True if tired, otherwise False
+        """
         # We won't sleep if we are hungry or thirsty.
         if self.is_hungry() or self.is_thirsty():
             return False
@@ -64,6 +90,10 @@ class GuineaPig:
             return self.__tired > 80
 
     def is_hungry(self) -> bool:
+        """
+        Decide if the guinea pig is hungry.
+        :return: True if hungry, otherwise False
+        """
         # We won't eat if we are thirsty.
         if self.is_thirsty():
             return False
@@ -74,16 +104,35 @@ class GuineaPig:
             return self.__hunger > 80
 
     def is_thirsty(self) -> bool:
+        """
+        Decide if the guinea pig is thirsty.
+        :return: True if thirsty, otherwise False
+        """
         return self.__thirst > 80
 
     @staticmethod
     def outside_bounds(attribute) -> bool:
+        """
+        Reasonable check for guinea pig attributes.
+        :param attribute: To check
+        :return: True if outside expected range, otherwise False
+        """
         return attribute < 0 or attribute > 130
 
-    def __get_saying_for_state(self, state_to_find: str) -> str:
-        return choice(self.__sayings[state_to_find])
+    def __get_saying_for_state(self, state: str) -> str:
+        """
+        Choose a saying to tweet.
+        :param state: To find sayings for
+        :return: Saying to tweet
+        """
+        return choice(self.__sayings[state])
 
     def __tweet_state(self, new_state: str) -> None:
+        """
+        Tweet, tweet with photo or find new friends.
+        :param new_state: drives tweet selection
+        :return: No meaningful return
+        """
         if self.__state != new_state:
             self.__state = new_state
             if randint(1, 5) == 1:
@@ -95,6 +144,12 @@ class GuineaPig:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> None:
+        """
+        Update attributes driven by change of state.
+        :param new_state:
+        :param changes:
+        :return: No meaningful return
+        """
         self.__tired += changes[0]
         self.__hunger += changes[1]
         self.__thirst += changes[2]
@@ -103,7 +158,11 @@ class GuineaPig:
             raise OverflowError
         self.__tweet_state(new_state)
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """
+        Build a string showing the current internal state.
+        :return: String representation of the current instance.
+        """
         return "GuineaPig:(Name: {0}, State: {1}, Hunger: {2}, Thirst: {3}, Tired: {4})"\
             .format(self.__name, self.__state, self.__hunger, self.__thirst, self.__tired)
 
