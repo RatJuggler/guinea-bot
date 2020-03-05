@@ -3,7 +3,7 @@ from typing import Dict, TypeVar
 
 T = TypeVar('T')
 
-AGE = 'art'
+AGE = 'age'
 
 
 class AgeLoggerAdapter(logging.LoggerAdapter):
