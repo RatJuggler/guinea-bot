@@ -43,11 +43,12 @@ class StateMachine:
     interval of minutes.
     """
 
-    def __init__(self, age: Age) -> None:
+    def __init__(self, end_state_name: str) -> None:
         """
         Initialise a StateMachine instance.
+        :param end_state_name: Termination state
         """
-        self.__age = age
+        self.__end_state_name = end_state_name
         self.__states = {}
         self.__counts = {}
 
@@ -68,7 +69,7 @@ class StateMachine:
         :return: No meaningful return
         """
         new_state_name = start_state_name
-        while self.__age.increase():
+        while new_state_name != self.__end_state_name:
             age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1

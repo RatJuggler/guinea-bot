@@ -15,6 +15,7 @@ DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
+END = "END"
 # Special state for sayings for photo tweets.
 PHOTOS = "PHOTOS"
 
@@ -122,13 +123,14 @@ class GuineaPig:
         elif randint(1, 200) == 1:
             self.__friends = self.__twitter_service.prune_friends(self.__friends)
 
-    def update(self, new_state: str, changes: List[int]) -> None:
+    def update(self, new_state: str, changes: List[int]) -> bool:
         """
         Update attributes driven by change of state.
         :param new_state:
         :param changes:
         :return: No meaningful return
         """
+        age_logger.set_age(self.__age)
         self.__tired += changes[0]
         self.__hunger += changes[1]
         self.__thirst += changes[2]
@@ -136,7 +138,7 @@ class GuineaPig:
             age_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
         self.__tweet_state(new_state)
-        age_logger.set_age(self.__age)
+        return self.__age.increase()
 
     def __str__(self) -> str:
         """
@@ -161,13 +163,13 @@ class GuineaPigState(State):
         self.__changes = changes
         super(GuineaPigState, self).__init__(state_name.upper())
 
-    def transition(self, gp: GuineaPig) -> str:
+    @staticmethod
+    def __determine_new_state(gp: GuineaPig) -> str:
         """
         Determine the next state for the given guinea pig.
         :param gp: A guinea pig instance
         :return: The name of the next state (not necessarily different to the current state)
         """
-        gp.update(self.get_name(), self.__changes)
         if gp.is_tired():
             new_state = SLEEPING
         elif gp.is_hungry():
@@ -182,14 +184,25 @@ class GuineaPigState(State):
             new_state = AWAKE
         return new_state
 
+    def transition(self, gp: GuineaPig) -> str:
+        """
+        Update the attributes and then determine the next state for the given guinea pig.
+        :param gp: A guinea pig instance
+        :return: The name of the next state (not necessarily different to the current state)
+        """
+        if gp.update(self.get_name(), self.__changes):
+            new_state = self.__determine_new_state(gp)
+        else:
+            new_state = END
+        return new_state
 
-def build_guinea_pig_machine(age: Age) -> StateMachine:
+
+def build_guinea_pig_machine() -> StateMachine:
     """
     Initialise the state machine.
-    :param age: Age tracker
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(age)
+    sm = StateMachine(END)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
