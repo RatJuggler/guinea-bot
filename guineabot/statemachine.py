@@ -39,8 +39,7 @@ class State(ABC):
 
 class StateMachine:
     """
-    A pseudo real-time state machine which runs for a fixed duration of days and transitions to the next state after each fixed
-    interval of minutes.
+    A simple state machine driven by state transitions from the State interface.
     """
 
     def __init__(self, end_state_name: str) -> None:

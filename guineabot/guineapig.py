@@ -15,6 +15,7 @@ DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
+# The end state.
 END = "END"
 # Special state for sayings for photo tweets.
 PHOTOS = "PHOTOS"
@@ -26,7 +27,7 @@ class GuineaPig:
     """
 
     def __init__(self, name: str, age: Age, start_state: str, tired: int, hunger: int, thirst: int,
-                 sayings: Sayings, photos: Photos, twitter_service: TwitterService) -> None:
+                 sayings: Sayings, photos: Photos, tweeter: TwitterService) -> None:
         """
         Initialise the guinea pig state.
         :param name: Name of the guinea pig bot
@@ -37,7 +38,7 @@ class GuineaPig:
         :param thirst: Initial value of thirst attribute
         :param sayings: Supplies sayings for tweeting
         :param photos: Supplies photos for tweeting
-        :param twitter_service: Twitter service to use
+        :param tweeter: Tweeting service to use
         """
         self.__name = name
         self.__age = age
@@ -47,8 +48,8 @@ class GuineaPig:
         self.__thirst = thirst
         self.__sayings = sayings
         self.__photos = photos
-        self.__twitter_service = twitter_service
-        self.__friends = self.__twitter_service.get_current_friends()
+        self.__tweeter = tweeter
+        self.__friends = self.__tweeter.get_current_friends()
 
     def is_tired(self) -> bool:
         """
@@ -105,7 +106,7 @@ class GuineaPig:
 
     def __tweet_state(self, new_state: str) -> None:
         """
-        Tweet, tweet with photo, find new friends or prune existing friends.
+        Tweet, tweet with a photo, find new friends or prune existing friends.
         This is limited using random checks to prevent the timeline being flooded and from accumulating friends too quickly.
         :param new_state: drives tweet selection
         :return: No meaningful return
@@ -113,22 +114,22 @@ class GuineaPig:
         if self.__state != new_state:
             self.__state = new_state
             if randint(1, 5) == 1:
-                self.__twitter_service.tweet(self.__sayings.get_random_saying(self.__state))
+                self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
         elif randint(1, 60) == 1:
             if self.__photos.loaded():
-                self.__twitter_service.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
-                                                        self.__photos.get_path_to_random())
+                self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
+                                                self.__photos.get_path_to_random())
         elif randint(1, 60) == 1:
-            self.__friends = self.__twitter_service.find_new_friend(self.__friends)
+            self.__friends = self.__tweeter.find_new_friend(self.__friends)
         elif randint(1, 200) == 1:
-            self.__friends = self.__twitter_service.prune_friends(self.__friends)
+            self.__friends = self.__tweeter.prune_friends(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
-        Update attributes driven by change of state.
-        :param new_state:
-        :param changes:
-        :return: No meaningful return
+        Update attributes driven by the change of state, check chance to tweet and then increase the age.
+        :param new_state: The new state to move to
+        :param changes: To apply to the attributes
+        :return: True while the guinea pig hasn't reached it's age limit, otherwise False
         """
         age_logger.set_age(self.__age)
         self.__tired += changes[0]
