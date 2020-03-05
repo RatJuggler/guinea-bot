@@ -80,10 +80,11 @@ class GuineaPig:
             if state["state"] == state_to_find:
                 return choice(state["sayings"])
 
-    def __tweet_state(self) -> None:
-        # Limit when we tweet and find friends.
-        if randint(1, 5) == 1:
-            self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
+    def __tweet_state(self, new_state: str) -> None:
+        if self.__state != new_state:
+            self.__state = new_state
+            if randint(1, 5) == 1:
+                self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
         elif randint(1, 40) == 1:
             if len(self.__photos) > 0:
                 self.__twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.__photos))
@@ -97,9 +98,7 @@ class GuineaPig:
         if self.outside_bounds(self.__tired) or self.outside_bounds(self.__hunger) or self.outside_bounds(self.__thirst):
             smt_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
-        if self.__state != new_state:
-            self.__state = new_state
-            self.__tweet_state()
+        self.__tweet_state(new_state)
 
     def __str__(self):
         return "GuineaPig:(Name: {0}, State: {1}, Hunger: {2}, Thirst: {3}, Tired: {4})"\
