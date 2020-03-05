@@ -29,7 +29,7 @@ class Sayings:
         """
         self.__sayings = self.__load_sayings()
 
-    def get_saying_for_state(self, state: str) -> str:
+    def get_random_saying(self, state: str) -> str:
         """
         Choose a saying to tweet.
         :param state: To find sayings for

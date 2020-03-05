@@ -100,10 +100,11 @@ class GuineaPig:
         if self.__state != new_state:
             self.__state = new_state
             if randint(1, 5) == 1:
-                self.__twitter_service.tweet(self.__sayings.get_saying_for_state(self.__state))
+                self.__twitter_service.tweet(self.__sayings.get_random_saying(self.__state))
         elif randint(1, 60) == 1:
             if self.__photos.loaded():
-                self.__twitter_service.tweet_with_photo(self.__sayings.get_saying_for_state(PHOTOS), self.__photos.get_path_to_random())
+                self.__twitter_service.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
+                                                        self.__photos.get_path_to_random())
         elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
         elif randint(1, 200) == 1:
