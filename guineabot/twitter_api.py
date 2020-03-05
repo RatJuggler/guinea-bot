@@ -6,7 +6,7 @@ from typing import List
 import tweepy
 from tweepy import API
 
-from .smt_logging import smt_logger
+from .age_logging import age_logger
 
 
 class TwitterService:
@@ -81,27 +81,27 @@ class TwitterServiceQuiet(TwitterService):
     """
 
     def __init__(self) -> None:
-        smt_logger.info("Quiet Mode On!")
+        age_logger.info("Quiet Mode On!")
 
     def tweet(self, message: str) -> None:
-        smt_logger.info("Would have tweeted: {0}".format(message))
+        age_logger.info("Would have tweeted: {0}".format(message))
 
     def tweet_with_photo(self, message: str, photo_path: str) -> None:
-        smt_logger.info("Would have tweeted: {0} {1}".format(message, photo_path))
+        age_logger.info("Would have tweeted: {0} {1}".format(message, photo_path))
 
     def get_current_friends(self) -> List[int]:
         return []
 
     def find_new_friend(self, friends: List[int]) -> List[int]:
-        smt_logger.info("Would have looked for a new friend!")
+        age_logger.info("Would have looked for a new friend!")
         return []
 
     def prune_friends(self, friends: List[int]) -> List[int]:
-        smt_logger.info("Would have tried to prune friends!")
+        age_logger.info("Would have tried to prune friends!")
         return []
 
     def unmute_all(self) -> None:
-        smt_logger.info("Would have un-muted all muted friends!")
+        age_logger.info("Would have un-muted all muted friends!")
 
 
 class TwitterServiceLive(TwitterService):
@@ -126,31 +126,31 @@ class TwitterServiceLive(TwitterService):
         try:
             api.verify_credentials()
         except Exception as error:
-            smt_logger.error("Error creating Twitter API!", error)
+            age_logger.error("Error creating Twitter API!", error)
             raise error
         return api
 
     def tweet(self, message: str) -> None:
         try:
             self.__api.update_status(message)
-            smt_logger.info("Tweeted: {0}".format(message))
+            age_logger.info("Tweeted: {0}".format(message))
         except tweepy.TweepError as error:
             if error.api_code == 187:
-                smt_logger.warning("Duplicate tweet discarded!")
+                age_logger.warning("Duplicate tweet discarded!")
             else:
-                smt_logger.error("Error trying to tweet!", error)
+                age_logger.error("Error trying to tweet!", error)
                 raise error
 
     def tweet_with_photo(self, message: str, photo_path: str) -> None:
         try:
             media = self.__api.media_upload(photo_path)
             self.__api.update_status(message, media_ids=[media.media_id])
-            smt_logger.info("Tweeted: {0} {1}".format(message, photo_path))
+            age_logger.info("Tweeted: {0} {1}".format(message, photo_path))
         except tweepy.TweepError as error:
             if error.api_code == 187:
-                smt_logger.warning("Duplicate photo tweet discarded!")
+                age_logger.warning("Duplicate photo tweet discarded!")
             else:
-                smt_logger.error("Error trying to tweet with photo!", error)
+                age_logger.error("Error trying to tweet with photo!", error)
                 raise error
 
     def get_current_friends(self) -> List[int]:
@@ -181,17 +181,17 @@ class TwitterServiceLive(TwitterService):
         return friends
 
     def prune_friends(self, friends: List[int]) -> List[int]:
-        smt_logger.info("Look for friends to prune...")
+        age_logger.info("Look for friends to prune...")
         muted = self.__api.mutes_ids()
         for friendship in self.__api.lookup_friendships(friends):
             if not self.__friendship_test(friendship.name, friendship.screen_name):
                 if friendship.is_followed_by:
                     if friendship.id not in muted:
                         self.__api.create_mute(friendship.id)
-                        smt_logger.info("Muted: {0} - {1}".format(friendship.name, friendship.screen_name))
+                        age_logger.info("Muted: {0} - {1}".format(friendship.name, friendship.screen_name))
                 else:
                     self.__api.destroy_friendship(friendship.id)
-                    smt_logger.info("Un-followed: {0} - {1}".format(friendship.name, friendship.screen_name))
+                    age_logger.info("Un-followed: {0} - {1}".format(friendship.name, friendship.screen_name))
         return self.get_current_friends()
 
     def unmute_all(self) -> None:

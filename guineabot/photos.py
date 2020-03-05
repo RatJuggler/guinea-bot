@@ -2,7 +2,7 @@ import glob
 from random import choice
 from typing import List
 
-from smt_logging import smt_logger
+from age_logging import age_logger
 
 
 class Photos:
@@ -16,7 +16,7 @@ class Photos:
         """
         if path_to_photos == "":
             return []
-        smt_logger.info("Loading photos from: {0}".format(path_to_photos))
+        age_logger.info("Loading photos from: {0}".format(path_to_photos))
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
     def __init__(self, path_to_photos: str) -> None:

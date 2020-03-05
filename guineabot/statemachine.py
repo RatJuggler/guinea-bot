@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 from .age import Age
-from .smt_logging import smt_logger
+from .age_logging import age_logger
 
 T = TypeVar('T')
 
@@ -72,8 +72,8 @@ class StateMachine:
         """
         new_state_name = start_state_name
         while self.__age.increase():
-            smt_logger.set_smt(self.__age)
-            smt_logger.debug("{0}".format(str(data)))
+            age_logger.set_age(self.__age)
+            age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
@@ -83,8 +83,8 @@ class StateMachine:
         Log stats on time spent in each state.
         :return: No meaningful return
         """
-        smt_logger.set_smt('COMPLETED')
-        smt_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
+        age_logger.set_age('COMPLETED')
+        age_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
         for state in self.__counts:
             percentage, average = self.__age.stats(self.__counts[state])
-            smt_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
+            age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))

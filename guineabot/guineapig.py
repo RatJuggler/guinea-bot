@@ -3,7 +3,7 @@ from typing import List
 
 from .photos import Photos
 from .sayings import Sayings
-from .smt_logging import smt_logger
+from .age_logging import age_logger
 from .statemachine import StateMachine, State
 from .twitter_api import TwitterService, get_twitter_service
 
@@ -130,7 +130,7 @@ class GuineaPig:
         self.__hunger += changes[1]
         self.__thirst += changes[2]
         if self.__rogue_pig():
-            smt_logger.error("Rogue Pig: {0}".format(str(self)))
+            age_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
         self.__tweet_state(new_state)
 

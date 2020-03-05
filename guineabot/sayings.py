@@ -3,7 +3,7 @@ import pathlib
 from random import choice
 from typing import Dict, List
 
-from .smt_logging import smt_logger
+from .age_logging import age_logger
 
 
 class Sayings:
@@ -15,7 +15,7 @@ class Sayings:
         :return: Dict of sayings for each state
         """
         sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
-        smt_logger.info("Loading sayings from: {0}".format(sayings_file))
+        age_logger.info("Loading sayings from: {0}".format(sayings_file))
         with sayings_file.open('r', encoding='utf-8') as f:
             sayings_loaded = json.load(f)
         state_sayings = {}

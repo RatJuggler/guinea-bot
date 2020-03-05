@@ -3,22 +3,22 @@ from typing import Dict, TypeVar
 
 T = TypeVar('T')
 
-SMT = 'smt'
+AGE = 'art'
 
 
-class SMTAdapter(logging.LoggerAdapter):
+class AgeLoggerAdapter(logging.LoggerAdapter):
     """
-    State Machine TIme logging adapter.
-    Allows log messages to include an element driven by the number of ticks of the state machine.
+    Age logging adapter.
+    Allows log messages to include the age.
     """
 
-    def set_smt(self, smt: str) -> None:
+    def set_age(self, age: str) -> None:
         """
-        Set string to represent the state machine time.
-        :param smt: String to show for state machine time.
+        Set string to represent the age.
+        :param age: String to show for age
         :return: No meaningful return
         """
-        self.extra = {SMT: smt}
+        self.extra = {AGE: age}
 
     def process(self, msg: str, kwargs: Dict[str, T]) -> [str, Dict[str, T]]:
         """
@@ -27,11 +27,11 @@ class SMTAdapter(logging.LoggerAdapter):
         :param kwargs: Arguments
         :return: Updated log message and arguments
         """
-        return '{0} >> {1}'.format(self.extra[SMT], msg), kwargs
+        return '{0} >> {1}'.format(self.extra[AGE], msg), kwargs
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
-smt_logger = SMTAdapter(logging.getLogger(), {SMT: 'INITIALISE'})
+age_logger = AgeLoggerAdapter(logging.getLogger(), {AGE: 'INITIALISE'})
 
 
 def configure_logging(loglevel: str) -> None:
@@ -42,4 +42,4 @@ def configure_logging(loglevel: str) -> None:
     """
     if logging.getLevelName(loglevel) == "Level {0}".format(loglevel):
         raise ValueError('Invalid log level: %s' % loglevel)
-    smt_logger.setLevel(loglevel)
+    age_logger.setLevel(loglevel)

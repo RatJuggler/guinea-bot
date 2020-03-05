@@ -5,7 +5,7 @@ import os.path
 
 from click import Context, Option
 
-from .smt_logging import configure_logging, smt_logger
+from .age_logging import configure_logging, age_logger
 from .guineapig import SLEEPING, create_guinea_pig, build_guinea_pig_machine
 
 
@@ -71,17 +71,17 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     :return: No meaningful return.
     """
     configure_logging(level)
-    smt_logger.info("Booting guinea pig {0}...".format(name))
+    age_logger.info("Booting guinea pig {0}...".format(name))
     if accelerated:
-        smt_logger.info("Accelerated running, quiet mode enforced.")
+        age_logger.info("Accelerated running, quiet mode enforced.")
         quiet = True
     if duration is None:
         duration = randint(1460, 2920)  # 4-8 years.
-    smt_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
-    smt_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
+    age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
+    age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     gp_machine = build_guinea_pig_machine(duration, interval, accelerated)
     a_guinea_pig = create_guinea_pig(name, photos, quiet)
-    smt_logger.info("It's alive!")
+    age_logger.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
     gp_machine.stats()
 
