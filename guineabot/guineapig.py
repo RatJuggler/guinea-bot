@@ -85,10 +85,10 @@ class GuineaPig:
             self.__state = new_state
             if randint(1, 5) == 1:
                 self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
-        elif randint(1, 40) == 1:
+        elif randint(1, 60) == 1:
             if len(self.__photos) > 0:
                 self.__twitter_service.tweet_with_photo(self.__get_saying_for_state("PHOTOS"), choice(self.__photos))
-        elif randint(1, 50) == 1:
+        elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> None:
