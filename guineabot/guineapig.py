@@ -1,14 +1,12 @@
-import json
 import glob
-import pathlib
 
 from random import choice, randint
-from typing import List, Dict
+from typing import List
 
+from .sayings import Sayings
 from .smt_logging import smt_logger
 from .statemachine import StateMachine, State
-from .twitter_api import TwitterService
-
+from .twitter_api import TwitterService, get_twitter_service
 
 # Current guinea pig states.
 SLEEPING = "SLEEPING"
@@ -27,21 +25,6 @@ class GuineaPig:
     """
 
     @staticmethod
-    def __load_sayings() -> Dict[str, List[str]]:
-        """
-        Load sayings from JSON file, see: guinea-pig-sayings-scheme.json
-        :return: Dict of sayings for each state
-        """
-        sayings_file = pathlib.Path(__file__).parent / "guinea_pig_sayings.json"
-        smt_logger.info("Loading sayings from: {0}".format(sayings_file))
-        with sayings_file.open('r', encoding='utf-8') as f:
-            sayings_loaded = json.load(f)
-        state_sayings = {}
-        for state in sayings_loaded['states']:
-            state_sayings[state['state']] = state['sayings']
-        return state_sayings
-
-    @staticmethod
     def __load_photos(path_to_photos: str) -> List[str]:
         """
         Load a list of the photos available to tweet.
@@ -54,7 +37,7 @@ class GuineaPig:
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
     def __init__(self, name: str, start_state: str, tired: int, hunger: int, thirst: int,
-                 path_to_photos: str, twitter_service: TwitterService) -> None:
+                 sayings: Sayings, path_to_photos: str, twitter_service: TwitterService) -> None:
         """
         Initialise the guinea pig state.
         :param name: Name of the guinea pig bot
@@ -70,7 +53,7 @@ class GuineaPig:
         self.__tired = tired
         self.__hunger = hunger
         self.__thirst = thirst
-        self.__sayings = self.__load_sayings()
+        self.__sayings = sayings
         self.__photos = self.__load_photos(path_to_photos)
         self.__twitter_service = twitter_service
         self.__friends = self.__twitter_service.get_current_friends()
@@ -119,14 +102,6 @@ class GuineaPig:
         """
         return attribute < 0 or attribute > 130
 
-    def __get_saying_for_state(self, state: str) -> str:
-        """
-        Choose a saying to tweet.
-        :param state: To find sayings for
-        :return: Saying to tweet
-        """
-        return choice(self.__sayings[state])
-
     def __tweet_state(self, new_state: str) -> None:
         """
         Tweet, tweet with photo, find new friends or prune existing friends.
@@ -137,10 +112,10 @@ class GuineaPig:
         if self.__state != new_state:
             self.__state = new_state
             if randint(1, 5) == 1:
-                self.__twitter_service.tweet(self.__get_saying_for_state(self.__state))
+                self.__twitter_service.tweet(self.__sayings.get_saying_for_state(self.__state))
         elif randint(1, 60) == 1:
             if len(self.__photos) > 0:
-                self.__twitter_service.tweet_with_photo(self.__get_saying_for_state(PHOTOS), choice(self.__photos))
+                self.__twitter_service.tweet_with_photo(self.__sayings.get_saying_for_state(PHOTOS), choice(self.__photos))
         elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
         elif randint(1, 200) == 1:
@@ -218,3 +193,14 @@ def add_guinea_pig_states(sm: StateMachine) -> None:
     sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
     sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
     sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
+
+
+def create_guinea_pig(name: str, path_to_photos: str, quiet: bool) -> GuineaPig:
+    """
+    Create a new guinea pig instance.
+    :param name: Of the guinea pig
+    :param path_to_photos: Path to folder of photos for tweeting
+    :param quiet: Run without invoking the Twitter API
+    :return: A new instance of a guinea pig
+    """
+    return GuineaPig(name, SLEEPING, 20, 10, 10, Sayings(), path_to_photos, get_twitter_service(quiet))

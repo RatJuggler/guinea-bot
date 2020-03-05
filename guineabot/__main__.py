@@ -6,9 +6,8 @@ import os.path
 from click import Context, Option
 
 from .smt_logging import configure_logging, smt_logger
-from .guineapig import GuineaPig, SLEEPING, add_guinea_pig_states
+from .guineapig import SLEEPING, add_guinea_pig_states, create_guinea_pig
 from .statemachine import StateMachine
-from .twitter_api import get_twitter_service
 
 
 # noinspection PyUnusedLocal
@@ -95,7 +94,7 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     smt_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     smt_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     gp_machine = build_guinea_pig_machine(duration, interval, accelerated)
-    a_guinea_pig = GuineaPig(name, SLEEPING, 20, 10, 10, photos, get_twitter_service(quiet))
+    a_guinea_pig = create_guinea_pig(name, photos, quiet)
     smt_logger.info("It's alive!")
     gp_machine.run(SLEEPING, a_guinea_pig)
     gp_machine.stats()
