@@ -102,8 +102,8 @@ class GuineaPig:
             self.__tweet_state()
 
     def __str__(self):
-        return "GuineaPig:(State: {0}, Hunger: {1}, Thirst:{2}, Tired:{3})"\
-            .format(self.__state, self.__hunger, self.__thirst, self.__tired)
+        return "GuineaPig:(Name: {0}, State: {1}, Hunger: {2}, Thirst: {3}, Tired: {4})"\
+            .format(self.__name, self.__state, self.__hunger, self.__thirst, self.__tired)
 
 
 class GuineaPigState(State):
