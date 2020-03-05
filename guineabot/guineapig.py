@@ -1,8 +1,7 @@
-import glob
-
-from random import choice, randint
+from random import randint
 from typing import List
 
+from .photos import Photos
 from .sayings import Sayings
 from .smt_logging import smt_logger
 from .statemachine import StateMachine, State
@@ -24,20 +23,8 @@ class GuineaPig:
     A guinea pig.
     """
 
-    @staticmethod
-    def __load_photos(path_to_photos: str) -> List[str]:
-        """
-        Load a list of the photos available to tweet.
-        :param path_to_photos: Path to folder of jpg files
-        :return: List of full paths to each photo
-        """
-        if path_to_photos == "":
-            return []
-        smt_logger.info("Loading photos from: {0}".format(path_to_photos))
-        return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
-
     def __init__(self, name: str, start_state: str, tired: int, hunger: int, thirst: int,
-                 sayings: Sayings, path_to_photos: str, twitter_service: TwitterService) -> None:
+                 sayings: Sayings, photos: Photos, twitter_service: TwitterService) -> None:
         """
         Initialise the guinea pig state.
         :param name: Name of the guinea pig bot
@@ -45,7 +32,8 @@ class GuineaPig:
         :param tired: Initial value of tired attribute
         :param hunger: Initial value of hunger attribute
         :param thirst: Initial value of thirst attribute
-        :param path_to_photos: Path to folder of photos for tweeting
+        :param sayings: Supplies sayings for tweeting
+        :param photos: Supplies photos for tweeting
         :param twitter_service: Twitter service to use
         """
         self.__name = name
@@ -54,7 +42,7 @@ class GuineaPig:
         self.__hunger = hunger
         self.__thirst = thirst
         self.__sayings = sayings
-        self.__photos = self.__load_photos(path_to_photos)
+        self.__photos = photos
         self.__twitter_service = twitter_service
         self.__friends = self.__twitter_service.get_current_friends()
 
@@ -114,8 +102,8 @@ class GuineaPig:
             if randint(1, 5) == 1:
                 self.__twitter_service.tweet(self.__sayings.get_saying_for_state(self.__state))
         elif randint(1, 60) == 1:
-            if len(self.__photos) > 0:
-                self.__twitter_service.tweet_with_photo(self.__sayings.get_saying_for_state(PHOTOS), choice(self.__photos))
+            if self.__photos.loaded():
+                self.__twitter_service.tweet_with_photo(self.__sayings.get_saying_for_state(PHOTOS), self.__photos.get_path_to_random())
         elif randint(1, 60) == 1:
             self.__friends = self.__twitter_service.find_new_friend(self.__friends)
         elif randint(1, 200) == 1:
@@ -203,4 +191,4 @@ def create_guinea_pig(name: str, path_to_photos: str, quiet: bool) -> GuineaPig:
     :param quiet: Run without invoking the Twitter API
     :return: A new instance of a guinea pig
     """
-    return GuineaPig(name, SLEEPING, 20, 10, 10, Sayings(), path_to_photos, get_twitter_service(quiet))
+    return GuineaPig(name, SLEEPING, 20, 10, 10, Sayings(), Photos(path_to_photos), get_twitter_service(quiet))
