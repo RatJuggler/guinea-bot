@@ -1,7 +1,7 @@
 from random import randint
 from typing import List
 
-from .age import Age
+from .age_tracker import AgeTracker
 from .photos import Photos
 from .sayings import Sayings
 from .age_logging import age_logger
@@ -26,7 +26,7 @@ class GuineaPig:
     A guinea pig.
     """
 
-    def __init__(self, name: str, age: Age, start_state: str, tired: int, hunger: int, thirst: int,
+    def __init__(self, name: str, age: AgeTracker, start_state: str, tired: int, hunger: int, thirst: int,
                  sayings: Sayings, photos: Photos, tweeter: TwitterService) -> None:
         """
         Initialise the guinea pig state.
@@ -213,7 +213,7 @@ def build_guinea_pig_machine() -> StateMachine:
     return sm
 
 
-def create_guinea_pig(name: str, age: Age, path_to_photos: str, quiet: bool) -> GuineaPig:
+def create_guinea_pig(name: str, age: AgeTracker, path_to_photos: str, quiet: bool) -> GuineaPig:
     """
     Create a new guinea pig instance.
     :param name: Of the guinea pig

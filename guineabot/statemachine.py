@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
-from .age import Age
+from .age_tracker import AgeTracker
 from .age_logging import age_logger
 
 T = TypeVar('T')
@@ -75,7 +75,7 @@ class StateMachine:
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
 
-    def stats(self, age: Age) -> None:
+    def stats(self, age: AgeTracker) -> None:
         """
         Log stats on time spent in each state.
         :param age: Age tracker to generate stats from

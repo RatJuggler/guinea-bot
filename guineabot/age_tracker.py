@@ -1,7 +1,10 @@
 from time import sleep
 
 
-class Age:
+class AgeTracker:
+    """
+    Acts like a virtual clock tracking over a duration.
+    """
 
     def __init__(self, duration: int, interval: int, accelerated: bool) -> None:
         """
