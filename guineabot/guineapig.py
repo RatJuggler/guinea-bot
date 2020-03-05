@@ -36,8 +36,9 @@ class GuineaPig:
         smt_logger.info("Loading photos from: {0}".format(path_to_photos))
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
-    def __init__(self, start_state: str, tired: int, hunger: int, thirst: int,
+    def __init__(self, name: str, start_state: str, tired: int, hunger: int, thirst: int,
                  path_to_photos: str, twitter_service: TwitterService) -> None:
+        self.__name = name
         self.__state = start_state.upper()
         self.__tired = tired
         self.__hunger = hunger
