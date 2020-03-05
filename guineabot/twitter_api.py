@@ -97,7 +97,7 @@ class TwitterServiceQuiet(TwitterService):
         return []
 
     def prune_friends(self, friends: List[int]) -> List[int]:
-        smt_logger.info("Would have tried to pruned friends!")
+        smt_logger.info("Would have tried to prune friends!")
         return []
 
     def unmute_all(self) -> None:
@@ -181,6 +181,7 @@ class TwitterServiceLive(TwitterService):
         return friends
 
     def prune_friends(self, friends: List[int]) -> List[int]:
+        smt_logger.info("Look for friends to prune...")
         muted = self.__api.mutes_ids()
         for friendship in self.__api.lookup_friendships(friends):
             if not self.__friendship_test(friendship.name, friendship.screen_name):
