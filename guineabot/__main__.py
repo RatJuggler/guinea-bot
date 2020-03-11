@@ -5,7 +5,7 @@ import os.path
 
 from click import Context, Option
 
-from age_tracker import AgeTracker
+from .age_tracker import AgeTracker
 from .age_logging import configure_logging, age_logger
 from .guineapig import create_guinea_pig, build_guinea_pig_machine
 
