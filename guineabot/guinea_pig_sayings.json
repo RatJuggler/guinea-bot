@@ -42,12 +42,10 @@
         "Listen to them — the guinea pigs in the night. What music they make!",
         "It's a long way to the top.",
         "I have a bad feeling about this.",
-        "Fly, you fools!",
         "I have a constant fear that something's always near.",
         "Being a guinea pig is hard work.",
         "I am not a furry potato.",
         "I'm not from Guinea and I'm not a pig.",
-        "Only me!",
         "Don't panic!"
       ]
     },
@@ -139,7 +137,9 @@
         "Walk this way.",
         "Pottering about.",
         "Meandering about.",
-        "Dance, dance."
+        "Dance, dance.",
+        "Only me!",
+        "Fly, you fools!"
       ]
     },
     {
