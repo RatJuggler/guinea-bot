@@ -2,7 +2,7 @@ import glob
 from random import choice
 from typing import List
 
-from age_logging import age_logger
+from .age_logging import age_logger
 
 
 class Photos:
