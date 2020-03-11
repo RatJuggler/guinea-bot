@@ -9,7 +9,7 @@
         "Snoozing. \uD83D\uDCA4",
         "Just need another forty winks. \uD83D\uDE34",
         "I'm sure I don't need any beauty sleep. \uD83D\uDE34",
-        "Power pignapping. \uD83D\uDE34",
+        "Power napping. \uD83D\uDE34",
         "Siesta time already? \uD83D\uDE34",
         "Dozing. \uD83D\uDCA4",
         "And rest. \uD83D\uDCA4",
@@ -46,7 +46,9 @@
         "I have a constant fear that something's always near.",
         "Being a guinea pig is hard work.",
         "I am not a furry potato.",
-        "I'm not from Guinea and I'm not a pig."
+        "I'm not from Guinea and I'm not a pig.",
+        "Only me!",
+        "Don't panic!"
       ]
     },
     {
@@ -150,13 +152,14 @@
         "Good times.",
         "It was the best of times.",
         "Is this my best side?",
-        "Thanks for memories.",
+        "Thanks for the memories.",
         "Just reminiscing.",
         "A trip down memory lane.",
         "Harking back to the days.",
         "As I recollect.",
         "Looking back.",
-        "Remember tomorrow."
+        "Remember tomorrow.",
+        "Dear future self."
       ]
     }
   ]
