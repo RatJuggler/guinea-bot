@@ -11,7 +11,7 @@ setup(
     long_description_content_type='text/markdown',
     author='John Chase',
     author_email='ratteal@gmail.com',
-    python_requires='>=3.5.3',
+    python_requires='>=3.5',
     url='https://github.com/RatJuggler/guinea-bot',
     packages=find_packages(exclude=['tests']),
     package_data={
@@ -23,8 +23,25 @@ setup(
         ]
     },
     install_requires=[
-        'click ==7.0',
+        # Check latest releases on piwheels: https://www.piwheels.hostedpi.com/
+        'click ==7.1.1',
         'tweepy ==3.8.0'
     ],
+    test_suite='tests',
+    tests_require=[
+        'coverage',
+        'flake8',
+        'testfixtures',
+        'tox'
+    ],
     license='MIT',
+    classifiers=[
+        # Trove classifiers
+        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        'License :: OSI Approved :: MIT License',
+        'Development Status :: 5 - Production/Stable',
+        'Programming Language :: Python :: 3.5',
+        'Operating System :: POSIX :: Linux',
+        'Topic :: Games/Entertainment :: Simulation'
+    ]
 )
