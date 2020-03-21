@@ -1,4 +1,7 @@
 # guinea-bot
+
+![Test & QA](https://github.com/RatJuggler/guinea-bot/workflows/Test%20&%20QA/badge.svg)
+
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
 It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic). 
