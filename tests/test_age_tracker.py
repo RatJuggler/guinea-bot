@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from age_tracker import AgeTracker
+from guineabot.age_tracker import AgeTracker
 
 
 class TestAgeTracker(TestCase):
