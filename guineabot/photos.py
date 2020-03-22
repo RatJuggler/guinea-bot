@@ -1,5 +1,4 @@
-import glob
-import os
+import pathlib
 
 from random import choice
 from typing import List, Optional
@@ -16,12 +15,13 @@ class Photos:
         :param path_to_photos: Path to folder of jpg files
         :return: List of full paths to each photo
         """
-        if path_to_photos is None or path_to_photos == "":
+        if not path_to_photos:
             return []
-        if not os.path.isdir(path_to_photos):
+        path_to_photos = pathlib.Path(path_to_photos)
+        if not path_to_photos.is_dir():
             raise NotADirectoryError
-        age_logger.info("Loading photos from: {0}".format(path_to_photos))
-        return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
+        age_logger.info("Loading photos from: {0}".format(str(path_to_photos)))
+        return [str(f) for f in path_to_photos.glob("*.jpg")]
 
     def __init__(self, path_to_photos: str) -> None:
         """
