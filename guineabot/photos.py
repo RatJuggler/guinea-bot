@@ -1,6 +1,8 @@
 import glob
+import os
+
 from random import choice
-from typing import List
+from typing import List, Optional
 
 from .age_logging import age_logger
 
@@ -8,14 +10,16 @@ from .age_logging import age_logger
 class Photos:
 
     @staticmethod
-    def __load_photos(path_to_photos: str) -> List[str]:
+    def __load_photos(path_to_photos: Optional[str]) -> List[str]:
         """
         Load a list of the photos available to tweet.
         :param path_to_photos: Path to folder of jpg files
         :return: List of full paths to each photo
         """
-        if path_to_photos == "":
+        if path_to_photos is None or path_to_photos == "":
             return []
+        if not os.path.isdir(path_to_photos):
+            raise NotADirectoryError
         age_logger.info("Loading photos from: {0}".format(path_to_photos))
         return [f for f in glob.glob(path_to_photos + "/*.jpg", recursive=False)]
 
