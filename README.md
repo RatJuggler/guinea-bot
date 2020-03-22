@@ -1,6 +1,7 @@
 # guinea-bot
 
 ![Test & QA](https://github.com/RatJuggler/guinea-bot/workflows/Test%20&%20QA/badge.svg)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/RatJuggler/guinea-bot)
 
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
