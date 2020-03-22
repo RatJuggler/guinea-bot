@@ -1,0 +1,28 @@
+{
+  "states": [
+    {
+      "state": "TEST1",
+      "sayings": [
+        "TEST1 SAYING1",
+        "TEST1 SAYING2",
+        "TEST1 SAYING3"
+      ]
+    },
+    {
+      "state": "TEST2",
+      "sayings": [
+        "TEST2 SAYING1",
+        "TEST2 SAYING2",
+        "TEST2 SAYING3"
+      ]
+    },
+    {
+      "state": "TEST3",
+      "sayings": [
+        "TEST3 SAYING1",
+        "TEST3 SAYING2",
+        "TEST3 SAYING3"
+      ]
+    }
+  ]
+}
