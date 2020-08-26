@@ -114,7 +114,7 @@ class GuineaPig:
         """
         if self.__state != new_state:
             self.__state = new_state
-            if randint(1, 5) == 1:
+            if randint(1, 7) == 1:
                 self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
         elif randint(1, 60) == 1:
             if self.__photos.loaded():
