@@ -24,8 +24,8 @@ setup(
     },
     install_requires=[
         # Check latest releases on piwheels: https://www.piwheels.org/
-        'click ==7.1.1',
-        'tweepy ==3.8.0'
+        'click ==7.1.2',
+        'tweepy ==3.9.0'
     ],
     test_suite='tests',
     tests_require=[
