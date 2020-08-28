@@ -14,10 +14,12 @@ Tweets are selected from a JSON file, loaded on startup, that contains a variety
 be tweeted the path to a folder of `.jpg` files must be set using the command line option on startup, a list of the photos available
 to use is then loaded on startup.
 
-Tweeting is limited to a 1 in 5 chance as it's very easy to generate hundreds of tweets a day. If the state does't change then 
-there is a 1 in 60 chance of tweeting a photo (if there are any) or a 1 in 60 chance of trying to follow a new account or a 1 in
-200 chance of pruning the friends list. Pruning involves removing friends who no longer pass the friendship test, unless they are
-following back, in which case they are muted.
+Tweeting is limited to a 1 in 8 chance as it's very easy to generate hundreds of tweets a day. If the state doesn't change then 
+there is a 1 in 80 chance of tweeting a photo (if there are any) or a 1 in 80 chance of trying to follow a new account or a 1 in
+240 chance of pruning the friends list. Pruning involves removing friends who no longer pass the friendship test, unless they are
+following back, in which case they are muted. Having bots automatically follow accounts on Twitter is a bit of minefield as you 
+never know what you are going to get. This bot looks for accounts by searching for "#guineapig" but if the account has one of a 
+number of "red flag" key words in it's bio/description it will fail the friendship test and won't be followed. 
 
 The state changes prioritise sleeping and eating but the internal attributes can drive it from any state to any state (see the code 
 for the exact rules). Sleeping is used as the start state and the end state can be reached at any time as the guinea pig ages and
