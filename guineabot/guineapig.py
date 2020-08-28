@@ -113,15 +113,15 @@ class GuineaPig:
         """
         if self.__state != new_state:
             self.__state = new_state
-            if randint(1, 7) == 1:
+            if randint(1, 8) == 1:
                 self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
-        elif randint(1, 60) == 1:
+        elif randint(1, 80) == 1:
             if self.__photos.loaded():
                 self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
                                                 self.__photos.get_path_to_random())
-        elif randint(1, 60) == 1:
+        elif randint(1, 80) == 1:
             self.__friends = self.__tweeter.find_new_friend(self.__friends)
-        elif randint(1, 200) == 1:
+        elif randint(1, 240) == 1:
             self.__friends = self.__tweeter.prune_friends(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> bool:
