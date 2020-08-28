@@ -1,10 +1,10 @@
 import os
 import re
 
-from typing import List
+from typing import List, Optional
 
 import tweepy
-from tweepy import API
+from tweepy import API, User
 
 from .age_logging import age_logger
 
@@ -157,34 +157,50 @@ class TwitterServiceLive(TwitterService):
         return self.__api.friends_ids()
 
     @staticmethod
-    def __good_name(name: str) -> bool:
-        return re.search(r"guinea\s*pig", name, re.IGNORECASE) is not None
+    def __search(string: str, flags: [str]) -> int:
+        found = 0
+        for flag in flags:
+            if re.search(flag, string, re.IGNORECASE) is not None:
+                found = found + 1
+        return found
 
     @classmethod
-    def __friendship_test(cls, name: str, screen_name: str) -> bool:
-        return cls.__good_name(name) or cls.__good_name(screen_name)
+    def __friendship_test(cls, new_friend: User) -> bool:
+        description = new_friend.__getattribute__("description")
+        red_flags = ["anti.?vax"]
+        if cls.__search(description, red_flags) > 0:
+            return False
+        green_flags = ["guinea.?pig"]
+        return cls.__search(description, green_flags) > 0
 
-    def find_new_friend(self, friends: List[int]) -> List[int]:
+    def search_for_users(self, friends: List[int]) -> Optional[User]:
         page_no = 0
         while page_no < 100:
-            page = self.__api.search_users("guinea pig", 20, page_no)
+            page = self.__api.search_users("#guineapig", 20, page_no)
             for new_friend in page:
                 if not new_friend.follow_request_sent and \
                         new_friend.id not in friends and \
-                        self.__friendship_test(new_friend.name, new_friend.screen_name):
-                    new_friend.follow()
-                    friends.append(new_friend.id)
-                    self.tweet("I've decided to follow {0}.".format(new_friend.name))
-                    return friends
+                        self.__friendship_test(new_friend):
+                    return new_friend
             page_no += 1
-        self.tweet("I can't find any new friends.",)
+        return None
+
+    def find_new_friend(self, friends: List[int]) -> List[int]:
+        new_friend = self.search_for_users(friends)
+        if new_friend:
+            new_friend.follow()
+            friends.append(new_friend.__getattribute__("id"))
+            self.tweet("I've decided to follow {0}.".format(new_friend.__getattribute__("name")))
+        else:
+            self.tweet("I can't find any new friends.",)
         return friends
 
     def prune_friends(self, friends: List[int]) -> List[int]:
         age_logger.info("Look for friends to prune...")
         muted = self.__api.mutes_ids()
+        # TODO API call limited to 100 entries.
         for friendship in self.__api.lookup_friendships(friends):
-            if not self.__friendship_test(friendship.name, friendship.screen_name):
+            if not self.__friendship_test(friendship):
                 if friendship.is_followed_by:
                     if friendship.id not in muted:
                         self.__api.create_mute(friendship.id)
