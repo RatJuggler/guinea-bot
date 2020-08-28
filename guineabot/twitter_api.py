@@ -195,19 +195,25 @@ class TwitterServiceLive(TwitterService):
             self.tweet("I can't find any new friends.",)
         return friends
 
-    def prune_friends(self, friends: List[int]) -> List[int]:
-        age_logger.info("Look for friends to prune...")
-        muted = self.__api.mutes_ids()
-        # TODO API call limited to 100 entries.
-        for friendship in self.__api.lookup_friendships(friends):
-            if not self.__friendship_test(friendship):
-                if friendship.is_followed_by:
-                    if friendship.id not in muted:
-                        self.__api.create_mute(friendship.id)
-                        age_logger.info("Muted: {0} - {1}".format(friendship.name, friendship.screen_name))
+    def __examine_friendships(self, friends: List[User], my_id: int, muted: List[int]):
+        for friend in friends:
+            if not self.__friendship_test(friend):
+                if my_id in friend.followers_ids():
+                    friend_id = friend.__getattribute__("id")
+                    if friend_id not in muted:
+                        self.__api.create_mute(friend_id)
+                        age_logger.info("Muted: {0}".format(friend))
                 else:
-                    self.__api.destroy_friendship(friendship.id)
-                    age_logger.info("Un-followed: {0} - {1}".format(friendship.name, friendship.screen_name))
+                    friend.unfollow()
+                    age_logger.info("Un-followed: {0}".format(friend))
+
+    def prune_friends(self, friends: List[int]) -> List[int]:
+        muted = self.__api.mutes_ids()
+        my_id = self.__api.me().__getattribute__("id")
+        # API call limited to 100 entries.
+        for page in tweepy.Cursor(self.__api.friends).pages():
+            age_logger.info("Look for friends to prune...{0}".format(len(page)))
+            self.__examine_friendships(page, my_id, muted)
         return self.get_current_friends()
 
     def unmute_all(self) -> None:
