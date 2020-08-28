@@ -157,21 +157,28 @@ class TwitterServiceLive(TwitterService):
         return self.__api.friends_ids()
 
     @staticmethod
-    def __search(string: str, flags: [str]) -> int:
+    def __search_string(find: str, in_string: str) -> bool:
+        return re.search(find, in_string, re.IGNORECASE) is not None
+
+    @classmethod
+    def __search(cls, string: str, flags: [str]) -> int:
         found = 0
         for flag in flags:
-            if re.search(flag, string, re.IGNORECASE) is not None:
+            if cls.__search_string(flag, string):
                 found = found + 1
         return found
 
     @classmethod
     def __friendship_test(cls, new_friend: User) -> bool:
         description = new_friend.__getattribute__("description")
-        red_flags = ["anti.?vax"]
+        red_flags = [r"anti.?vax"]
         if cls.__search(description, red_flags) > 0:
             return False
-        green_flags = ["guinea.?pig"]
-        return cls.__search(description, green_flags) > 0
+        key_term = r"guinea.?pig"
+        green_flags = [key_term]
+        return cls.__search_string(key_term, new_friend.__getattribute__("name")) or \
+            cls.__search_string(key_term, new_friend.__getattribute__("screen_name")) or \
+            cls.__search(description, green_flags) > 0
 
     def search_for_users(self, friends: List[int]) -> Optional[User]:
         page_no = 0
