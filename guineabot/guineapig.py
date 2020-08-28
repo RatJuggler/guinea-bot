@@ -108,7 +108,6 @@ class GuineaPig:
         """
         Tweet, tweet with a photo, find new friends or prune existing friends.
         This is limited using random checks to prevent the timeline being flooded and from accumulating friends too quickly.
-        TODO Pruning disabled due to issues with friend list size.
         :param new_state: drives tweet selection
         :return: No meaningful return
         """
@@ -122,8 +121,8 @@ class GuineaPig:
                                                 self.__photos.get_path_to_random())
         elif randint(1, 60) == 1:
             self.__friends = self.__tweeter.find_new_friend(self.__friends)
-        # elif randint(1, 200) == 1:
-        #     self.__friends = self.__tweeter.prune_friends(self.__friends)
+        elif randint(1, 200) == 1:
+            self.__friends = self.__tweeter.prune_friends(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
