@@ -104,25 +104,21 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
-    def __tweet_state(self, new_state: str) -> None:
+    def __tweet_state(self) -> None:
         """
-        Tweet, tweet with a photo, find new friends or prune existing friends.
+        Tweet, tweet with a photo or find new friends.
         This is limited using random checks to prevent the timeline being flooded and from accumulating friends too quickly.
-        :param new_state: drives tweet selection
         :return: No meaningful return
         """
-        if self.__state != new_state:
-            self.__state = new_state
-            if randint(1, 8) == 1:
-                self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
-        elif randint(1, 80) == 1:
+        chance = randint(1, 80)
+        if chance <= 10:
+            self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
+        elif chance == 11:
             if self.__photos.loaded():
                 self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
                                                 self.__photos.get_path_to_random())
-        elif randint(1, 80) == 1:
+        elif chance == 12:
             self.__friends = self.__tweeter.find_new_friend(self.__friends)
-        elif randint(1, 240) == 1:
-            self.__friends = self.__tweeter.prune_friends(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
@@ -138,7 +134,9 @@ class GuineaPig:
         if self.__rogue_pig():
             age_logger.error("Rogue Pig: {0}".format(str(self)))
             raise OverflowError
-        self.__tweet_state(new_state)
+        if self.__state != new_state:
+            self.__state = new_state
+            self.__tweet_state()
         return self.__age.increase()
 
     def __str__(self) -> str:
