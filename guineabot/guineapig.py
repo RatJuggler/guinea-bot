@@ -117,8 +117,8 @@ class GuineaPig:
             if self.__photos.loaded():
                 self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
                                                 self.__photos.get_path_to_random())
-        elif chance == 12:
-            self.__friends = self.__tweeter.find_new_friend(self.__friends)
+        # elif chance == 12:
+        #     self.__friends = self.__tweeter.find_new_friend(self.__friends)
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
