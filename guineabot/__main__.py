@@ -47,7 +47,7 @@ def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
 @click.option('-a', '--accelerated', 'accelerated', default=False, is_flag=True,
               help="Ignore the pauses between state changes, forces quiet mode to prevent Twitter API rate limit triggering.",
               show_default=True)
-@click.option('-d', '--duration', 'duration', type=click.IntRange(1460, 2555),
+@click.option('-d', '--duration', 'duration', type=click.IntRange(1, 2920),
               help="How many days the bot should run for (guinea pig lifespan), random if not set.", show_default=False)
 @click.option('-i', '--interval', 'interval', type=click.IntRange(1, 1440),
               help="The interval between changes in state (guinea pig activity), in minutes.", default=15, show_default=True)
