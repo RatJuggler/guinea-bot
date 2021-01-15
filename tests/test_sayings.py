@@ -22,3 +22,8 @@ class TestSayings(TestCase):
         sayings = Sayings('./tests/test_sayings.json')
         saying = sayings.get_random_saying('TEST2')
         self.assertIn(saying, ["TEST2 SAYING1", "TEST2 SAYING2", "TEST2 SAYING3"])
+
+    def test_random_photo_saying(self) -> None:
+        sayings = Sayings('./tests/test_sayings.json')
+        saying = sayings.get_random_photo_saying()
+        self.assertIn(saying, ["PHOTO SAYING1", "PHOTO SAYING2", "PHOTO SAYING3"])

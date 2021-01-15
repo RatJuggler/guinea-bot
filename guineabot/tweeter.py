@@ -4,9 +4,6 @@ from .photos import Photos
 from .sayings import Sayings
 from .twitter_api import TwitterService, get_twitter_service
 
-# Flag for sayings for photo tweets.
-PHOTOS = "PHOTOS"
-
 
 class Tweeter:
     """
@@ -37,7 +34,7 @@ class Tweeter:
             self.__tweeter.tweet(self.__sayings.get_random_saying(state))
         elif chance == 11:
             if self.__photos.loaded():
-                self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
+                self.__tweeter.tweet_with_photo(self.__sayings.get_random_photo_saying(),
                                                 self.__photos.get_path_to_random())
         # elif chance == 12:
         #     self.__friends = self.__tweeter.find_new_friend(self.__friends)

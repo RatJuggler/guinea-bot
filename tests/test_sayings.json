@@ -23,6 +23,14 @@
         "TEST3 SAYING2",
         "TEST3 SAYING3"
       ]
+    },
+    {
+      "state": "PHOTOS",
+      "sayings": [
+        "PHOTO SAYING1",
+        "PHOTO SAYING2",
+        "PHOTO SAYING3"
+      ]
     }
   ]
 }

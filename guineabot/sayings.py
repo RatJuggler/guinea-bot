@@ -40,3 +40,10 @@ class Sayings:
         :return: Saying to tweet
         """
         return choice(self.__sayings[state])
+
+    def get_random_photo_saying(self) -> str:
+        """
+        Choose a saying to go with a photo tweet.
+        :return: Saying to tweet
+        """
+        return self.get_random_saying("PHOTOS")
