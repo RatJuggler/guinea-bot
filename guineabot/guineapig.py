@@ -1,20 +1,8 @@
-from random import randint
 from typing import List
 
 from .age_tracker import AgeTracker
 from .age_logging import age_logger
-from .statemachine import StateMachine, State
 from .tweeter import Tweeter
-
-# Current guinea pig states.
-SLEEPING = "SLEEPING"
-EATING = "EATING"
-DRINKING = "DRINKING"
-WANDERING = "WANDERING"
-THINKING = "THINKING"
-AWAKE = "AWAKE"
-# The end state.
-END = "END"
 
 
 class GuineaPig:
@@ -50,7 +38,7 @@ class GuineaPig:
         """
         if self.is_hungry() or self.is_thirsty():
             return False
-        if self.__state == SLEEPING:
+        if self.__state == "SLEEPING":
             # If we are already sleeping, carry on sleeping.
             return self.__tired > 30
         else:
@@ -64,7 +52,7 @@ class GuineaPig:
         """
         if self.is_thirsty():
             return False
-        if self.__state == EATING:
+        if self.__state == "EATING":
             # If already eating, keep on eating.
             return self.__hunger > 30
         else:
@@ -123,68 +111,6 @@ class GuineaPig:
             .format(self.__name, self.__state, self.__hunger, self.__thirst, self.__tired)
 
 
-class GuineaPigState(State):
-    """
-    The common class which defines each state of the guinea pig.
-    """
-
-    def __init__(self, state_name: str, changes: List[int]) -> None:
-        """
-        Initialise a guinea pig state instance.
-        :param state_name: The name of the state
-        :param changes: The guinea pig attributes the state affects
-        """
-        self.__changes = changes
-        super(GuineaPigState, self).__init__(state_name.upper())
-
-    @staticmethod
-    def __determine_new_state(gp: GuineaPig) -> str:
-        """
-        Determine what guinea pig will do next.
-        :return: The name of the next state (not necessarily different to the current state)
-        """
-        if gp.is_tired():
-            new_state = SLEEPING
-        elif gp.is_hungry():
-            new_state = EATING
-        elif gp.is_thirsty():
-            new_state = DRINKING
-        elif randint(1, 10) > 5:
-            new_state = WANDERING
-        elif randint(1, 10) > 8:
-            new_state = THINKING
-        else:
-            new_state = AWAKE
-        return new_state
-
-    def transition(self, gp: GuineaPig) -> str:
-        """
-        Update the attributes and then determine the next state for the given guinea pig.
-        :param gp: A guinea pig instance
-        :return: The name of the next state (not necessarily different to the current state)
-        """
-        if gp.update(self.get_name(), self.__changes):
-            new_state = self.__determine_new_state(gp)
-        else:
-            new_state = END
-        return new_state
-
-
-def build_guinea_pig_machine() -> StateMachine:
-    """
-    Initialise the state machine.
-    :return: StateMachine instance with states configured
-    """
-    sm = StateMachine(SLEEPING, END)
-    sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
-    sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
-    sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
-    sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
-    sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
-    sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
-    return sm
-
-
 def create_guinea_pig(name: str, age: AgeTracker, tweeter: Tweeter) -> GuineaPig:
     """
     Create a new guinea pig instance.
@@ -193,4 +119,4 @@ def create_guinea_pig(name: str, age: AgeTracker, tweeter: Tweeter) -> GuineaPig
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    return GuineaPig(name, age, SLEEPING, 20, 10, 10, tweeter)
+    return GuineaPig(name, age, "SLEEPING", 20, 10, 10, tweeter)
