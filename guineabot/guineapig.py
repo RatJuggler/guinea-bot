@@ -42,13 +42,13 @@ class GuineaPig:
         self.__thirst = thirst
         self.__tweeter = tweeter
 
-    def __is_tired(self) -> bool:
+    def is_tired(self) -> bool:
         """
         Decide if the guinea pig is tired.
         We won't sleep if we are hungry or thirsty.
         :return: True if tired, otherwise False
         """
-        if self.__is_hungry() or self.__is_thirsty():
+        if self.is_hungry() or self.is_thirsty():
             return False
         if self.__state == SLEEPING:
             # If we are already sleeping, carry on sleeping.
@@ -56,13 +56,13 @@ class GuineaPig:
         else:
             return self.__tired > 80
 
-    def __is_hungry(self) -> bool:
+    def is_hungry(self) -> bool:
         """
         Decide if the guinea pig is hungry.
         We won't eat if we are thirsty.
         :return: True if hungry, otherwise False
         """
-        if self.__is_thirsty():
+        if self.is_thirsty():
             return False
         if self.__state == EATING:
             # If already eating, keep on eating.
@@ -70,7 +70,7 @@ class GuineaPig:
         else:
             return self.__hunger > 80
 
-    def __is_thirsty(self) -> bool:
+    def is_thirsty(self) -> bool:
         """
         Decide if the guinea pig is thirsty.
         :return: True if thirsty, otherwise False
@@ -94,25 +94,6 @@ class GuineaPig:
         return self.__outside_bounds(self.__tired) or \
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
-
-    def determine_new_state(self) -> str:
-        """
-        Determine what guinea pig will do next.
-        :return: The name of the next state (not necessarily different to the current state)
-        """
-        if self.__is_tired():
-            new_state = SLEEPING
-        elif self.__is_hungry():
-            new_state = EATING
-        elif self.__is_thirsty():
-            new_state = DRINKING
-        elif randint(1, 10) > 5:
-            new_state = WANDERING
-        elif randint(1, 10) > 8:
-            new_state = THINKING
-        else:
-            new_state = AWAKE
-        return new_state
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
@@ -156,6 +137,26 @@ class GuineaPigState(State):
         self.__changes = changes
         super(GuineaPigState, self).__init__(state_name.upper())
 
+    @staticmethod
+    def __determine_new_state(gp: GuineaPig) -> str:
+        """
+        Determine what guinea pig will do next.
+        :return: The name of the next state (not necessarily different to the current state)
+        """
+        if gp.is_tired():
+            new_state = SLEEPING
+        elif gp.is_hungry():
+            new_state = EATING
+        elif gp.is_thirsty():
+            new_state = DRINKING
+        elif randint(1, 10) > 5:
+            new_state = WANDERING
+        elif randint(1, 10) > 8:
+            new_state = THINKING
+        else:
+            new_state = AWAKE
+        return new_state
+
     def transition(self, gp: GuineaPig) -> str:
         """
         Update the attributes and then determine the next state for the given guinea pig.
@@ -163,7 +164,7 @@ class GuineaPigState(State):
         :return: The name of the next state (not necessarily different to the current state)
         """
         if gp.update(self.get_name(), self.__changes):
-            new_state = gp.determine_new_state()
+            new_state = self.__determine_new_state(gp)
         else:
             new_state = END
         return new_state
