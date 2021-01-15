@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='guineabot',
-    version='0.0.6',
+    version='0.1.0',
     description='A guinea pig Twitter bot.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -25,7 +25,7 @@ setup(
     install_requires=[
         # Check latest releases on piwheels: https://www.piwheels.org/
         'click ==7.1.2',
-        'tweepy ==3.9.0'
+        'tweepy ==3.10.0'
     ],
     test_suite='tests',
     tests_require=[
