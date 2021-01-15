@@ -2,11 +2,9 @@ from random import randint
 from typing import List
 
 from .age_tracker import AgeTracker
-from .photos import Photos
-from .sayings import Sayings
 from .age_logging import age_logger
 from .statemachine import StateMachine, State
-from .twitter_api import TwitterService, get_twitter_service
+from .tweeter import Tweeter
 
 # Current guinea pig states.
 SLEEPING = "SLEEPING"
@@ -17,8 +15,6 @@ THINKING = "THINKING"
 AWAKE = "AWAKE"
 # The end state.
 END = "END"
-# Special state for sayings for photo tweets.
-PHOTOS = "PHOTOS"
 
 
 class GuineaPig:
@@ -27,18 +23,16 @@ class GuineaPig:
     """
 
     def __init__(self, name: str, age: AgeTracker, start_state: str, tired: int, hunger: int, thirst: int,
-                 sayings: Sayings, photos: Photos, tweeter: TwitterService) -> None:
+                 tweeter: Tweeter) -> None:
         """
-        Initialise the guinea pig state.
+        Initialise the guinea pig.
         :param name: Name of the guinea pig bot
         :param age: Age tracker
         :param start_state: Initial state
         :param tired: Initial value of tired attribute
         :param hunger: Initial value of hunger attribute
         :param thirst: Initial value of thirst attribute
-        :param sayings: Supplies sayings for tweeting
-        :param photos: Supplies photos for tweeting
-        :param tweeter: Tweeting service to use
+        :param tweeter: To generate tweets with
         """
         self.__name = name
         self.__age = age
@@ -46,18 +40,15 @@ class GuineaPig:
         self.__tired = tired
         self.__hunger = hunger
         self.__thirst = thirst
-        self.__sayings = sayings
-        self.__photos = photos
         self.__tweeter = tweeter
-        self.__friends = self.__tweeter.get_current_friends()
 
-    def is_tired(self) -> bool:
+    def __is_tired(self) -> bool:
         """
         Decide if the guinea pig is tired.
         We won't sleep if we are hungry or thirsty.
         :return: True if tired, otherwise False
         """
-        if self.is_hungry() or self.is_thirsty():
+        if self.__is_hungry() or self.__is_thirsty():
             return False
         if self.__state == SLEEPING:
             # If we are already sleeping, carry on sleeping.
@@ -65,13 +56,13 @@ class GuineaPig:
         else:
             return self.__tired > 80
 
-    def is_hungry(self) -> bool:
+    def __is_hungry(self) -> bool:
         """
         Decide if the guinea pig is hungry.
         We won't eat if we are thirsty.
         :return: True if hungry, otherwise False
         """
-        if self.is_thirsty():
+        if self.__is_thirsty():
             return False
         if self.__state == EATING:
             # If already eating, keep on eating.
@@ -79,7 +70,7 @@ class GuineaPig:
         else:
             return self.__hunger > 80
 
-    def is_thirsty(self) -> bool:
+    def __is_thirsty(self) -> bool:
         """
         Decide if the guinea pig is thirsty.
         :return: True if thirsty, otherwise False
@@ -104,21 +95,24 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
-    def __tweet_state(self) -> None:
+    def determine_new_state(self) -> str:
         """
-        Tweet, tweet with a photo or find new friends.
-        This is limited using random checks to prevent the timeline being flooded and from accumulating friends too quickly.
-        :return: No meaningful return
+        Determine what guinea pig will do next.
+        :return: The name of the next state (not necessarily different to the current state)
         """
-        chance = randint(1, 80)
-        if chance <= 10:
-            self.__tweeter.tweet(self.__sayings.get_random_saying(self.__state))
-        elif chance == 11:
-            if self.__photos.loaded():
-                self.__tweeter.tweet_with_photo(self.__sayings.get_random_saying(PHOTOS),
-                                                self.__photos.get_path_to_random())
-        # elif chance == 12:
-        #     self.__friends = self.__tweeter.find_new_friend(self.__friends)
+        if self.__is_tired():
+            new_state = SLEEPING
+        elif self.__is_hungry():
+            new_state = EATING
+        elif self.__is_thirsty():
+            new_state = DRINKING
+        elif randint(1, 10) > 5:
+            new_state = WANDERING
+        elif randint(1, 10) > 8:
+            new_state = THINKING
+        else:
+            new_state = AWAKE
+        return new_state
 
     def update(self, new_state: str, changes: List[int]) -> bool:
         """
@@ -136,7 +130,7 @@ class GuineaPig:
             raise OverflowError
         if self.__state != new_state:
             self.__state = new_state
-            self.__tweet_state()
+            self.__tweeter.tweet_state(self.__state)
         return self.__age.increase()
 
     def __str__(self) -> str:
@@ -162,27 +156,6 @@ class GuineaPigState(State):
         self.__changes = changes
         super(GuineaPigState, self).__init__(state_name.upper())
 
-    @staticmethod
-    def __determine_new_state(gp: GuineaPig) -> str:
-        """
-        Determine the next state for the given guinea pig.
-        :param gp: A guinea pig instance
-        :return: The name of the next state (not necessarily different to the current state)
-        """
-        if gp.is_tired():
-            new_state = SLEEPING
-        elif gp.is_hungry():
-            new_state = EATING
-        elif gp.is_thirsty():
-            new_state = DRINKING
-        elif randint(1, 10) > 5:
-            new_state = WANDERING
-        elif randint(1, 10) > 8:
-            new_state = THINKING
-        else:
-            new_state = AWAKE
-        return new_state
-
     def transition(self, gp: GuineaPig) -> str:
         """
         Update the attributes and then determine the next state for the given guinea pig.
@@ -190,7 +163,7 @@ class GuineaPigState(State):
         :return: The name of the next state (not necessarily different to the current state)
         """
         if gp.update(self.get_name(), self.__changes):
-            new_state = self.__determine_new_state(gp)
+            new_state = gp.determine_new_state()
         else:
             new_state = END
         return new_state
@@ -211,13 +184,12 @@ def build_guinea_pig_machine() -> StateMachine:
     return sm
 
 
-def create_guinea_pig(name: str, age: AgeTracker, path_to_photos: str, quiet: bool) -> GuineaPig:
+def create_guinea_pig(name: str, age: AgeTracker, tweeter: Tweeter) -> GuineaPig:
     """
     Create a new guinea pig instance.
     :param name: Of the guinea pig
     :param age: Age tracker
-    :param path_to_photos: Path to folder of photos for tweeting
-    :param quiet: Run without invoking the Twitter API
+    :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    return GuineaPig(name, age, SLEEPING, 20, 10, 10, Sayings(), Photos(path_to_photos), get_twitter_service(quiet))
+    return GuineaPig(name, age, SLEEPING, 20, 10, 10, tweeter)

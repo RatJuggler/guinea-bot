@@ -7,6 +7,7 @@ from click import Context, Option
 
 from .age_tracker import AgeTracker
 from .age_logging import configure_logging, age_logger
+from .tweeter import create_tweeter
 from .guineapig import create_guinea_pig, build_guinea_pig_machine
 
 
@@ -82,7 +83,8 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     age = AgeTracker(duration, interval, accelerated)
     gp_machine = build_guinea_pig_machine()
-    guinea_pig = create_guinea_pig(name, age, photos, quiet)
+    tweeter = create_tweeter(photos, quiet)
+    guinea_pig = create_guinea_pig(name, age, tweeter)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
     gp_machine.stats(age)
