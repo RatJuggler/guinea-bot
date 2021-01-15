@@ -51,15 +51,13 @@ class TestMain(TestCase):
         self.assertEqual(result.exit_code, 2)
         self.assertIn('Error: Invalid value for \'-p\' / \'--photos-folder\': /path/to/nowhere', result.output)
 
-    @patch('guineabot.__main__.AgeTracker')
     @patch('guineabot.__main__.create_guinea_pig')
     @patch('guineabot.__main__.create_tweeter')
     @patch('guineabot.__main__.build_guinea_pig_machine')
     def test_name(self,
                   build_guinea_pig_machine_mock: MagicMock,
                   create_tweeter: MagicMock,
-                  create_guinea_pig_mock: MagicMock,
-                  age_tracker_mock: MagicMock) -> None:
+                  create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-n', 'Bramble', '-d', '99'])
         self.assertEqual(result.exit_code, 0)
@@ -68,20 +66,17 @@ class TestMain(TestCase):
                         'INITIALISE >> Bot duration (guinea pig lifespan): 99 days',
                         'INITIALISE >> State interval (changes in guinea pig activity): 15 minutes',
                         'INITIALISE >> It\'s alive!')
-        age_tracker_mock.assert_called_once()
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
 
-    @patch('guineabot.__main__.AgeTracker')
     @patch('guineabot.__main__.create_guinea_pig')
     @patch('guineabot.__main__.create_tweeter')
     @patch('guineabot.__main__.build_guinea_pig_machine')
     def test_duration(self,
                       build_guinea_pig_machine_mock: MagicMock,
                       create_tweeter: MagicMock,
-                      create_guinea_pig_mock: MagicMock,
-                      age_tracker_mock: MagicMock) -> None:
+                      create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99'])
         self.assertEqual(result.exit_code, 0)
@@ -90,20 +85,17 @@ class TestMain(TestCase):
                         'INITIALISE >> Bot duration (guinea pig lifespan): 99 days',
                         'INITIALISE >> State interval (changes in guinea pig activity): 15 minutes',
                         'INITIALISE >> It\'s alive!')
-        age_tracker_mock.assert_called_once()
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
 
-    @patch('guineabot.__main__.AgeTracker')
     @patch('guineabot.__main__.create_guinea_pig')
     @patch('guineabot.__main__.create_tweeter')
     @patch('guineabot.__main__.build_guinea_pig_machine')
     def test_interval(self,
                       build_guinea_pig_machine_mock: MagicMock,
                       create_tweeter: MagicMock,
-                      create_guinea_pig_mock: MagicMock,
-                      age_tracker_mock: MagicMock) -> None:
+                      create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-i', '22', '-d', '99'])
         self.assertEqual(result.exit_code, 0)
@@ -112,20 +104,17 @@ class TestMain(TestCase):
                         'INITIALISE >> Bot duration (guinea pig lifespan): 99 days',
                         'INITIALISE >> State interval (changes in guinea pig activity): 22 minutes',
                         'INITIALISE >> It\'s alive!')
-        age_tracker_mock.assert_called_once()
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
 
-    @patch('guineabot.__main__.AgeTracker')
     @patch('guineabot.__main__.create_guinea_pig')
     @patch('guineabot.__main__.create_tweeter')
     @patch('guineabot.__main__.build_guinea_pig_machine')
     def test_accelerated(self,
                          build_guinea_pig_machine_mock: MagicMock,
                          create_tweeter: MagicMock,
-                         create_guinea_pig_mock: MagicMock,
-                         age_tracker_mock: MagicMock) -> None:
+                         create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-a', '-d', '99'])
         self.assertEqual(result.exit_code, 0)
@@ -136,7 +125,6 @@ class TestMain(TestCase):
                         'INITIALISE >> It\'s alive!')
         log_out.check_present(('root', al.logging.getLevelName(al.logging.INFO),
                                'INITIALISE >> Accelerated running, quiet mode enforced.'))
-        age_tracker_mock.assert_called_once()
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
