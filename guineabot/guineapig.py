@@ -106,23 +106,22 @@ class GuineaPig:
             self.__state = new_state
             self.__tweeter.tweet_state(self.__state)
         with open(self.__name + '.json', 'w') as file:
-            file.write(self.repr_json())
+            json.dump(self.repr_dict(), file, indent=4)
         return self.__age.increase()
 
-    def repr_json(self) -> str:
+    def repr_dict(self) -> dict:
         """
-        Build a string to represent the object in JSON.
-        :return: JSON string of key object attributes.
+        Build a dictionary to represent the object.
+        :return: Dictionary of key object attributes.
         """
-        state = dict(__class__=self.__class__.__name__,
-                     __module__=self.__module__,
-                     name=self.__name,
-                     age=self.__age.repr_json(),
-                     state=self.__state,
-                     tired=self.__tired,
-                     hunger=self.__hunger,
-                     thirst=self.__thirst)
-        return json.dumps(state)
+        return dict(__class__=self.__class__.__name__,
+                    __module__=self.__module__,
+                    name=self.__name,
+                    age=self.__age.repr_dict(),
+                    state=self.__state,
+                    tired=self.__tired,
+                    hunger=self.__hunger,
+                    thirst=self.__thirst)
 
     def __str__(self) -> str:
         """
