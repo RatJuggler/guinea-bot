@@ -1,7 +1,9 @@
+import json
+
 from typing import List
 
-from .age_tracker import AgeTracker
 from .age_logging import age_logger
+from .age_tracker import AgeTracker
 from .tweeter import Tweeter
 
 
@@ -104,6 +106,21 @@ class GuineaPig:
             self.__state = new_state
             self.__tweeter.tweet_state(self.__state)
         return self.__age.increase()
+
+    def repr_json(self) -> str:
+        """
+        Build a string to represent the object in JSON.
+        :return: JSON string of key object attributes.
+        """
+        state = dict(__class__=self.__class__.__name__,
+                     __module__=self.__module__,
+                     name=self.__name,
+                     age=self.__age.repr_json(),
+                     state=self.__state,
+                     tired=self.__tired,
+                     hunger=self.__hunger,
+                     thirst=self.__thirst)
+        return json.dumps(state)
 
     def __str__(self) -> str:
         """

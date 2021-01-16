@@ -1,3 +1,5 @@
+import json
+
 from time import sleep
 
 
@@ -60,6 +62,18 @@ class AgeTracker:
         percentage = duration / self.__age_clock * 100
         average = self.__format_age_time(duration * self.__interval // self.__duration)
         return percentage, average
+
+    def repr_json(self) -> str:
+        """
+        Build a string to represent the object in JSON.
+        :return: JSON string of key object attributes.
+        """
+        state = dict(__class__=self.__class__.__name__,
+                     __module__=self.__module__,
+                     duration=self.__duration,
+                     interval=self.__interval,
+                     accelerated=self.__accelerated)
+        return json.dumps(state)
 
     def __str__(self) -> str:
         """
