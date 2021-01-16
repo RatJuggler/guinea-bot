@@ -105,6 +105,8 @@ class GuineaPig:
         if self.__state != new_state:
             self.__state = new_state
             self.__tweeter.tweet_state(self.__state)
+        with open(self.__name + '.json', 'w') as file:
+            file.write(self.repr_json())
         return self.__age.increase()
 
     def repr_json(self) -> str:
