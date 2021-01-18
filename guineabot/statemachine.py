@@ -55,8 +55,9 @@ class StateMachine:
         self.__end_state_name = end_state_name
         self.__interval = interval
         self.__accelerated = accelerated
-        self.__states = {}
-        self.__counts = {}
+        self.__ticks = 0    # Track state machine ticks or state changes.
+        self.__states = {}  # Contains the states to be run.
+        self.__counts = {}  # Counts of how many times each state is reached.
 
     def add_state(self, new_state: State) -> None:
         """
@@ -79,6 +80,7 @@ class StateMachine:
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
+            self.__ticks += 1
             if not self.__accelerated:
                 sleep(self.__interval * 60)
 
@@ -89,7 +91,8 @@ class StateMachine:
         :return: No meaningful return
         """
         age_logger.set_age('COMPLETED')
-        age_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
+        age_logger.info("Dumping states for state machine instance...\n{:>96}"
+                        .format("State     : Time spent in state (% and daily avg.)"))
         for state in self.__counts:
             percentage, average = age.stats(self.__counts[state], self.__interval)
             age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
