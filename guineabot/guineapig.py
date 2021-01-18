@@ -3,7 +3,6 @@ import json
 from typing import List
 
 from .age_logging import age_logger
-from .age_tracker import AgeTracker
 from .tweeter import Tweeter
 
 
@@ -12,15 +11,13 @@ class GuineaPig:
     A guinea pig.
     """
 
-    def __init__(self, name: str, lifespan: int, current_age: int, age: AgeTracker, start_state: str, tired: int, hunger: int,
-                 thirst: int,
+    def __init__(self, name: str, lifespan: int, current_age: int, start_state: str, tired: int, hunger: int, thirst: int,
                  tweeter: Tweeter) -> None:
         """
         Initialise the guinea pig.
         :param name: Name of the guinea pig bot
         :param lifespan: Of the guinea pig in days
         :param current_age: Of the guinea pig in minutes
-        :param age: Age tracker
         :param start_state: Initial state
         :param tired: Initial value of tired attribute
         :param hunger: Initial value of hunger attribute
@@ -31,20 +28,11 @@ class GuineaPig:
         self.__lifespan = lifespan
         self.__max_age = self.__lifespan * 24 * 60
         self.__current_age = current_age
-        self.__age = age
         self.__state = start_state.upper()
         self.__tired = tired
         self.__hunger = hunger
         self.__thirst = thirst
         self.__tweeter = tweeter
-
-    def age(self) -> AgeTracker:
-        """
-        TODO Shouldn't be doing this!
-        Access to the age for final stats.
-        :return: Age tracker.
-        """
-        return self.__age
 
     def is_tired(self) -> bool:
         """
@@ -114,7 +102,7 @@ class GuineaPig:
         :param duration: How long the new state will last
         :return: No meaningful return
         """
-        age_logger.set_age(self.__age)
+        age_logger.set_age(self.__current_age)
         self.__tired += changes[0]
         self.__hunger += changes[1]
         self.__thirst += changes[2]
@@ -127,7 +115,6 @@ class GuineaPig:
         with open(self.__name + '.json', 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
         self.__current_age += duration
-        self.__age.increase()
 
     def repr_dict(self) -> dict:
         """
@@ -151,14 +138,12 @@ class GuineaPig:
             .format(self.__name, self.__state, self.__hunger, self.__thirst, self.__tired)
 
 
-def create_guinea_pig(name: str, duration: int, interval: int, tweeter: Tweeter) -> GuineaPig:
+def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     """
     Create a new guinea pig instance.
     :param name: Of the guinea pig
-    :param duration: How long the guinea pig will live
-    :param interval: The time interval between each tick of the age clock
+    :param lifespan: How long the guinea pig will live
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    age = AgeTracker(interval)
-    return GuineaPig(name, duration, 0, age, "SLEEPING", 20, 10, 10, tweeter)
+    return GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)

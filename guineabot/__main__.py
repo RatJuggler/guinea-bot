@@ -82,7 +82,7 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     tweeter = create_tweeter(photos, quiet)
-    guinea_pig = create_guinea_pig(name, duration, interval, tweeter)
+    guinea_pig = create_guinea_pig(name, duration, tweeter)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
