@@ -34,9 +34,16 @@ class AgeLoggerAdapter(logging.LoggerAdapter):
         minutes -= days * 24 * 60
         self.extra = {AGE: "Age: {0:d} - {1}".format(days, self.__format_age_time(minutes))}
 
+    def set_initialise(self) -> None:
+        """
+        Set string for initialisation logging.
+        :return: No meaningful return
+        """
+        self.extra = {AGE: "INITIALISE"}
+
     def set_complete(self) -> None:
         """
-        Set string to represent completed.
+        Set string for completion logging.
         :return: No meaningful return
         """
         self.extra = {AGE: "COMPLETE"}
@@ -52,7 +59,7 @@ class AgeLoggerAdapter(logging.LoggerAdapter):
 
 
 logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
-age_logger = AgeLoggerAdapter(logging.getLogger(), {AGE: 'INITIALISE'})
+age_logger = AgeLoggerAdapter(logging.getLogger(), {AGE: '<...>'})
 
 
 def configure_logging(loglevel: str) -> None:
@@ -64,3 +71,4 @@ def configure_logging(loglevel: str) -> None:
     if logging.getLevelName(loglevel) == "Level {0}".format(loglevel):
         raise ValueError('Invalid log level: %s' % loglevel)
     age_logger.setLevel(loglevel)
+    age_logger.set_initialise()
