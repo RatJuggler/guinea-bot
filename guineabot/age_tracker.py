@@ -1,4 +1,3 @@
-from time import sleep
 
 
 class AgeTracker:
@@ -6,16 +5,14 @@ class AgeTracker:
     Acts like a virtual clock tracking over a duration.
     """
 
-    def __init__(self, duration: int, interval: int, accelerated: bool) -> None:
+    def __init__(self, duration: int, interval: int) -> None:
         """
         Initialise an age tracking instance.
         :param duration: How long to track the age in days
         :param interval: The time interval between each tick of the age clock
-        :param accelerated: Don't wait for the time interval
         """
         self.__duration = duration
         self.__interval = interval
-        self.__accelerated = accelerated
         # Calculate the number of interval ticks over the duration.
         self.__max_age = (self.__duration * 24 * 60) // self.__interval
         self.__age_clock = 0
@@ -54,8 +51,6 @@ class AgeTracker:
         :return: No meaningful return
         """
         self.__age_clock += 1
-        if not self.__accelerated:
-            sleep(self.__interval * 60)
 
     def stats(self, duration: int) -> [float, str]:
         """
@@ -75,8 +70,7 @@ class AgeTracker:
         return dict(__class__=self.__class__.__name__,
                     __module__=self.__module__,
                     duration=self.__duration,
-                    interval=self.__interval,
-                    accelerated=self.__accelerated)
+                    interval=self.__interval)
 
     def __str__(self) -> str:
         """

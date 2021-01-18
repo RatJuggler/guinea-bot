@@ -61,12 +61,14 @@ class GuineaPigState(State):
         return self.__determine_new_state(gp)
 
 
-def build_guinea_pig_machine() -> StateMachine:
+def build_guinea_pig_machine(interval: int, accelerated: bool) -> StateMachine:
     """
     Initialise the state machine.
+    :param interval: The time interval between each tick of the state machine clock (in minutes)
+    :param accelerated: Don't wait for the time interval
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(SLEEPING, END)
+    sm = StateMachine(SLEEPING, END, interval, accelerated)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))

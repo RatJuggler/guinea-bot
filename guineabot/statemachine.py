@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from time import sleep
 from typing import Generic, TypeVar
 
 from .age_tracker import AgeTracker
@@ -39,17 +40,21 @@ class State(ABC):
 
 class StateMachine:
     """
-    A simple state machine driven by state transitions from the State interface.
+    A simple state machine driven by state transitions from the State interface at fixed intervals.
     """
 
-    def __init__(self, start_state_name: str, end_state_name: str) -> None:
+    def __init__(self, start_state_name: str, end_state_name: str, interval: int, accelerated: bool) -> None:
         """
         Initialise a StateMachine instance.
         :param start_state_name: Initial state
         :param end_state_name: Termination state
+        :param interval: The time interval between each tick of the state machine clock (in minutes)
+        :param accelerated: Don't wait for the time interval
         """
         self.__start_state_name = start_state_name
         self.__end_state_name = end_state_name
+        self.__interval = interval
+        self.__accelerated = accelerated
         self.__states = {}
         self.__counts = {}
 
@@ -74,6 +79,8 @@ class StateMachine:
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(data)
+            if not self.__accelerated:
+                sleep(self.__interval * 60)
 
     def stats(self, age: AgeTracker) -> None:
         """

@@ -144,15 +144,14 @@ class GuineaPig:
             .format(self.__name, self.__state, self.__hunger, self.__thirst, self.__tired)
 
 
-def create_guinea_pig(name: str, duration: int, interval: int, accelerated: bool, tweeter: Tweeter) -> GuineaPig:
+def create_guinea_pig(name: str, duration: int, interval: int, tweeter: Tweeter) -> GuineaPig:
     """
     Create a new guinea pig instance.
     :param name: Of the guinea pig
     :param duration: How long the guinea pig will live
     :param interval: The time interval between each tick of the age clock
-    :param accelerated: Don't wait for the time interval
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    age = AgeTracker(duration, interval, accelerated)
+    age = AgeTracker(duration, interval)
     return GuineaPig(name, age, "SLEEPING", 20, 10, 10, tweeter)
