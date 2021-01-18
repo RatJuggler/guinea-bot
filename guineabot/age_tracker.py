@@ -52,17 +52,6 @@ class AgeTracker:
         """
         self.__age_clock += 1
 
-    def stats(self, duration: int, interval) -> [float, str]:
-        """
-        Calculate percentage and average time spent for given duration.
-        :param duration: to calculate stats for
-        :param interval: The time interval between each tick of the age clock
-        :return: Percentage and average time
-        """
-        percentage = duration / self.__age_clock * 100
-        average = self.__format_age_time(duration * interval // self.__duration)
-        return percentage, average
-
     def repr_dict(self) -> dict:
         """
         Build a dictionary to represent the object.

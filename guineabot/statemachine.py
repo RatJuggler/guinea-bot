@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from time import sleep
 from typing import Generic, TypeVar
 
-from .age_tracker import AgeTracker
 from .age_logging import age_logger
 
 T = TypeVar('T')
@@ -84,15 +83,35 @@ class StateMachine:
             if not self.__accelerated:
                 sleep(self.__interval * 60)
 
-    def stats(self, age: AgeTracker) -> None:
+    @staticmethod
+    def __format_age_time(minutes: int) -> str:
+        """
+        Format minutes of age time.
+        :param minutes: to format
+        :return: String of minutes in HH:MM format
+        """
+        hours = minutes // 60
+        minutes -= hours * 60
+        return "{0:02d}:{1:02d}".format(hours, minutes)
+
+    def __calc_stats(self, duration: int) -> [float, str]:
+        """
+        Calculate percentage and the rough daily equivalent of time spent for given duration.
+        :param duration: to calculate stats for
+        :return: Percentage and average time
+        """
+        percentage = duration / self.__ticks * 100
+        time = self.__format_age_time(round(percentage * 24 * 60) // 100)
+        return percentage, time
+
+    def stats(self) -> None:
         """
         Log stats on time spent in each state.
-        :param age: Age tracker to generate stats from
         :return: No meaningful return
         """
         age_logger.set_age('COMPLETED')
         age_logger.info("Dumping states for state machine instance...\n{:>96}"
-                        .format("State     : Time spent in state (% and daily avg.)"))
+                        .format("State     : Time spent in state (% and rough daily equivalent)"))
         for state in self.__counts:
-            percentage, average = age.stats(self.__counts[state], self.__interval)
-            age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
+            percentage, time = self.__calc_stats(self.__counts[state])
+            age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, time))
