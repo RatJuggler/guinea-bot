@@ -12,13 +12,27 @@ class AgeLoggerAdapter(logging.LoggerAdapter):
     Allows log messages to include the age.
     """
 
-    def set_age(self, age: str) -> None:
+    @staticmethod
+    def __format_age_time(minutes: int) -> str:
+        """
+        Format minutes of age time.
+        :param minutes: to format
+        :return: String of minutes in HH:MM format
+        """
+        hours = minutes // 60
+        minutes -= hours * 60
+        return "{0:02d}:{1:02d}".format(hours, minutes)
+
+    def set_age(self, age: int) -> None:
         """
         Set string to represent the age.
         :param age: String to show for age
         :return: No meaningful return
         """
-        self.extra = {AGE: age}
+        minutes = age
+        days = minutes // (24 * 60)
+        minutes -= days * 24 * 60
+        self.extra = {AGE: "Age: {0:d} - {1}".format(days, self.__format_age_time(minutes))}
 
     def process(self, msg: str, kwargs: Dict[str, T]) -> [str, Dict[str, T]]:
         """
