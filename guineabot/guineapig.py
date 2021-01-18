@@ -137,7 +137,6 @@ class GuineaPig:
         return dict(__class__=self.__class__.__name__,
                     __module__=self.__module__,
                     name=self.__name,
-                    age=self.__age.repr_dict(),
                     state=self.__state,
                     tired=self.__tired,
                     hunger=self.__hunger,
@@ -161,5 +160,5 @@ def create_guinea_pig(name: str, duration: int, interval: int, tweeter: Tweeter)
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    age = AgeTracker(duration, interval)
+    age = AgeTracker(interval)
     return GuineaPig(name, duration, 0, age, "SLEEPING", 20, 10, 10, tweeter)
