@@ -91,5 +91,5 @@ class StateMachine:
         age_logger.set_age('COMPLETED')
         age_logger.info("Dumping stats...\n{:>96}".format("State     : Time spent in state (% and daily avg.)"))
         for state in self.__counts:
-            percentage, average = age.stats(self.__counts[state])
+            percentage, average = age.stats(self.__counts[state], self.__interval)
             age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, average))
