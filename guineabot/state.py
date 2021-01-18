@@ -51,13 +51,14 @@ class GuineaPigState(State):
             new_state = AWAKE
         return new_state
 
-    def transition(self, gp: GuineaPig) -> str:
+    def transition(self, duration: int, gp: GuineaPig) -> str:
         """
         Update the attributes and then determine the next state for the given guinea pig.
+        :param duration: How long the state will last
         :param gp: A guinea pig instance
         :return: The name of the next state (not necessarily different to the current state)
         """
-        gp.update(self.get_name(), self.__changes)
+        gp.update(self.get_name(), self.__changes, duration)
         return self.__determine_new_state(gp)
 
 

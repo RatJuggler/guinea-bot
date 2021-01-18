@@ -12,11 +12,14 @@ class GuineaPig:
     A guinea pig.
     """
 
-    def __init__(self, name: str, age: AgeTracker, start_state: str, tired: int, hunger: int, thirst: int,
+    def __init__(self, name: str, lifespan: int, current_age: int, age: AgeTracker, start_state: str, tired: int, hunger: int,
+                 thirst: int,
                  tweeter: Tweeter) -> None:
         """
         Initialise the guinea pig.
         :param name: Name of the guinea pig bot
+        :param lifespan: Of the guinea pig in days
+        :param current_age: Of the guinea pig in minutes
         :param age: Age tracker
         :param start_state: Initial state
         :param tired: Initial value of tired attribute
@@ -25,6 +28,9 @@ class GuineaPig:
         :param tweeter: To generate tweets with
         """
         self.__name = name
+        self.__lifespan = lifespan
+        self.__max_age = self.__lifespan * 24 * 60
+        self.__current_age = current_age
         self.__age = age
         self.__state = start_state.upper()
         self.__tired = tired
@@ -80,7 +86,7 @@ class GuineaPig:
         Decide if the guinea has died.
         :return: True once the guinea pig reaches it's age limit, otherwise False
         """
-        return self.__age.has_died()
+        return self.__current_age >= self.__max_age
 
     @staticmethod
     def __outside_bounds(attribute) -> bool:
@@ -100,11 +106,12 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
-    def update(self, new_state: str, changes: List[int]) -> None:
+    def update(self, new_state: str, changes: List[int], duration: int) -> None:
         """
         Update attributes driven by the change of state, check chance to tweet and then increase the age.
         :param new_state: The new state to move to
         :param changes: To apply to the attributes
+        :param duration: How long the new state will last
         :return: No meaningful return
         """
         age_logger.set_age(self.__age)
@@ -119,6 +126,7 @@ class GuineaPig:
             self.__tweeter.tweet_state(self.__state)
         with open(self.__name + '.json', 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
+        self.__current_age += duration
         self.__age.increase()
 
     def repr_dict(self) -> dict:
@@ -154,4 +162,4 @@ def create_guinea_pig(name: str, duration: int, interval: int, tweeter: Tweeter)
     :return: A new instance of a guinea pig
     """
     age = AgeTracker(duration, interval)
-    return GuineaPig(name, age, "SLEEPING", 20, 10, 10, tweeter)
+    return GuineaPig(name, duration, 0, age, "SLEEPING", 20, 10, 10, tweeter)

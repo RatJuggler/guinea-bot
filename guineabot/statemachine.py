@@ -28,9 +28,10 @@ class State(ABC):
         return self.__name
 
     @abstractmethod
-    def transition(self, data: Generic[T]) -> str:
+    def transition(self, duration: int, data: Generic[T]) -> str:
         """
         A transition to the next state.
+        :param duration: How long the new state will last (in minutes)
         :param data: Object which informs the transition to the next state.
         :return: The name of the next state (not necessarily different to the current state)
         """
@@ -78,7 +79,7 @@ class StateMachine:
             age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
-            new_state_name = state.transition(data)
+            new_state_name = state.transition(self.__interval, data)
             self.__ticks += 1
             if not self.__accelerated:
                 sleep(self.__interval * 60)
