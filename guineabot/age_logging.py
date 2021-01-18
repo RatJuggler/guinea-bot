@@ -34,6 +34,13 @@ class AgeLoggerAdapter(logging.LoggerAdapter):
         minutes -= days * 24 * 60
         self.extra = {AGE: "Age: {0:d} - {1}".format(days, self.__format_age_time(minutes))}
 
+    def set_complete(self) -> None:
+        """
+        Set string to represent completed.
+        :return: No meaningful return
+        """
+        self.extra = {AGE: "COMPLETE"}
+
     def process(self, msg: str, kwargs: Dict[str, T]) -> [str, Dict[str, T]]:
         """
         Overrides LoggerAdapter method.
