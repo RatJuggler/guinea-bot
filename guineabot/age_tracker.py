@@ -41,15 +41,21 @@ class AgeTracker:
         minutes -= days * 24 * 60
         return "Age: {0:d} - {1}".format(days, self.__format_age_time(minutes))
 
-    def increase(self) -> bool:
+    def has_died(self) -> bool:
+        """
+        Has the bot reached the end of its lifespan?
+        :return: True once age reaches final age, otherwise False
+        """
+        return self.__age_clock >= self.__max_age
+
+    def increase(self) -> None:
         """
         Increase age and pause if we aren't running in accelerated mode.
-        :return: True while age is less than final age, otherwise False
+        :return: No meaningful return
         """
         self.__age_clock += 1
         if not self.__accelerated:
             sleep(self.__interval * 60)
-        return self.__age_clock < self.__max_age
 
     def stats(self, duration: int) -> [float, str]:
         """

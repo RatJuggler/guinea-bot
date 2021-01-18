@@ -35,7 +35,9 @@ class GuineaPigState(State):
         Determine what guinea pig will do next.
         :return: The name of the next state (not necessarily different to the current state)
         """
-        if gp.is_tired():
+        if gp.has_died():
+            new_state = END
+        elif gp.is_tired():
             new_state = SLEEPING
         elif gp.is_hungry():
             new_state = EATING
@@ -55,11 +57,8 @@ class GuineaPigState(State):
         :param gp: A guinea pig instance
         :return: The name of the next state (not necessarily different to the current state)
         """
-        if gp.update(self.get_name(), self.__changes):
-            new_state = self.__determine_new_state(gp)
-        else:
-            new_state = END
-        return new_state
+        gp.update(self.get_name(), self.__changes)
+        return self.__determine_new_state(gp)
 
 
 def build_guinea_pig_machine() -> StateMachine:

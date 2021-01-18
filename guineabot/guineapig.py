@@ -33,6 +33,11 @@ class GuineaPig:
         self.__tweeter = tweeter
 
     def age(self) -> AgeTracker:
+        """
+        TODO Shouldn't be doing this!
+        Access to the age for final stats.
+        :return: Age tracker.
+        """
         return self.__age
 
     def is_tired(self) -> bool:
@@ -70,6 +75,13 @@ class GuineaPig:
         """
         return self.__thirst > 80
 
+    def has_died(self) -> bool:
+        """
+        Decide if the guinea has died.
+        :return: True once the guinea pig reaches it's age limit, otherwise False
+        """
+        return self.__age.has_died()
+
     @staticmethod
     def __outside_bounds(attribute) -> bool:
         """
@@ -88,12 +100,12 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
-    def update(self, new_state: str, changes: List[int]) -> bool:
+    def update(self, new_state: str, changes: List[int]) -> None:
         """
         Update attributes driven by the change of state, check chance to tweet and then increase the age.
         :param new_state: The new state to move to
         :param changes: To apply to the attributes
-        :return: True while the guinea pig hasn't reached it's age limit, otherwise False
+        :return: No meaningful return
         """
         age_logger.set_age(self.__age)
         self.__tired += changes[0]
@@ -107,7 +119,7 @@ class GuineaPig:
             self.__tweeter.tweet_state(self.__state)
         with open(self.__name + '.json', 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
-        return self.__age.increase()
+        self.__age.increase()
 
     def repr_dict(self) -> dict:
         """

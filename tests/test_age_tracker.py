@@ -14,19 +14,24 @@ class TestAgeTracker(TestCase):
 
     def test_single_interval(self) -> None:
         at = AgeTracker(99, 13, True)
-        self.assertTrue(at.increase())
+        self.assertFalse(at.has_died())
+        at.increase()
+        self.assertFalse(at.has_died())
         self.assertEqual(at.__str__(), 'Age: 0 - 00:13')
 
     def test_multiple_intervals(self) -> None:
         at = AgeTracker(99, 22, True)
         for i in range(127):
-            self.assertTrue(at.increase())
+            self.assertFalse(at.has_died())
+            at.increase()
+        self.assertFalse(at.has_died())
         self.assertEqual(at.__str__(), 'Age: 1 - 22:34')
 
     def test_end_interval(self) -> None:
         at = AgeTracker(2, 30, True)
         duration = 60 // 30 * 24 * 2
-        for i in range(duration - 1):
-            self.assertTrue(at.increase())
-        self.assertFalse(at.increase())
+        for i in range(duration):
+            self.assertFalse(at.has_died())
+            at.increase()
+        self.assertTrue(at.has_died())
         self.assertEqual(at.__str__(), 'Age: 2 - 00:00')
