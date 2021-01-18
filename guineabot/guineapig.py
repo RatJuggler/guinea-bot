@@ -124,6 +124,8 @@ class GuineaPig:
         return dict(__class__=self.__class__.__name__,
                     __module__=self.__module__,
                     name=self.__name,
+                    lifespan=self.__lifespan,
+                    current_age=self.__current_age,
                     state=self.__state,
                     tired=self.__tired,
                     hunger=self.__hunger,
