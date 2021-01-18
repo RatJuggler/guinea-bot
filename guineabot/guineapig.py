@@ -136,8 +136,8 @@ class GuineaPig:
         Build a string showing the current internal state.
         :return: String representation of the current instance.
         """
-        return "GuineaPig:(Name: {0}, State: {1}, Tired: {2}, Hunger: {3}, Thirst: {4})"\
-            .format(self.__name, self.__state, self.__tired, self.__hunger, self.__thirst)
+        return "GuineaPig:(Name: {0}, Lifespan: {1} days, Current Age: {2} mins, State: {3}, Tired: {4}, Hunger: {5}, Thirst: {6})"\
+            .format(self.__name, self.__lifespan, self.__current_age, self.__state, self.__tired, self.__hunger, self.__thirst)
 
 
 def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:

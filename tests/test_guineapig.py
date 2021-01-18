@@ -11,14 +11,16 @@ class TestGuineaPig(TestCase):
 
     def test_initial_str(self) -> None:
         gp = GuineaPig("Test", 99, 0, "SLEEPING", 20, 10, 10, Mock())
-        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, State: SLEEPING, Tired: 20, Hunger: 10, Thirst: 10)")
+        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, Lifespan: 99 days, Current Age: 0 mins, State: SLEEPING, "
+                                       "Tired: 20, Hunger: 10, Thirst: 10)")
 
     def test_single_update(self) -> None:
         gp = GuineaPig("Test", 99, 0, "SLEEPING", 20, 10, 10, Mock())
         self.assertFalse(gp.has_died())
         gp.update("TEST", [1, 2, 3], 1)
         self.assertFalse(gp.has_died())
-        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, State: TEST, Tired: 21, Hunger: 12, Thirst: 13)")
+        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, Lifespan: 99 days, Current Age: 1 mins, State: TEST, "
+                                       "Tired: 21, Hunger: 12, Thirst: 13)")
 
     def test_multiple_updates(self) -> None:
         gp = GuineaPig("Test", 99, 0, "SLEEPING", 20, 10, 10, Mock())
@@ -26,7 +28,8 @@ class TestGuineaPig(TestCase):
             self.assertFalse(gp.has_died())
             gp.update("TEST", [0, 0, 0], 1)
         self.assertFalse(gp.has_died())
-        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, State: TEST, Tired: 20, Hunger: 10, Thirst: 10)")
+        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, Lifespan: 99 days, Current Age: 127 mins, State: TEST, "
+                                       "Tired: 20, Hunger: 10, Thirst: 10)")
 
     def test_end_interval(self) -> None:
         gp = GuineaPig("Test", 9, 0, "SLEEPING", 20, 10, 10, Mock())
@@ -35,4 +38,5 @@ class TestGuineaPig(TestCase):
             self.assertFalse(gp.has_died())
             gp.update("TEST", [0, 0, 0], 1)
         self.assertTrue(gp.has_died())
-        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, State: TEST, Tired: 20, Hunger: 10, Thirst: 10)")
+        self.assertEqual(gp.__str__(), "GuineaPig:(Name: Test, Lifespan: 9 days, Current Age: 12960 mins, State: TEST, "
+                                       "Tired: 20, Hunger: 10, Thirst: 10)")
