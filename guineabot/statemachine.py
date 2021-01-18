@@ -111,7 +111,7 @@ class StateMachine:
         :return: No meaningful return
         """
         age_logger.set_complete()
-        age_logger.info("Dumping states for state machine instance...\n{:>96}"
+        age_logger.info("Dumping states for state machine instance...\n{:>107}"
                         .format("State     : Time spent in state (% and rough daily equivalent)"))
         for state in self.__counts:
             percentage, time = self.__calc_stats(self.__counts[state])
