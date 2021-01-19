@@ -170,9 +170,10 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     :return: A new instance of a guinea pig
     """
     try:
-        with open(format_filename(name), 'r') as reader:
+        existing_file = format_filename(name)
+        with open(existing_file, 'r') as reader:
             gp_data = json.load(reader)
-            age_logger.info("Previous instance of guinea pig '{0}' found, reanimating!".format(name))
+            age_logger.info("Previous instance of guinea pig found at '{0}', reanimating!".format(existing_file))
             gp = GuineaPig(gp_data["name"],
                            gp_data["lifespan"],
                            gp_data["current_age"],
