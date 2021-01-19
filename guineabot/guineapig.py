@@ -98,6 +98,14 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
+    def save_state(self) -> None:
+        """
+        Save the guinea pig state.
+        :return: No meaningful return
+        """
+        with open(format_filename(self.__name), 'w') as file:
+            json.dump(self.repr_dict(), file, indent=4)
+
     def update(self, new_state: str, changes: List[int], duration: int) -> None:
         """
         Update attributes driven by the change of state, check chance to tweet and then increase the age.
@@ -118,9 +126,7 @@ class GuineaPig:
             self.__tweeter.tweet_state(self.__state)
         self.__current_age += duration
         age_logger.debug(self.__str__())
-        # Save the guinea pig state.
-        with open(format_filename(self.__name), 'w') as file:
-            json.dump(self.repr_dict(), file, indent=4)
+        self.save_state()
 
     def rejuvenate(self) -> None:
         """
@@ -177,7 +183,8 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
             if gp.has_died():
                 age_logger.info("This is an ex guinea pig, rejuvenating!")
                 gp.rejuvenate()
-            return gp
     except FileNotFoundError:
         age_logger.info("No previous instance of guinea pig '{0}' found, creating a new pig!".format(name))
-    return GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
+        gp = GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
+        gp.save_state()
+    return gp
