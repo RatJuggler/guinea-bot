@@ -1,5 +1,6 @@
 import json
 
+from pathlib import Path
 from typing import List
 
 from .age_logging import age_logger
@@ -7,7 +8,7 @@ from .tweeter import Tweeter
 
 
 def format_filename(name: str) -> str:
-    return name + ".json"
+    return str(Path.home()) + '/' + name + ".json"
 
 
 class GuineaPig:
