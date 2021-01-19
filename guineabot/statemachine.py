@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from time import sleep
 from typing import Generic, TypeVar
 
-from .age_logging import age_logger
 
 T = TypeVar('T')
 
@@ -76,7 +75,6 @@ class StateMachine:
         """
         new_state_name = self.__start_state_name
         while new_state_name != self.__end_state_name:
-            age_logger.debug("{0}".format(str(data)))
             state = self.__states[new_state_name]
             self.__counts[new_state_name] += 1
             new_state_name = state.transition(self.__interval, data)
@@ -107,14 +105,13 @@ class StateMachine:
         time = self.__format_age_time(round(percentage * 24 * 60) // 100)
         return percentage, time
 
-    def stats(self) -> None:
+    def stats(self) -> str:
         """
-        Log stats on time spent in each state.
-        :return: No meaningful return
+        Create formatted string of stats on time spent in each state.
+        :return: Formatted string showing stats
         """
-        age_logger.set_complete()
-        age_logger.info("Dumping states for state machine instance...\n{:>107}"
-                        .format("State     : Time spent in state (% and rough daily equivalent)"))
+        stats = "\nState     : Time spent in state (% and rough daily equivalent)\n"
         for state in self.__counts:
             percentage, time = self.__calc_stats(self.__counts[state])
-            age_logger.info("{0:9} : {1:04.2f}% - {2}".format(state, percentage, time))
+            stats += "{0:9} : {1:04.2f}% - {2}\n".format(state, percentage, time)
+        return stats
