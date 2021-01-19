@@ -73,7 +73,7 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     :return: No meaningful return.
     """
     configure_logging(level)
-    age_logger.info("Booting guinea pig {0}...".format(name))
+    age_logger.info("Booting guinea pig '{0}'...".format(name))
     if accelerated:
         age_logger.info("Accelerated running, quiet mode enforced.")
         quiet = True

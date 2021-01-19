@@ -81,7 +81,7 @@ class TwitterServiceQuiet(TwitterService):
     """
 
     def __init__(self) -> None:
-        age_logger.info("Quiet Mode On!")
+        age_logger.info("Quiet Mode is On, no Tweeting please!")
 
     def tweet(self, message: str) -> None:
         age_logger.info("Would have tweeted: {0}".format(message))

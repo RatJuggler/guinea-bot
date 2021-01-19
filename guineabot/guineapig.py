@@ -117,6 +117,7 @@ class GuineaPig:
             self.__state = new_state
             self.__tweeter.tweet_state(self.__state)
         self.__current_age += duration
+        age_logger.debug(self.__str__())
         # Save the guinea pig state.
         with open(format_filename(self.__name), 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
@@ -155,7 +156,7 @@ class GuineaPig:
 
 def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     """
-    Create a new guinea pig instance.
+    Create a new guinea pig instance or load from a previous save.
     :param name: Of the guinea pig
     :param lifespan: How long the guinea pig will live
     :param tweeter: To generate tweet with
@@ -164,7 +165,7 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     try:
         with open(format_filename(name), 'r') as reader:
             gp_data = json.load(reader)
-            age_logger.info("Previous instance of guinea pig '{0}' found, loading data!".format(name))
+            age_logger.info("Previous instance of guinea pig '{0}' found, reanimating!".format(name))
             gp = GuineaPig(gp_data["name"],
                            gp_data["lifespan"],
                            gp_data["current_age"],
