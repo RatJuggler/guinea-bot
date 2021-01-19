@@ -5,25 +5,27 @@
 
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
-It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic). 
-The guinea pig has an internal aging mechanism and as it ages a change of state is triggered every 15 minutes (by default) to 
-emulate its exciting and busy life. It will randomly tweet what it is doing on each state change and may also post a random picture 
-from its archive or search for other "guinea pig" accounts and randomly follow one.
+It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic).
+The state machine runs with a change of state triggered being every 15 minutes (by default). The guinea pig has a lifespan, and 
+some simple internal attributes which affect its behaviour to emulate its exciting and busy life. It will randomly tweet what it is 
+doing on each state change and may also post a random picture from its archive if configured to do so. 
 
-Tweets are selected from a JSON file, loaded on startup, that contains a variety of amusing messages for each state. For photos to
-be tweeted the path to a folder of `.jpg` files must be set using the command line option on startup, a list of the photos available
-to use is then loaded on startup.
+Tweets are selected from a JSON file, loaded on start-up, that contains a variety of amusing messages for each state. For photos to
+be tweeted the path to a folder of `.jpg` files must be set using the command line option, a list of the photos available to use is 
+then loaded on start-up. Tweeting is limited to a 1 in 8 chance as it's very easy to generate hundreds of tweets a day. If the 
+state doesn't change then there is a 1 in 80 chance of tweeting a photo (if there are any).
 
-Tweeting is limited to a 1 in 8 chance as it's very easy to generate hundreds of tweets a day. If the state doesn't change then 
-there is a 1 in 80 chance of tweeting a photo (if there are any) or a 1 in 80 chance of trying to follow a new account or a 1 in
-240 chance of pruning the friends list. Pruning involves removing friends who no longer pass the friendship test, unless they are
-following back, in which case they are muted. Having bots automatically follow accounts on Twitter is a bit of minefield as you 
-never know what you are going to get. This bot looks for accounts by searching for "#guineapig" but if the account has one of a 
-number of "red flag" key words in it's bio/description it will fail the friendship test and won't be followed. 
+The bot has the functionality to automatically search for other guinea pigs related accounts and randomly follow them. This was 
+triggered with a 1 in 80 chance if nothing was tweeted, but having bots automatically follow other accounts on Twitter is a bit of 
+minefield as you never know what you are going to get so this functionality has been disabled. When enabled the bot searched for 
+accounts using the "#guineapig" tag and then decide if it wanted to follow them after checking for a number of "red flag" keywords 
+in the accounts' bio/description. It also attempts to curate the existing friends list by removing friends who no longer pass the 
+"friendship test", unless they are following back, in which case they are muted. 
 
-The state changes prioritise sleeping and eating but the internal attributes can drive it from any state to any state (see the code 
-for the exact rules). Sleeping is used as the start state and the end state can be reached at any time as the guinea pig ages and
-reaches its lifespan duration and dies :cry:.
+The state changes that drive the guinea pig prioritise sleeping and eating, but the internal attributes can drive it from any state 
+to any other state (see the code for the exact rules). Sleeping is used as the start state, and the end state can be reached at any 
+time as the guinea pig ages, reaches its lifespan duration and dies :cry:. But, the internal state, age/attributes, are persisted 
+to a file on each state change so that the same guinea pig can continue to run after a crash or power outage.
 
 ![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/gp-states.png)
 
