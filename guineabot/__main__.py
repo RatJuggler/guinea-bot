@@ -86,8 +86,10 @@ def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: i
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
+    final_stats = gp_machine.stats()
     age_logger.set_complete()
-    age_logger.info("Dumping stats for state machine instance..." + gp_machine.stats())
+    age_logger.info("Dumping stats for state machine instance..." + final_stats)
+    tweeter.tweet(final_stats)
 
 
 if __name__ == "__main__":

@@ -22,6 +22,14 @@ class Tweeter:
         self.__tweeter = tweeter
         self.__friends = self.__tweeter.get_current_friends()
 
+    def tweet(self, text: str) -> None:
+        """
+        Tweet something directly.
+        :param text: To tweet
+        :return: No meaningful return
+        """
+        self.__tweeter.tweet(text)
+
     def tweet_state(self, state: str) -> None:
         """
         Tweet, tweet with a photo or find new friends.
