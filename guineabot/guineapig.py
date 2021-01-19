@@ -6,6 +6,10 @@ from .age_logging import age_logger
 from .tweeter import Tweeter
 
 
+def format_filename(name: str) -> str:
+    return name + ".json"
+
+
 class GuineaPig:
     """
     A guinea pig.
@@ -114,7 +118,7 @@ class GuineaPig:
             self.__tweeter.tweet_state(self.__state)
         self.__current_age += duration
         # Save the guinea pig state.
-        with open(self.__name + '.json', 'w') as file:
+        with open(format_filename(self.__name), 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
 
     def repr_dict(self) -> dict:
@@ -149,4 +153,18 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
+    try:
+        with open(format_filename(name), 'r') as reader:
+            gp_data = json.load(reader)
+            age_logger.info("Previous instance of guinea pig '{0}' found, loading data!".format(name))
+            return GuineaPig(gp_data["name"],
+                             gp_data["lifespan"],
+                             gp_data["current_age"],
+                             gp_data["state"],
+                             gp_data["tired"],
+                             gp_data["hunger"],
+                             gp_data["thirst"],
+                             tweeter)
+    except FileNotFoundError:
+        age_logger.info("No previous instance of guinea pig '{0}' found, creating a new pig!".format(name))
     return GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
