@@ -10,7 +10,7 @@ EATING = "EATING"
 DRINKING = "DRINKING"
 WANDERING = "WANDERING"
 THINKING = "THINKING"
-AWAKE = "AWAKE"
+POOING = "POOING"
 # The end state.
 DEAD = "DEAD"
 
@@ -48,7 +48,7 @@ class GuineaPigState(State):
         elif randint(1, 10) > 8:
             new_state = THINKING
         else:
-            new_state = AWAKE
+            new_state = POOING
         return new_state
 
     def transition(self, duration: int, gp: GuineaPig) -> str:
@@ -71,7 +71,7 @@ def build_guinea_pig_machine(interval: int, accelerated: bool) -> StateMachine:
     """
     sm = StateMachine(SLEEPING, DEAD, interval, accelerated)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
-    sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
+    sm.add_state(GuineaPigState(POOING, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
     sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
     sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
