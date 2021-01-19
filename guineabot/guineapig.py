@@ -121,6 +121,14 @@ class GuineaPig:
         with open(format_filename(self.__name), 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
 
+    def rejuvenate(self) -> None:
+        """
+        Bring the guinea pig back to life.
+        :return: No meaningful return
+        """
+        self.__state = "SLEEPING"
+        self.__current_age = 0
+
     def repr_dict(self) -> dict:
         """
         Build a dictionary to represent the object.
@@ -157,14 +165,18 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
         with open(format_filename(name), 'r') as reader:
             gp_data = json.load(reader)
             age_logger.info("Previous instance of guinea pig '{0}' found, loading data!".format(name))
-            return GuineaPig(gp_data["name"],
-                             gp_data["lifespan"],
-                             gp_data["current_age"],
-                             gp_data["state"],
-                             gp_data["tired"],
-                             gp_data["hunger"],
-                             gp_data["thirst"],
-                             tweeter)
+            gp = GuineaPig(gp_data["name"],
+                           gp_data["lifespan"],
+                           gp_data["current_age"],
+                           gp_data["state"],
+                           gp_data["tired"],
+                           gp_data["hunger"],
+                           gp_data["thirst"],
+                           tweeter)
+            if gp.has_died():
+                age_logger.info("This is an ex guinea pig, rejuvenating!")
+                gp.rejuvenate()
+            return gp
     except FileNotFoundError:
         age_logger.info("No previous instance of guinea pig '{0}' found, creating a new pig!".format(name))
     return GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
