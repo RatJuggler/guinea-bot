@@ -17,3 +17,6 @@ dist/
 
 # Environments
 venv/
+
+# Ignore test state file
+/TestGP.json
