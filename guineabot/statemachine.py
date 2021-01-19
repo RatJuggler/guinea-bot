@@ -107,11 +107,12 @@ class StateMachine:
 
     def stats(self) -> str:
         """
-        Create formatted string of stats on time spent in each state.
+        Create formatted string of stats on time spent in each state except for the end state.
         :return: Formatted string showing stats
         """
         stats = "\nState     : Time spent in state (% and rough daily equivalent)\n"
         for state in self.__counts:
-            percentage, time = self.__calc_stats(self.__counts[state])
-            stats += "{0:9} : {1:04.2f}% - {2}\n".format(state, percentage, time)
+            if state != self.__end_state_name:
+                percentage, time = self.__calc_stats(self.__counts[state])
+                stats += "{0:9} : {1:04.2f}% - {2}\n".format(state, percentage, time)
         return stats
