@@ -12,7 +12,7 @@ WANDERING = "WANDERING"
 THINKING = "THINKING"
 AWAKE = "AWAKE"
 # The end state.
-END = "END"
+DEAD = "DEAD"
 
 
 class GuineaPigState(State):
@@ -36,7 +36,7 @@ class GuineaPigState(State):
         :return: The name of the next state (not necessarily different to the current state)
         """
         if gp.has_died():
-            new_state = END
+            new_state = DEAD
         elif gp.is_tired():
             new_state = SLEEPING
         elif gp.is_hungry():
@@ -69,11 +69,12 @@ def build_guinea_pig_machine(interval: int, accelerated: bool) -> StateMachine:
     :param accelerated: Don't wait for the time interval
     :return: StateMachine instance with states configured
     """
-    sm = StateMachine(SLEEPING, END, interval, accelerated)
+    sm = StateMachine(SLEEPING, DEAD, interval, accelerated)
     sm.add_state(GuineaPigState(SLEEPING, [-20, 3, 1]))
     sm.add_state(GuineaPigState(AWAKE, [5, 5, 2]))
     sm.add_state(GuineaPigState(THINKING, [1, 3, 1]))
     sm.add_state(GuineaPigState(EATING, [5, -10, 4]))
     sm.add_state(GuineaPigState(DRINKING, [5, 5, -80]))
     sm.add_state(GuineaPigState(WANDERING, [10, 10, 5]))
+    sm.add_state(GuineaPigState(DEAD, [0, 0, 0]))
     return sm

@@ -83,6 +83,8 @@ class StateMachine:
             self.__ticks += 1
             if not self.__accelerated:
                 sleep(self.__interval * 60)
+        # Transition to the end state.
+        self.__states[new_state_name].transition(self.__interval, data)
 
     @staticmethod
     def __format_age_time(minutes: int) -> str:
