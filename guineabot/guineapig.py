@@ -112,9 +112,10 @@ class GuineaPig:
         if self.__state != new_state:
             self.__state = new_state
             self.__tweeter.tweet_state(self.__state)
+        self.__current_age += duration
+        # Save the guinea pig state.
         with open(self.__name + '.json', 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
-        self.__current_age += duration
 
     def repr_dict(self) -> dict:
         """
