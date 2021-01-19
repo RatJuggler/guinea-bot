@@ -154,6 +154,12 @@
       ]
     },
     {
+      "state": "DEAD",
+      "sayings": [
+        "I told you I was ill."
+      ]
+    },
+    {
       "state": "PHOTOS",
       "sayings": [
         "What's going on here?",
