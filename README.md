@@ -25,11 +25,13 @@ in the accounts' bio/description. It also attempts to curate the existing friend
 The state changes that drive the guinea pig prioritise sleeping and eating, but the internal attributes can drive it from any state 
 to any other state (see the code for the exact rules). Sleeping is used as the start state, and the end state can be reached at any 
 time as the guinea pig ages, reaches its lifespan duration and dies :cry:. But, the internal state, age/attributes, are persisted 
-to a file on each state change so that the same guinea pig can continue to run after a crash or power outage.
+to a file on each state change so that the same guinea pig can continue to run after a crash or power outage. The file is stored in
+the current users home directory, there is no option to change this yet.
 
 ![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/gp-states.png)
 
 ## Installing
+
 Checkout the source code from here:
 ```
 $ git clone https://github.com/RatJuggler/guinea-bot.git
@@ -37,7 +39,7 @@ $ cd guinea-bot
 ```
 Then install/update the bot as a Python package:
 ```
-$ sudo pip3 install -U .
+$ pip3 install -U .
 ```
 ## Running
 ```
@@ -75,7 +77,9 @@ TWITTER_CONSUMER_SECRET
 TWITTER_ACCESS_TOKEN
 TWITTER_ACCESS_TOKEN_SECRET
 ```
+
 ## Installing as a service under systemd
+
 First edit the `guinea-bot.service` file and add any command line options you need, making sure to keep them within the command 
 quotes. It's also a good idea to set a user as the service doesn't need to run as root. Then copy the file to `/etc/systemd/system` 
 and enter the following to create a systemd unit service. 
