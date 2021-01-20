@@ -4,6 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=simple
+User=pi
 ExecStart=/bin/bash -c "/usr/local/bin/guineabot"
 Restart=always
 
