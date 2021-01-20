@@ -169,11 +169,11 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
+    save_file = format_filename(name)
     try:
-        existing_file = format_filename(name)
-        with open(existing_file, 'r') as reader:
+        with open(save_file, 'r') as reader:
             gp_data = json.load(reader)
-            age_logger.info("Previous instance of guinea pig found at '{0}', reanimating!".format(existing_file))
+            age_logger.info("Previous instance of guinea pig found at '{0}', reanimating!".format(save_file))
             gp = GuineaPig(gp_data["name"],
                            gp_data["lifespan"],
                            gp_data["current_age"],
@@ -186,7 +186,7 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
                 age_logger.info("This is an ex guinea pig, rejuvenating!")
                 gp.rejuvenate()
     except FileNotFoundError:
-        age_logger.info("No previous instance of guinea pig '{0}' found, creating a new pig!".format(name))
+        age_logger.info("No previous instance of guinea pig found, creating a new instance at '{0}'!".format(save_file))
         gp = GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
         gp.save_state()
     return gp
