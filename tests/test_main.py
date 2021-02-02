@@ -33,6 +33,7 @@ class TestMain(TestCase):
         self.assertIn(" -n, --name ", result.output)
         self.assertIn(" -p, --photos-folder ", result.output)
         self.assertIn(" -q, --quiet ", result.output)
+        self.assertIn(" -t, --test ", result.output)
         self.assertIn(" --help ", result.output)
 
     # TODO: Requires "python3 setup.py sdist" to have been run to pass, review.
@@ -128,3 +129,10 @@ class TestMain(TestCase):
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
+
+    @patch("guineabot.__main__.TwitterServiceLive")
+    def test_test(self,
+                  twitter_service_live_mock: MagicMock) -> None:
+        result = self.runner.invoke(main.simulate_guinea_pig, ["-t"])
+        self.assertEqual(result.exit_code, 0)
+        twitter_service_live_mock.assert_called_once()
