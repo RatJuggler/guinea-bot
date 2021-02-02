@@ -33,14 +33,14 @@ the current users home directory, there is no option to change this yet.
 ## Installing
 
 Checkout the source code from here:
-```
-$ git clone https://github.com/RatJuggler/guinea-bot.git
-$ cd guinea-bot
-```
+
+    $ git clone https://github.com/RatJuggler/guinea-bot.git
+    $ cd guinea-bot
+
 Then install/update the bot as a Python package:
-```
-$ pip3 install -U .
-```
+
+    $ pip3 install -U .
+
 ## Running
 ```
 $ guineabot --help
@@ -66,59 +66,63 @@ Options:
   -p, --photos-folder TEXT        Folder containing photos to Tweet.
   -q, --quiet                     Run without invoking the Twitter API.
                                   [default: False]
+  -t, --test                      Test the Twitter access tokens and exit.
+                                  [default: False]
   --help                          Show this message and exit.
 ```
 You can use the `-q` option to run without using the Twitter API but to make it fully functional you will need to set up a Twitter 
 account and apply for access [here](https://developer.twitter.com/en/apply-for-access). You'll then need to make the following
 tokens available to run it:
-```
-TWITTER_CONSUMER_KEY
-TWITTER_CONSUMER_SECRET
-TWITTER_ACCESS_TOKEN
-TWITTER_ACCESS_TOKEN_SECRET
-```
+
+    TWITTER_CONSUMER_KEY
+    TWITTER_CONSUMER_SECRET
+    TWITTER_ACCESS_TOKEN
+    TWITTER_ACCESS_TOKEN_SECRET
+
+Test that your tokens are working by using:
+
+    $ guineabot --test
 
 ## Installing as a service under systemd
 
 First edit the `guinea-bot.service` file and add any command line options you need, making sure to keep them within the command 
-quotes. It's also a good idea to set a user as the service doesn't need to run as root. Then copy the file to `/etc/systemd/system` 
+quotes. It's also a good idea to set a user as the service does not need to run as root. Then copy the file to `/etc/systemd/system` 
 and enter the following to create a systemd unit service. 
-```
-$ sudo cp guinea-bot.service /etc/systemd/system
-```
+
+    $ sudo cp guinea-bot.service /etc/systemd/system
+
 A configuration file also needs to be created to hold the Twitter access keys.
-```
-$ sudo systemctl edit guinea-bot
-```
+
+    $ sudo systemctl edit guinea-bot
+
 Add an entry to the generated file like so:
-```
-[Service]
-Environment="TWITTER_CONSUMER_KEY=<your consumer key here>"
-Environment="TWITTER_CONSUMER_SECRET=<your consumer secret here>"
-Environment="TWITTER_ACCESS_TOKEN=<your access token here>"
-Environment="TWITTER_ACCESS_TOKEN_SECRET=<your access token secret here>"
-```
+
+    [Service]
+    Environment="TWITTER_CONSUMER_KEY=<your consumer key here>"
+    Environment="TWITTER_CONSUMER_SECRET=<your consumer secret here>"
+    Environment="TWITTER_ACCESS_TOKEN=<your access token here>"
+    Environment="TWITTER_ACCESS_TOKEN_SECRET=<your access token secret here>"
+
 Reload the service files after changes or when new:
-```
-$ sudo systemctl daemon-reload
-```
+
+    $ sudo systemctl daemon-reload
+
 Enable the service:
-```
-$ sudo systemctl enable guinea-bot.service
-```
+
+    $ sudo systemctl enable guinea-bot.service
+
 Start the service:
-```
-$ sudo systemctl start guinea-bot.service
-```
+
+    $ sudo systemctl start guinea-bot.service
+
 Check the status of the service:
-```
-$ sudo systemctl status guinea-bot.service
-```
+
+    $ sudo systemctl status guinea-bot.service
+
 Stop the service:
-```
-$ sudo systemctl stop guinea-bot.service
-```
+
+    $ sudo systemctl stop guinea-bot.service
+
 Tail service's log:
-```
-$ sudo journalctl -f -u guinea-bot.service
-```
+
+    $ sudo journalctl -f -u guinea-bot.service
