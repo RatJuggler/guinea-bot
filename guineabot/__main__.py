@@ -9,6 +9,7 @@ from .age_logging import configure_logging, age_logger
 from .guineapig import create_guinea_pig
 from .guineapig_states import build_guinea_pig_machine
 from .tweeter import create_tweeter
+from .twitter_api import TwitterServiceLive
 
 
 # noinspection PyUnusedLocal
@@ -41,6 +42,15 @@ def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
     return value
 
 
+# noinspection PyUnusedLocal
+def test_twitter_tokens(ctx, param, value):
+    if not value or ctx.resilient_parsing:
+        return
+    TwitterServiceLive()
+    click.echo('Twitter credentials verified.')
+    ctx.exit()
+
+
 @click.command(help="""
     Guinea Pig Twitter bot.
                     """)
@@ -60,6 +70,8 @@ def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
               help="Folder containing photos to Tweet.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
+@click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
+              help="Test the Twitter access tokens and exit.", show_default=True)
 def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: int, photos: str, level: str, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
