@@ -126,3 +126,19 @@ Stop the service:
 Tail service's log:
 
     $ sudo journalctl -f -u guinea-bot.service
+
+## Docker
+
+Docker build and compose files are available which create a standalone image for the guinea bot to live in.
+
+Create the image with: `docker build -f docker/Dockerfile -t guinea-bot:local .`
+
+We need to be careful that any Twitter access tokens aren't included in the image in case it is pushed to a public repository (and
+it's also just best practice). There are a number of ways to inject the tokens into the image but probably the easiest is to create 
+an `env.list` file from the supplied template, set the tokens in it and then run the image with the `--env-file` option.
+
+    docker run guinea-bot:local -d --env-file ./docker/env.list
+
+Or just use the compose file to do everything:
+
+    docker-compose up -d
