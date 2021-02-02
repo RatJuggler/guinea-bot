@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  guinea-bot:
+    image: ${dockerId:-johnchase}/guinea-bot:${BUILD_TAG:-local}
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      target: guinea-bot
+    env_file:
+      - ./docker/env.list
+    restart: unless-stopped
