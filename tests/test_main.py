@@ -26,12 +26,12 @@ class TestMain(TestCase):
         result = self.runner.invoke(main.simulate_guinea_pig, ["--help"])
         self.assertEqual(result.exit_code, 0)
         self.assertIn(" --version ", result.output)
-        self.assertIn(" -a, --accelerated ", result.output)
+        self.assertIn(" -n, --name ", result.output)
+        self.assertIn(" -p, --photos ", result.output)
         self.assertIn(" -d, --duration ", result.output)
         self.assertIn(" -i, --interval ", result.output)
+        self.assertIn(" -a, --accelerated ", result.output)
         self.assertIn(" -l, --log-level ", result.output)
-        self.assertIn(" -n, --name ", result.output)
-        self.assertIn(" -p, --photos-folder ", result.output)
         self.assertIn(" -q, --quiet ", result.output)
         self.assertIn(" -t, --test ", result.output)
         self.assertIn(" --help ", result.output)
@@ -47,10 +47,10 @@ class TestMain(TestCase):
         self.assertEqual(result.exit_code, 2)
         self.assertIn("Error: Invalid value for '-n' / '--name': AVeryLongForAGuineaPig", result.output)
 
-    def test_invalid_photos_folder(self) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["--photos-folder", "/path/to/nowhere"])
+    def test_invalid_photos(self) -> None:
+        result = self.runner.invoke(main.simulate_guinea_pig, ["--photos", "/path/to/nowhere"])
         self.assertEqual(result.exit_code, 2)
-        self.assertIn("Error: Invalid value for '-p' / '--photos-folder': /path/to/nowhere", result.output)
+        self.assertIn("Error: Invalid value for '-p' / '--photos': Directory '/path/to/nowhere' does not exist.", result.output)
 
     @patch("guineabot.__main__.create_guinea_pig")
     @patch("guineabot.__main__.create_tweeter")
