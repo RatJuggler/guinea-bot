@@ -55,31 +55,31 @@ def test_twitter_tokens(ctx, param, value):
     Guinea Pig Twitter bot.
                     """)
 @click.version_option()
-@click.option('-a', '--accelerated', 'accelerated', default=False, is_flag=True,
-              help="Ignore the pauses between state changes, forces quiet mode to prevent Twitter API rate limit triggering.",
-              show_default=True)
+@click.option('-n', '--name', 'name', type=click.STRING, callback=validate_name,
+              help="The name of the guinea pig.", default="Holly", show_default=True)
+@click.option('-p', '--photos', 'photos', type=click.STRING, callback=validate_photos_folder,
+              help="Option path to photos which can be Tweeted.", show_default=True)
 @click.option('-d', '--duration', 'duration', type=click.IntRange(1, 2920),
               help="How many days the bot should run for (guinea pig lifespan), random if not set.", show_default=False)
 @click.option('-i', '--interval', 'interval', type=click.IntRange(1, 1440),
               help="The interval between changes in state (guinea pig activity), in minutes.", default=15, show_default=True)
+@click.option('-a', '--accelerated', 'accelerated', default=False, is_flag=True,
+              help="Ignore the pauses between state changes, forces quiet mode to prevent Twitter API rate limit triggering.",
+              show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
-@click.option('-n', '--name', 'name', type=click.STRING, callback=validate_name,
-              help="Give the bot a name.", default="Holly", show_default=True)
-@click.option('-p', '--photos-folder', 'photos', type=click.STRING, callback=validate_photos_folder,
-              help="Folder containing photos to Tweet.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
 @click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
               help="Test the Twitter access tokens and exit.", show_default=True)
-def simulate_guinea_pig(accelerated: bool, name: str, duration: int, interval: int, photos: str, level: str, quiet: bool) -> None:
+def simulate_guinea_pig(name: str, photos: str, duration: int, interval: int, accelerated: bool, level: str, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
-    :param accelerated: Don't run in pseudo real-time
     :param name: Name of the bot.
+    :param photos: Optional path to photos to use in some Tweets
     :param duration: The number of days the bot should run for
     :param interval: The time between changes in state, in minutes
-    :param photos: Optional path to folder containing photos to use in some Tweets\\
+    :param accelerated: Don't run in pseudo real-time
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
