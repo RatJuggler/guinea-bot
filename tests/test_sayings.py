@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from testfixtures import LogCapture
 
-from utils import log_check
+from tests.utils import log_check
 
 from guineabot.age_logging import configure_logging, logging
 from guineabot.sayings import Sayings
