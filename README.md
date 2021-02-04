@@ -5,10 +5,10 @@
 
 A guinea pig Twitter bot currently tweeting under the handle [@guinea_bot](https://twitter.com/guinea_bot)
 
-It uses a very simple state machine implementation of a Markov chain (state changes are probabilistic rather than deterministic).
-The state machine runs with a change of state triggered being every 15 minutes (by default). The guinea pig has a lifespan, and 
-some simple internal attributes which affect its behaviour to emulate its exciting and busy life. It will randomly tweet what it is 
-doing on each state change and may also post a random picture from its archive if configured to do so. 
+It uses a very simple state machine implementation of a Markov chain (some state changes are probabilistic rather than 
+deterministic). The state machine runs with a change of state triggered being every 15 minutes (by default). The guinea pig has a 
+lifespan, and some simple internal attributes which affect its behaviour to emulate its exciting and busy life. It will randomly 
+tweet what it is doing on each state change and may also post a random picture from its archive if configured to do so. 
 
 Tweets are selected from a JSON file, loaded on start-up, that contains a variety of amusing messages for each state. For photos to
 be tweeted the path to a folder of `.jpg` files must be set using the command line option, a list of the photos available to use is 
@@ -51,19 +51,23 @@ Usage: guineabot [OPTIONS]
 
 Options:
   --version                       Show the version and exit.
-  -a, --accelerated               Don't run in pseudo real-time, forces quiet
-                                  mode to prevent Twitter API rate limit
-                                  triggering.  [default: False]
+  -n, --name TEXT                 The name of the guinea pig.  [default:
+                                  Holly]
+  -h, --house DIRECTORY           Piggy house where the guinea pig is kept.
+                                  [default: (user home directory)]
+  -p, --photos DIRECTORY          Optional path to photos which can be
+                                  Tweeted.
   -d, --duration INTEGER RANGE    How many days the bot should run for (guinea
                                   pig lifespan), random if not set.
   -i, --interval INTEGER RANGE    The interval between changes in state
                                   (guinea pig activity), in minutes.
                                   [default: 15]
+  -a, --accelerated               Ignore the pauses between state changes,
+                                  forces quiet mode to prevent Twitter API
+                                  rate limit triggering.  [default: False]
   -l, --log-level [DEBUG|INFO|WARNING]
                                   Show additional logging information.
                                   [default: INFO]
-  -n, --name TEXT                 Give the bot a name.  [default: Holly]
-  -p, --photos-folder TEXT        Folder containing photos to Tweet.
   -q, --quiet                     Run without invoking the Twitter API.
                                   [default: False]
   -t, --test                      Test the Twitter access tokens and exit.
@@ -86,8 +90,9 @@ Test that your tokens are working by using:
 ## Installing as a service under systemd
 
 First edit the `guinea-bot.service` file and add any command line options you need, making sure to keep them within the command 
-quotes. It's also a good idea to set a user as the service does not need to run as root. Then copy the file to `/etc/systemd/system` 
-and enter the following to create a systemd unit service. 
+quotes. It's also a good idea to set a user as the service does not need to run as root, but make sure the home directory is 
+accessible if you are using the default state save location. Once complete copy the file to `/etc/systemd/system` and enter the 
+following to create a systemd unit service. 
 
     $ sudo cp guinea-bot.service /etc/systemd/system
 
