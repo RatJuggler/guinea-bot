@@ -3,8 +3,7 @@ import re
 
 from typing import List, Optional
 
-import tweepy
-from tweepy import API, User
+from tweepy import API, Cursor, OAuthHandler, TweepError, User
 
 from .age_logging import age_logger
 
@@ -120,9 +119,9 @@ class TwitterServiceLive(TwitterService):
         self.__api = self.__get_api()
 
     def __get_api(self) -> API:
-        auth = tweepy.OAuthHandler(self.__consumer_key, self.__consumer_secret)
+        auth = OAuthHandler(self.__consumer_key, self.__consumer_secret)
         auth.set_access_token(self.__access_token, self.__access_token_secret)
-        api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+        api = API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         try:
             api.verify_credentials()
         except Exception as error:
@@ -134,7 +133,7 @@ class TwitterServiceLive(TwitterService):
         try:
             self.__api.update_status(message)
             age_logger.info("Tweeted: {0}".format(message))
-        except tweepy.TweepError as error:
+        except TweepError as error:
             if error.api_code == 187:
                 age_logger.warning("Duplicate tweet discarded!")
             else:
@@ -146,7 +145,7 @@ class TwitterServiceLive(TwitterService):
             media = self.__api.media_upload(photo_path)
             self.__api.update_status(message, media_ids=[media.media_id])
             age_logger.info("Tweeted: {0} {1}".format(message, photo_path))
-        except tweepy.TweepError as error:
+        except TweepError as error:
             if error.api_code == 187:
                 age_logger.warning("Duplicate photo tweet discarded!")
             else:
@@ -218,7 +217,7 @@ class TwitterServiceLive(TwitterService):
         muted = self.__api.mutes_ids()
         my_id = self.__api.me().__getattribute__("id")
         # API call limited to 100 entries.
-        for page in tweepy.Cursor(self.__api.friends).pages():
+        for page in Cursor(self.__api.friends).pages():
             age_logger.info("Look for friends to prune...{0}".format(len(page)))
             self.__examine_friendships(page, my_id, muted)
         return self.get_current_friends()
