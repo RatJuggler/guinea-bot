@@ -1,7 +1,7 @@
 from unittest import TestCase
+from unittest.mock import patch, MagicMock, Mock
 
 from guineabot.tweeter import Tweeter
-from unittest.mock import patch, MagicMock, Mock
 
 
 class TestTweeter(TestCase):
