@@ -1,14 +1,13 @@
 import json
 
-from pathlib import Path
 from typing import List
 
 from .age_logging import age_logger
 from .tweeter import Tweeter
 
 
-def format_filename(name: str) -> str:
-    return str(Path.home()) + '/' + name + ".json"
+def format_filename(name: str, house: str) -> str:
+    return house + '/' + name + ".json"
 
 
 class GuineaPig:
@@ -16,11 +15,12 @@ class GuineaPig:
     A guinea pig.
     """
 
-    def __init__(self, name: str, lifespan: int, current_age: int, start_state: str, tired: int, hunger: int, thirst: int,
-                 tweeter: Tweeter) -> None:
+    def __init__(self, name: str, house: str, lifespan: int, current_age: int, start_state: str, tired: int, hunger: int,
+                 thirst: int, tweeter: Tweeter) -> None:
         """
         Initialise the guinea pig.
-        :param name: Name of the guinea pig bot
+        :param name: Of the guinea pig
+        :param house: Where the guinea pig state file is kept
         :param lifespan: Of the guinea pig in days
         :param current_age: Of the guinea pig in minutes
         :param start_state: Initial state
@@ -30,6 +30,7 @@ class GuineaPig:
         :param tweeter: To generate tweets with
         """
         self.__name = name
+        self.__house = house
         self.__lifespan = lifespan
         self.__max_age = self.__lifespan * 24 * 60
         self.__current_age = current_age
@@ -104,7 +105,7 @@ class GuineaPig:
         Save the guinea pig state.
         :return: No meaningful return
         """
-        with open(format_filename(self.__name), 'w') as file:
+        with open(format_filename(self.__name, self.__house), 'w') as file:
             json.dump(self.repr_dict(), file, indent=4)
 
     def update(self, new_state: str, changes: List[int], duration: int) -> None:
@@ -161,20 +162,22 @@ class GuineaPig:
             .format(self.__name, self.__lifespan, self.__current_age, self.__state, self.__tired, self.__hunger, self.__thirst)
 
 
-def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
+def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
     """
     Create a new guinea pig instance or load from a previous save.
     :param name: Of the guinea pig
+    :param house: Where the guinea pig state file is kept
     :param lifespan: How long the guinea pig will live
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    save_file = format_filename(name)
+    save_file = format_filename(name, house)
     try:
         with open(save_file, 'r') as reader:
             gp_data = json.load(reader)
             age_logger.info("Previous instance of guinea pig found at '{0}', reanimating!".format(save_file))
             gp = GuineaPig(gp_data["name"],
+                           house,
                            gp_data["lifespan"],
                            gp_data["current_age"],
                            gp_data["state"],
@@ -187,6 +190,6 @@ def create_guinea_pig(name: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
                 gp.rejuvenate()
     except FileNotFoundError:
         age_logger.info("No previous instance of guinea pig found, creating a new instance at '{0}'!".format(save_file))
-        gp = GuineaPig(name, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
+        gp = GuineaPig(name, house, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
         gp.save_state()
     return gp

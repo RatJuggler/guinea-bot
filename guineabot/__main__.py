@@ -1,3 +1,4 @@
+import os
 from random import randint
 
 import click
@@ -40,8 +41,10 @@ def test_twitter_tokens(ctx, param, value):
 @click.version_option()
 @click.option('-n', '--name', 'name', type=click.STRING, callback=validate_name,
               help="The name of the guinea pig.", default="Holly", show_default=True)
+@click.option('-h', '--house', 'house', type=click.Path(exists=True, file_okay=False, writable=True, resolve_path=True),
+              help="Piggy house where the guinea pig is kept.", default=lambda: os.environ.get('HOME', ''), show_default=True)
 @click.option('-p', '--photos', 'photos', type=click.Path(exists=True, file_okay=False),
-              help="Option path to photos which can be Tweeted.", show_default=True)
+              help="Optional path to photos which can be Tweeted.")
 @click.option('-d', '--duration', 'duration', type=click.IntRange(1, 2920),
               help="How many days the bot should run for (guinea pig lifespan), random if not set.", show_default=False)
 @click.option('-i', '--interval', 'interval', type=click.IntRange(1, 1440),
@@ -55,10 +58,12 @@ def test_twitter_tokens(ctx, param, value):
               help="Run without invoking the Twitter API.", show_default=True)
 @click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
               help="Test the Twitter access tokens and exit.", show_default=True)
-def simulate_guinea_pig(name: str, photos: str, duration: int, interval: int, accelerated: bool, level: str, quiet: bool) -> None:
+def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, interval: int, accelerated: bool, level: str,
+                        quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
-    :param name: Name of the bot.
+    :param name: Name of the bot
+    :param house: Where the guinea pig state file is kept
     :param photos: Optional path to photos to use in some Tweets
     :param duration: The number of days the bot should run for
     :param interval: The time between changes in state, in minutes
@@ -77,7 +82,7 @@ def simulate_guinea_pig(name: str, photos: str, duration: int, interval: int, ac
     age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     tweeter = create_tweeter(photos, quiet)
-    guinea_pig = create_guinea_pig(name, duration, tweeter)
+    guinea_pig = create_guinea_pig(name, house, duration, tweeter)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
