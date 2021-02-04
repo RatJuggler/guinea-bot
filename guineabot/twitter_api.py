@@ -20,7 +20,7 @@ class TwitterService:
         :param message: String to tweet
         :return: No meaningful return
         """
-        pass
+        pass    # pragma: no cover
 
     def tweet_with_photo(self, message: str, photo_path: str) -> None:
         """
@@ -29,14 +29,14 @@ class TwitterService:
         :param photo_path: Path to photo to tweet
         :return: No meaningful return
         """
-        pass
+        pass    # pragma: no cover
 
     def get_current_friends(self) -> List[int]:
         """
         Get a list of the current friends.
         :return: List of friend ids
         """
-        pass
+        pass    # pragma: no cover
 
     def find_new_friend(self, friends: List[int]) -> List[int]:
         """
@@ -44,7 +44,7 @@ class TwitterService:
         :param friends: Current list of friend ids
         :return: Updated list of friend ids
         """
-        pass
+        pass    # pragma: no cover
 
     def prune_friends(self, friends: List[int]) -> List[int]:
         """
@@ -52,14 +52,14 @@ class TwitterService:
         :param friends: Current list of friend ids
         :return: Updated list of friend ids
         """
-        pass
+        pass    # pragma: no cover
 
     def unmute_all(self) -> None:
         """
         Maintenance function to remove all mutes from friends.
         :return: No meaningful return
         """
-        pass
+        pass    # pragma: no cover
 
 
 def get_twitter_service(quiet: bool) -> TwitterService:

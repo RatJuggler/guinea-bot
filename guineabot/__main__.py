@@ -94,4 +94,4 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
 
 
 if __name__ == "__main__":
-    simulate_guinea_pig()
+    simulate_guinea_pig()   # pragma: no cover
