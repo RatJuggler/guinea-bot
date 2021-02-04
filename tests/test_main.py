@@ -4,20 +4,17 @@ from unittest.mock import patch, MagicMock
 from click.testing import CliRunner
 from testfixtures import LogCapture
 
+from utils import log_check
+
+from guineabot.age_logging import configure_logging, logging
+
 import guineabot.__main__ as main
-import guineabot.age_logging as al
-
-
-def _log_check(log_out: LogCapture, *expects: str) -> None:
-    root = "root"
-    log_level = al.logging.getLevelName(al.logging.INFO)
-    for expected in expects:
-        log_out.check_present((root, log_level, expected))
 
 
 class TestMain(TestCase):
 
     def setUp(self) -> None:
+        configure_logging()
         self.runner = CliRunner()
 
     def test_help(self) -> None:
@@ -63,14 +60,14 @@ class TestMain(TestCase):
                   build_guinea_pig_machine_mock: MagicMock,
                   create_tweeter: MagicMock,
                   create_guinea_pig_mock: MagicMock) -> None:
-        with LogCapture(level=al.logging.INFO) as log_out:
+        with LogCapture(level=logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-n', 'Bramble', '-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _log_check(log_out,
-                   "INITIALISE >> Booting guinea pig 'Bramble'...",
-                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                   "INITIALISE >> It's alive!")
+        log_check(log_out,
+                  "INITIALISE >> Booting guinea pig 'Bramble'...",
+                  "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                  "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                  "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -82,14 +79,14 @@ class TestMain(TestCase):
                       build_guinea_pig_machine_mock: MagicMock,
                       create_tweeter: MagicMock,
                       create_guinea_pig_mock: MagicMock) -> None:
-        with LogCapture(level=al.logging.INFO) as log_out:
+        with LogCapture(level=logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _log_check(log_out,
-                   "INITIALISE >> Booting guinea pig 'Holly'...",
-                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                   "INITIALISE >> It's alive!")
+        log_check(log_out,
+                  "INITIALISE >> Booting guinea pig 'Holly'...",
+                  "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                  "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                  "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -101,14 +98,14 @@ class TestMain(TestCase):
                       build_guinea_pig_machine_mock: MagicMock,
                       create_tweeter: MagicMock,
                       create_guinea_pig_mock: MagicMock) -> None:
-        with LogCapture(level=al.logging.INFO) as log_out:
+        with LogCapture(level=logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-i', '22', '-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _log_check(log_out,
-                   "INITIALISE >> Booting guinea pig 'Holly'...",
-                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                   "INITIALISE >> State interval (changes in guinea pig activity): 22 minutes",
-                   "INITIALISE >> It's alive!")
+        log_check(log_out,
+                  "INITIALISE >> Booting guinea pig 'Holly'...",
+                  "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                  "INITIALISE >> State interval (changes in guinea pig activity): 22 minutes",
+                  "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -120,16 +117,15 @@ class TestMain(TestCase):
                          build_guinea_pig_machine_mock: MagicMock,
                          create_tweeter: MagicMock,
                          create_guinea_pig_mock: MagicMock) -> None:
-        with LogCapture(level=al.logging.INFO) as log_out:
+        with LogCapture(level=logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99', '-a'])
         self.assertEqual(0, result.exit_code)
-        _log_check(log_out,
-                   "INITIALISE >> Booting guinea pig 'Holly'...",
-                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                   "INITIALISE >> It's alive!")
-        log_out.check_present(("root", al.logging.getLevelName(al.logging.INFO),
-                               "INITIALISE >> Accelerated running, quiet mode enforced."))
+        log_check(log_out,
+                  "INITIALISE >> Booting guinea pig 'Holly'...",
+                  "INITIALISE >> Accelerated running, quiet mode enforced.",
+                  "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                  "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                  "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
