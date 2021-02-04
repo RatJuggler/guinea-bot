@@ -8,7 +8,7 @@ import guineabot.__main__ as main
 import guineabot.age_logging as al
 
 
-def _init_log_check(log_out: LogCapture, *expects: str) -> None:
+def _log_check(log_out: LogCapture, *expects: str) -> None:
     root = "root"
     log_level = al.logging.getLevelName(al.logging.INFO)
     for expected in expects:
@@ -66,11 +66,11 @@ class TestMain(TestCase):
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-n', 'Bramble', '-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _init_log_check(log_out,
-                        "INITIALISE >> Booting guinea pig 'Bramble'...",
-                        "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                        "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                        "INITIALISE >> It's alive!")
+        _log_check(log_out,
+                   "INITIALISE >> Booting guinea pig 'Bramble'...",
+                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                   "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -85,11 +85,11 @@ class TestMain(TestCase):
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _init_log_check(log_out,
-                        "INITIALISE >> Booting guinea pig 'Holly'...",
-                        "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                        "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                        "INITIALISE >> It's alive!")
+        _log_check(log_out,
+                   "INITIALISE >> Booting guinea pig 'Holly'...",
+                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                   "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -104,11 +104,11 @@ class TestMain(TestCase):
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-i', '22', '-d', '99'])
         self.assertEqual(0, result.exit_code)
-        _init_log_check(log_out,
-                        "INITIALISE >> Booting guinea pig 'Holly'...",
-                        "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                        "INITIALISE >> State interval (changes in guinea pig activity): 22 minutes",
-                        "INITIALISE >> It's alive!")
+        _log_check(log_out,
+                   "INITIALISE >> Booting guinea pig 'Holly'...",
+                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                   "INITIALISE >> State interval (changes in guinea pig activity): 22 minutes",
+                   "INITIALISE >> It's alive!")
         create_guinea_pig_mock.assert_called_once()
         create_tweeter.assert_called_once()
         build_guinea_pig_machine_mock.assert_called_once()
@@ -123,11 +123,11 @@ class TestMain(TestCase):
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99', '-a'])
         self.assertEqual(0, result.exit_code)
-        _init_log_check(log_out,
-                        "INITIALISE >> Booting guinea pig 'Holly'...",
-                        "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
-                        "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
-                        "INITIALISE >> It's alive!")
+        _log_check(log_out,
+                   "INITIALISE >> Booting guinea pig 'Holly'...",
+                   "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
+                   "INITIALISE >> State interval (changes in guinea pig activity): 15 minutes",
+                   "INITIALISE >> It's alive!")
         log_out.check_present(("root", al.logging.getLevelName(al.logging.INFO),
                                "INITIALISE >> Accelerated running, quiet mode enforced."))
         create_guinea_pig_mock.assert_called_once()
