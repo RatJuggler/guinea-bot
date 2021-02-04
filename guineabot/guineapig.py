@@ -155,8 +155,14 @@ class GuineaPig:
         Build a string showing the current internal state.
         :return: String representation of the current instance.
         """
-        return "GuineaPig:(Name: {0}, Lifespan: {1} days, Current Age: {2} mins, State: {3}, Tired: {4}, Hunger: {5}, Thirst: {6})"\
-            .format(self.__name, self.__lifespan, self.__current_age, self.__state, self.__tired, self.__hunger, self.__thirst)
+        return "GuineaPig:(Name: {0}, Save File: {1}, Lifespan: {2} days, Current Age: {3} mins, " \
+               "State: {4}, Tired: {5}, Hunger: {6}, Thirst: {7})"\
+            .format(self.__name, self.__save_file, self.__lifespan, self.__current_age,
+                    self.__state, self.__tired, self.__hunger, self.__thirst)
+
+
+def build_save_filename(house: str, name: str) -> str:
+    return os.path.join(house, name + '.json')
 
 
 def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
@@ -168,7 +174,7 @@ def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter) ->
     :param tweeter: To generate tweet with
     :return: A new instance of a guinea pig
     """
-    save_file = os.path.join(house, name + '.json')
+    save_file = build_save_filename(house, name)
     try:
         with open(save_file, 'r') as reader:
             gp_data = json.load(reader)
