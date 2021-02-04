@@ -46,6 +46,11 @@ class TestMain(TestCase):
         self.assertEqual(result.exit_code, 2)
         self.assertIn("Error: Invalid value for '-n' / '--name': AVeryLongForAGuineaPig", result.output)
 
+    def test_invalid_house(self) -> None:
+        result = self.runner.invoke(main.simulate_guinea_pig, ['--house', '/path/to/nowhere'])
+        self.assertEqual(result.exit_code, 2)
+        self.assertIn("Error: Invalid value for '-h' / '--house': Directory '/path/to/nowhere' does not exist.", result.output)
+
     def test_invalid_photos(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--photos', '/path/to/nowhere'])
         self.assertEqual(result.exit_code, 2)
