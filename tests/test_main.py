@@ -8,13 +8,11 @@ import guineabot.__main__ as main
 import guineabot.age_logging as al
 
 
-def _init_log_check(log_out: LogCapture, expected1: str, expected2: str, expected3: str, expected4: str) -> None:
+def _init_log_check(log_out: LogCapture, *expects: str) -> None:
     root = "root"
     log_level = al.logging.getLevelName(al.logging.INFO)
-    log_out.check_present((root, log_level, expected1),
-                          (root, log_level, expected2),
-                          (root, log_level, expected3),
-                          (root, log_level, expected4))
+    for expected in expects:
+        log_out.check_present((root, log_level, expected))
 
 
 class TestMain(TestCase):
@@ -23,10 +21,11 @@ class TestMain(TestCase):
         self.runner = CliRunner()
 
     def test_help(self) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["--help"])
+        result = self.runner.invoke(main.simulate_guinea_pig, ['--help'])
         self.assertEqual(result.exit_code, 0)
         self.assertIn(" --version ", result.output)
         self.assertIn(" -n, --name ", result.output)
+        self.assertIn(" -h, --house ", result.output)
         self.assertIn(" -p, --photos ", result.output)
         self.assertIn(" -d, --duration ", result.output)
         self.assertIn(" -i, --interval ", result.output)
@@ -38,17 +37,17 @@ class TestMain(TestCase):
 
     # TODO: Requires "python3 setup.py sdist" to have been run to pass, review.
     def test_version(self) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["--version"])
+        result = self.runner.invoke(main.simulate_guinea_pig, ['--version'])
         self.assertEqual(result.exit_code, 0)
         self.assertIn("simulate-guinea-pig, version ", result.output)
 
     def test_invalid_name(self) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["--name", "AVeryLongForAGuineaPig"])
+        result = self.runner.invoke(main.simulate_guinea_pig, ['--name', 'AVeryLongForAGuineaPig'])
         self.assertEqual(result.exit_code, 2)
         self.assertIn("Error: Invalid value for '-n' / '--name': AVeryLongForAGuineaPig", result.output)
 
     def test_invalid_photos(self) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["--photos", "/path/to/nowhere"])
+        result = self.runner.invoke(main.simulate_guinea_pig, ['--photos', '/path/to/nowhere'])
         self.assertEqual(result.exit_code, 2)
         self.assertIn("Error: Invalid value for '-p' / '--photos': Directory '/path/to/nowhere' does not exist.", result.output)
 
@@ -60,7 +59,7 @@ class TestMain(TestCase):
                   create_tweeter: MagicMock,
                   create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
-            result = self.runner.invoke(main.simulate_guinea_pig, ["-n", "Bramble", "-d", "99"])
+            result = self.runner.invoke(main.simulate_guinea_pig, ['-n', 'Bramble', '-d', '99'])
         self.assertEqual(result.exit_code, 0)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Bramble'...",
@@ -79,7 +78,7 @@ class TestMain(TestCase):
                       create_tweeter: MagicMock,
                       create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
-            result = self.runner.invoke(main.simulate_guinea_pig, ["-d", "99"])
+            result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99'])
         self.assertEqual(result.exit_code, 0)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
@@ -98,7 +97,7 @@ class TestMain(TestCase):
                       create_tweeter: MagicMock,
                       create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
-            result = self.runner.invoke(main.simulate_guinea_pig, ["-i", "22", "-d", "99"])
+            result = self.runner.invoke(main.simulate_guinea_pig, ['-i', '22', '-d', '99'])
         self.assertEqual(result.exit_code, 0)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
@@ -117,7 +116,7 @@ class TestMain(TestCase):
                          create_tweeter: MagicMock,
                          create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
-            result = self.runner.invoke(main.simulate_guinea_pig, ["-a", "-d", "99"])
+            result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99', '-a'])
         self.assertEqual(result.exit_code, 0)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
@@ -133,6 +132,6 @@ class TestMain(TestCase):
     @patch("guineabot.__main__.TwitterServiceLive")
     def test_test(self,
                   twitter_service_live_mock: MagicMock) -> None:
-        result = self.runner.invoke(main.simulate_guinea_pig, ["-t"])
+        result = self.runner.invoke(main.simulate_guinea_pig, ['-t'])
         self.assertEqual(result.exit_code, 0)
         twitter_service_live_mock.assert_called_once()
