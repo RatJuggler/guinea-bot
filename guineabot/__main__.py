@@ -1,7 +1,6 @@
 from random import randint
 
 import click
-import os.path
 
 from click import Context, Option
 
@@ -27,22 +26,6 @@ def validate_name(ctx: Context, param: Option, value: str) -> str:
 
 
 # noinspection PyUnusedLocal
-def validate_photos_folder(ctx: Context, param: Option, value: str) -> str:
-    """
-    Validate that the photos folder supplied exists, empty string is valid if no value supplied.
-    :param ctx: see callbacks for click options
-    :param param: see callbacks for click options
-    :param value: see callbacks for click options
-    :return: Validated photos folder otherwise a click.BadParameter exception is raised
-    """
-    if value is None:
-        return ""
-    if not os.path.isdir(value):
-        raise click.BadParameter(value)
-    return value
-
-
-# noinspection PyUnusedLocal
 def test_twitter_tokens(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
@@ -57,7 +40,7 @@ def test_twitter_tokens(ctx, param, value):
 @click.version_option()
 @click.option('-n', '--name', 'name', type=click.STRING, callback=validate_name,
               help="The name of the guinea pig.", default="Holly", show_default=True)
-@click.option('-p', '--photos', 'photos', type=click.STRING, callback=validate_photos_folder,
+@click.option('-p', '--photos', 'photos', type=click.Path(exists=True, file_okay=False),
               help="Option path to photos which can be Tweeted.", show_default=True)
 @click.option('-d', '--duration', 'duration', type=click.IntRange(1, 2920),
               help="How many days the bot should run for (guinea pig lifespan), random if not set.", show_default=False)
