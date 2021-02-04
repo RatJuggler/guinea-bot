@@ -62,7 +62,7 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 age_logger = AgeLoggerAdapter(logging.getLogger(), {AGE: '<...>'})
 
 
-def configure_logging(loglevel: str) -> None:
+def configure_logging(loglevel: str = "INFO") -> None:
     """
     Configure basic logging to the console.
     :param loglevel: level name from the command line or default
