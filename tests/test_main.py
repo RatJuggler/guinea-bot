@@ -22,7 +22,7 @@ class TestMain(TestCase):
 
     def test_help(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--help'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         self.assertIn(" --version ", result.output)
         self.assertIn(" -n, --name ", result.output)
         self.assertIn(" -h, --house ", result.output)
@@ -38,22 +38,22 @@ class TestMain(TestCase):
     # TODO: Requires "python3 setup.py sdist" to have been run to pass, review.
     def test_version(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--version'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         self.assertIn("simulate-guinea-pig, version ", result.output)
 
     def test_invalid_name(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--name', 'AVeryLongForAGuineaPig'])
-        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(2, result.exit_code)
         self.assertIn("Error: Invalid value for '-n' / '--name': AVeryLongForAGuineaPig", result.output)
 
     def test_invalid_house(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--house', '/path/to/nowhere'])
-        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(2, result.exit_code)
         self.assertIn("Error: Invalid value for '-h' / '--house': Directory '/path/to/nowhere' does not exist.", result.output)
 
     def test_invalid_photos(self) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['--photos', '/path/to/nowhere'])
-        self.assertEqual(result.exit_code, 2)
+        self.assertEqual(2, result.exit_code)
         self.assertIn("Error: Invalid value for '-p' / '--photos': Directory '/path/to/nowhere' does not exist.", result.output)
 
     @patch("guineabot.__main__.create_guinea_pig")
@@ -65,7 +65,7 @@ class TestMain(TestCase):
                   create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-n', 'Bramble', '-d', '99'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Bramble'...",
                         "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
@@ -84,7 +84,7 @@ class TestMain(TestCase):
                       create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
                         "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
@@ -103,7 +103,7 @@ class TestMain(TestCase):
                       create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-i', '22', '-d', '99'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
                         "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
@@ -122,7 +122,7 @@ class TestMain(TestCase):
                          create_guinea_pig_mock: MagicMock) -> None:
         with LogCapture(level=al.logging.INFO) as log_out:
             result = self.runner.invoke(main.simulate_guinea_pig, ['-d', '99', '-a'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         _init_log_check(log_out,
                         "INITIALISE >> Booting guinea pig 'Holly'...",
                         "INITIALISE >> Bot duration (guinea pig lifespan): 99 days",
@@ -138,5 +138,5 @@ class TestMain(TestCase):
     def test_test(self,
                   twitter_service_live_mock: MagicMock) -> None:
         result = self.runner.invoke(main.simulate_guinea_pig, ['-t'])
-        self.assertEqual(result.exit_code, 0)
+        self.assertEqual(0, result.exit_code)
         twitter_service_live_mock.assert_called_once()
