@@ -13,4 +13,4 @@ COPY . .
 RUN pip3 install -U .
 
 # Run the guinea-bot.
-CMD ["guineabot"]
+CMD ["guineabot", "-h", "/src"]
