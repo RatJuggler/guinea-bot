@@ -28,7 +28,7 @@ time as the guinea pig ages, reaches its lifespan duration and dies :cry:. But, 
 to a file on each state change so that the same guinea pig can continue to run after a crash or power outage. The file is stored in
 the current users home directory, there is no option to change this yet.
 
-![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/master/gp-states.png)
+![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/main/gp-states.png)
 
 ## Installing
 
