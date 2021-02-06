@@ -3,6 +3,7 @@ import re
 
 from typing import List, Optional
 
+from environs import Env
 from tweepy import API, Cursor, OAuthHandler, TweepError, User
 
 from .age_logging import age_logger
@@ -107,20 +108,20 @@ class TwitterServiceLive(TwitterService):
     """
     Live version of the TwitterService.
     Invokes the Twitter API using the Tweepy module.
-    TODO: Improve new friend search and friendship testing.
-    TODO: Optimise for a larger numbers of friends.
     """
 
     def __init__(self) -> None:
-        self.__consumer_key = self.__getenv("TWITTER_CONSUMER_KEY")
-        self.__consumer_secret = self.__getenv("TWITTER_CONSUMER_SECRET")
-        self.__access_token = self.__getenv("TWITTER_ACCESS_TOKEN")
-        self.__access_token_secret = self.__getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        env = Env()
+        env.read_env("guinea-bot.env", recurse=False)
+        self.__consumer_key = self.__getenv(env, "TWITTER_CONSUMER_KEY")
+        self.__consumer_secret = self.__getenv(env, "TWITTER_CONSUMER_SECRET")
+        self.__access_token = self.__getenv(env, "TWITTER_ACCESS_TOKEN")
+        self.__access_token_secret = self.__getenv(env, "TWITTER_ACCESS_TOKEN_SECRET")
         self.__api = self.__get_api()
 
     @staticmethod
-    def __getenv(env_var_name: str) -> str:
-        env_var = os.getenv(env_var_name)
+    def __getenv(env: Env, env_var_name: str) -> str:
+        env_var = env(env_var_name, False)
         if not env_var:
             raise SystemExit("Unable to connect to the Twitter API, access token '{0}' not found!".format(env_var_name))
         return env_var
