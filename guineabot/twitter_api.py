@@ -1,4 +1,3 @@
-import os
 import re
 
 from typing import List, Optional
@@ -112,7 +111,7 @@ class TwitterServiceLive(TwitterService):
 
     def __init__(self) -> None:
         env = Env()
-        env.read_env("guinea-bot.env", recurse=False)
+        env.read_env("guinea-bot.env")
         self.__consumer_key = self.__getenv(env, "TWITTER_CONSUMER_KEY")
         self.__consumer_secret = self.__getenv(env, "TWITTER_CONSUMER_SECRET")
         self.__access_token = self.__getenv(env, "TWITTER_ACCESS_TOKEN")
