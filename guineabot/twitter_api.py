@@ -129,10 +129,7 @@ class TwitterServiceLive(TwitterService):
         auth = OAuthHandler(self.__consumer_key, self.__consumer_secret)
         auth.set_access_token(self.__access_token, self.__access_token_secret)
         api = API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-        try:
-            api.verify_credentials()
-        except TweepError as error:
-            age_logger.debug("Error creating Twitter API!", error)
+        if not api.verify_credentials():
             raise SystemExit("Unable to connect to the Twitter API, please check your access tokens.")
         return api
 
