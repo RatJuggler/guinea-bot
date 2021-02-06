@@ -8,5 +8,5 @@ services:
       dockerfile: ./docker/Dockerfile
       target: guinea-bot
     env_file:
-      - env.list
+      - guinea-bot.env
     restart: unless-stopped

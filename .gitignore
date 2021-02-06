@@ -17,7 +17,7 @@ dist/
 
 # Environments
 venv/
+*.env
 
 # Ignore test state file
 /TestGP.json
-**/env.list
