@@ -75,15 +75,21 @@ Options:
   --help                          Show this message and exit.
 ```
 You can use the `-q` option to run without using the Twitter API but to make it fully functional you will need to set up a Twitter 
-account and apply for access [here](https://developer.twitter.com/en/apply-for-access). You'll then need to make the following
-tokens available as environment variables to run it:
+account and apply for access [here](https://developer.twitter.com/en/apply-for-access). The access tokens created for the account
+then need to be made available as environment variables for the bot to find. The easiest way to do this is to create a 
+`guinea-bot.env` file from the supplied template, then edit the file and copy in your tokens. 
 
-    TWITTER_CONSUMER_KEY
-    TWITTER_CONSUMER_SECRET
-    TWITTER_ACCESS_TOKEN
-    TWITTER_ACCESS_TOKEN_SECRET
+    $ cp guinea-bot.env.template guinea-bot.env
 
-Test that your tokens are working by using:
+The edited file should then look something like this (not real tokens):
+
+    TWITTER_CONSUMER_KEY="123abc456cde789fgh012ijkl"
+    TWITTER_CONSUMER_SECRET="456cde789fgh012ijkl123abc456cde789fgh012ijkl123abc"
+    TWITTER_ACCESS_TOKEN="789fgh012ijkl123abc456cde789fgh012ijkl123abc456cde"
+    TWITTER_ACCESS_TOKEN_SECRET="c456cde789fgh012ijkl123abc456cde789fgh012ijkl"
+
+The bot will always start by looking for the file in the current directory and then searching upwards. Test that your tokens are 
+working by using:
 
     $ guineabot --test
 
@@ -96,7 +102,7 @@ following to create a systemd unit service.
 
     $ sudo cp guinea-bot.service /etc/systemd/system
 
-A configuration file also needs to be created to hold the Twitter access keys.
+A configuration file also needs to be created to hold the Twitter access tokens.
 
     $ sudo systemctl edit guinea-bot
 
@@ -140,9 +146,9 @@ Create the image with: `docker build -f docker/Dockerfile -t guinea-bot:local .`
 
 We need to be careful that any Twitter access tokens aren't included in the image in case it is pushed to a public repository (and
 it's also just best practice). There are a number of ways to inject the tokens into the image but probably the easiest is to create 
-an `env.list` file from the supplied template, set the tokens in it and then run the image with the `--env-file` option.
+a `guinea-bot.env` file as described above and then run the image with the `--env-file` option.
 
-    docker run guinea-bot:local -d --env-file ./docker/env.list
+    docker run guinea-bot:local -d --env-file guinea-bot.env
 
 Or just use the compose file to do everything:
 
