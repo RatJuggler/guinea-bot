@@ -19,14 +19,14 @@ The bot has the functionality to automatically search for other guinea pigs rela
 triggered with a 1 in 80 chance if nothing was tweeted, but having bots automatically follow other accounts on Twitter is a bit of 
 minefield as you never know what you are going to get so this functionality has been disabled. When enabled the bot searched for 
 accounts using the "#guineapig" tag and then decide if it wanted to follow them after checking for a number of "red flag" keywords 
-in the accounts' bio/description. It also attempts to curate the existing friends list by removing friends who no longer pass the 
-"friendship test", unless they are following back, in which case they are muted. 
+in the accounts' bio/description. It would also attempt to curate the existing friends list by removing friends who no longer pass 
+the "friendship test", unless they were following back, in which case they were muted. 
 
 The state changes that drive the guinea pig prioritise sleeping and eating, but the internal attributes can drive it from any state 
 to any other state (see the code for the exact rules). Sleeping is used as the start state, and the end state can be reached at any 
 time as the guinea pig ages, reaches its lifespan duration and dies :cry:. But, the internal state, age/attributes, are persisted 
 to a file on each state change so that the same guinea pig can continue to run after a crash or power outage. The file is stored in
-the current users home directory, there is no option to change this yet.
+the current users home directory by default but that can be changed using the -h/--house option.
 
 ![Image of Guinea Pig States](https://raw.githubusercontent.com/RatJuggler/guinea-bot/main/gp-states.png)
 
@@ -76,7 +76,7 @@ Options:
 ```
 You can use the `-q` option to run without using the Twitter API but to make it fully functional you will need to set up a Twitter 
 account and apply for access [here](https://developer.twitter.com/en/apply-for-access). You'll then need to make the following
-tokens available to run it:
+tokens available as environment variables to run it:
 
     TWITTER_CONSUMER_KEY
     TWITTER_CONSUMER_SECRET
