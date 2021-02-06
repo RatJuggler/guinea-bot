@@ -55,6 +55,7 @@ class TestTwitterServiceQuiet(TestCase):
                   "INITIALISE >> Would have un-muted all muted friends!")
 
 
+@patch("guineabot.twitter_api.os.getenv")
 @patch("guineabot.twitter_api.OAuthHandler")
 @patch("guineabot.twitter_api.API")
 class TestTwitterServiceLive(TestCase):
@@ -64,7 +65,9 @@ class TestTwitterServiceLive(TestCase):
 
     def test_tweet(self,
                    tweepy_api_mock: MagicMock,
-                   tweepy_oauthhandler_mock: MagicMock) -> None:
+                   tweepy_oauthhandler_mock: MagicMock,
+                   os_getenv_mock: MagicMock) -> None:
+        os_getenv_mock.return_value = "MOCK ACCESS TOKEN"
         with LogCapture(level=logging.INFO) as log_out:
             TwitterServiceLive().tweet("test")
         log_check(log_out,
@@ -74,7 +77,9 @@ class TestTwitterServiceLive(TestCase):
 
     def test_tweet_with_photo(self,
                               tweepy_api_mock: MagicMock,
-                              tweepy_oauthhandler_mock: MagicMock) -> None:
+                              tweepy_oauthhandler_mock: MagicMock,
+                              os_getenv_mock: MagicMock) -> None:
+        os_getenv_mock.return_value = "MOCK ACCESS TOKEN"
         with LogCapture(level=logging.INFO) as log_out:
             TwitterServiceLive().tweet_with_photo("test", "photo")
         log_check(log_out,
@@ -86,7 +91,9 @@ class TestTwitterServiceLive(TestCase):
 
     def test_get_current_friends(self,
                                  tweepy_api_mock: MagicMock,
-                                 tweepy_oauthhandler_mock: MagicMock) -> None:
+                                 tweepy_oauthhandler_mock: MagicMock,
+                                 os_getenv_mock: MagicMock) -> None:
+        os_getenv_mock.return_value = "MOCK ACCESS TOKEN"
         TwitterServiceLive().get_current_friends()
         tweepy_oauthhandler_mock.return_value.set_access_token.assert_called_once()
         tweepy_api_mock.return_value.friends_ids.assert_called_once()

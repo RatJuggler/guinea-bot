@@ -112,11 +112,18 @@ class TwitterServiceLive(TwitterService):
     """
 
     def __init__(self) -> None:
-        self.__consumer_key = os.getenv("TWITTER_CONSUMER_KEY")
-        self.__consumer_secret = os.getenv("TWITTER_CONSUMER_SECRET")
-        self.__access_token = os.getenv("TWITTER_ACCESS_TOKEN")
-        self.__access_token_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+        self.__consumer_key = self.__getenv("TWITTER_CONSUMER_KEY")
+        self.__consumer_secret = self.__getenv("TWITTER_CONSUMER_SECRET")
+        self.__access_token = self.__getenv("TWITTER_ACCESS_TOKEN")
+        self.__access_token_secret = self.__getenv("TWITTER_ACCESS_TOKEN_SECRET")
         self.__api = self.__get_api()
+
+    @staticmethod
+    def __getenv(env_var_name: str) -> str:
+        env_var = os.getenv(env_var_name)
+        if not env_var:
+            raise SystemExit("Unable to connect to the Twitter API, access token '{0}' not found!".format(env_var_name))
+        return env_var
 
     def __get_api(self) -> API:
         auth = OAuthHandler(self.__consumer_key, self.__consumer_secret)
@@ -124,9 +131,9 @@ class TwitterServiceLive(TwitterService):
         api = API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
         try:
             api.verify_credentials()
-        except Exception as error:
-            age_logger.error("Error creating Twitter API!", error)
-            raise error
+        except TweepError as error:
+            age_logger.debug("Error creating Twitter API!", error)
+            raise SystemExit("Unable to connect to the Twitter API, please check your access tokens.")
         return api
 
     def tweet(self, message: str) -> None:

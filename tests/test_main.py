@@ -136,3 +136,9 @@ class TestMain(TestCase):
         result = self.runner.invoke(main.simulate_guinea_pig, ['-t'])
         self.assertEqual(0, result.exit_code)
         twitter_service_live_mock.assert_called_once()
+
+    def test_test_fail(self) -> None:
+        result = self.runner.invoke(main.simulate_guinea_pig, ['-t'])
+        self.assertEqual(1, result.exit_code)
+        self.assertEqual("Unable to connect to the Twitter API, access token 'TWITTER_CONSUMER_KEY' not found!",
+                         result.exception.code)
