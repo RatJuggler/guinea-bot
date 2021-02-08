@@ -2,4 +2,6 @@
 .github
 .idea
 .tox
+
 venv
+**/*.env
