@@ -1,11 +1,16 @@
 version: '3.8'
 
+x-args: &args
+  args:
+    BUILD_TAG: ${BUILD_TAG:-local}
+
 services:
   guinea-bot:
-    image: ${dockerId:-johnchase}/guinea-bot:${BUILD_TAG:-local}
+    image: ${DOCKER_REGISTRY}${DOCKER_ID}/guinea-bot:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: ./docker/Dockerfile
+      <<: *args
       target: guinea-bot
     env_file:
       - guinea-bot.env

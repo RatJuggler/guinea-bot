@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='guineabot',
-    version='0.2.1',
+    version='0.2.2',
     description='A guinea pig Twitter bot.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -13,6 +13,11 @@ setup(
     author_email='ratteal@gmail.com',
     python_requires='>=3.7',
     url='https://github.com/RatJuggler/guinea-bot',
+    project_urls={
+        "Documentation": "https://github.com/RatJuggler/guinea-bot",
+        "Code": "https://github.com/RatJuggler/guinea-bot",
+        "Issue tracker": "https://github.com/RatJuggler/guinea-bot/issues",
+    },
     packages=find_packages(exclude=['tests']),
     package_data={
         'guineabot': ['guinea_pig_sayings.json'],
