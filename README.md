@@ -153,3 +153,5 @@ a `guinea-bot.env` file as described above and then run the image with the `--en
 Or just use the compose file to do everything:
 
     docker-compose up -d
+
+Environment variables can be used to configure image tagging (see the file).
