@@ -6,7 +6,7 @@ x-args: &args
 
 services:
   guinea-bot:
-    image: ${DOCKER_REGISTRY}${DOCKER_ID}guinea-bot:${IMAGE_TAG:-latest}
+    image: ${REGISTRY}${REPOSITORY}guinea-bot:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: ./docker/Dockerfile
