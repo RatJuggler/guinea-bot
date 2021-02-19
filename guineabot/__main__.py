@@ -30,7 +30,11 @@ def validate_name(ctx: Context, param: Option, value: str) -> str:
 def test_twitter_tokens(ctx, param, value):
     if not value or ctx.resilient_parsing:
         return
-    TwitterServiceLive()
+    try:
+        TwitterServiceLive()
+    except Exception:
+        click.echo('Unable to verify Twitter credentials!')
+        ctx.exit(1)
     click.echo('Twitter credentials verified.')
     ctx.exit()
 
