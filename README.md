@@ -154,4 +154,5 @@ Or just use the compose file to do everything:
 
     docker-compose up -d
 
-Environment variables can be used to configure image tagging (see the file).
+Environment variables can be used to configure image tagging (see the file), and a simple health check, using the `--test` option,
+is available if running under orchestration.
