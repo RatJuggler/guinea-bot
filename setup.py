@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='guineabot',
-    version='0.2.2',
+    version='0.3.0',
     description='A guinea pig Twitter bot.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -32,6 +32,7 @@ setup(
         'click ==7.1.2',
         'environs ==9.3.0',
         'tweepy ==3.10.0',
+        'prometheus_client ==0.9.0'
     ],
     test_suite='tests',
     tests_require=[

@@ -28,6 +28,8 @@ class TestMain(TestCase):
         self.assertIn(" -i, --interval ", result.output)
         self.assertIn(" -a, --accelerated ", result.output)
         self.assertIn(" -l, --log-level ", result.output)
+        self.assertIn(" -m, --metrics ", result.output)
+        self.assertIn(" -o, --port ", result.output)
         self.assertIn(" -q, --quiet ", result.output)
         self.assertIn(" -t, --test ", result.output)
         self.assertIn(" --help ", result.output)

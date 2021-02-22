@@ -13,7 +13,7 @@ class TestGuineaPig(TestCase):
         self.__save_file = build_save_filename(os.environ.get('HOME', ''), self.__name)
 
     def build_guinea_pig(self, lifespan: int = 9) -> GuineaPig:
-        return GuineaPig(self.__name, self.__save_file, lifespan, 0, "SLEEPING", 20, 10, 10, Mock())
+        return GuineaPig(self.__name, self.__save_file, lifespan, 0, "SLEEPING", 20, 10, 10, Mock(), None)
 
     def check_state(self, gp: GuineaPig, lifespan: int, age: int, state: str, tired: int, hunger: int, thirst: int) -> None:
         self.assertEqual("GuineaPig:(Name: {0}, Save File: {1}, Lifespan: {2} days, Current Age: {3} mins, State: {4}, "

@@ -3,17 +3,18 @@ from random import randint
 
 import click
 
-from click import Context, Option
+from prometheus_client import start_http_server
 
 from .age_logging import configure_logging, age_logger
 from .guineapig import create_guinea_pig
-from .guineapig_states import build_guinea_pig_machine
+from .guineapig_states import build_guinea_pig_machine, GUINEAPIG_STATES
+from .metrics import Metrics
 from .tweeter import create_tweeter
 from .twitter_api import TwitterServiceLive
 
 
 # noinspection PyUnusedLocal
-def validate_name(ctx: Context, param: Option, value: str) -> str:
+def validate_name(ctx: click.Context, param: click.Option, value: str) -> str:
     """
     Validate that the name is a reasonable length.
     :param ctx: see callbacks for click options
@@ -27,7 +28,7 @@ def validate_name(ctx: Context, param: Option, value: str) -> str:
 
 
 # noinspection PyUnusedLocal
-def test_twitter_tokens(ctx, param, value):
+def test_twitter_tokens(ctx: click.Context, param: click.Option, value: bool):
     if not value or ctx.resilient_parsing:
         return
     try:
@@ -59,12 +60,16 @@ def test_twitter_tokens(ctx, param, value):
               show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
+@click.option('-m', '--metrics', 'metrics', default=False, is_flag=True,
+              help="Publish metrics on the internal state of the bot.", show_default=True)
+@click.option('-o', '--port', 'port', type=click.IntRange(1, 65536), default=8000,
+              help="Port that any published metrics will be available on.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
 @click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
               help="Test the Twitter access tokens and exit.", show_default=True)
 def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, interval: int, accelerated: bool, level: str,
-                        quiet: bool) -> None:
+                        metrics: bool, port: int, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
     :param name: Name of the bot
@@ -74,6 +79,8 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     :param interval: The time between changes in state, in minutes
     :param accelerated: Don't run in pseudo real-time
     :param level: Set a logging level; DEBUG, INFO or WARNING
+    :param metrics: Publish metrics on the internal state
+    :param port: Port that any published metrics will be available on
     :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
     """
@@ -87,8 +94,12 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     tweeter = create_tweeter(photos, quiet)
-    guinea_pig = create_guinea_pig(name, house, duration, tweeter)
+    publisher = Metrics(GUINEAPIG_STATES) if metrics else None
+    guinea_pig = create_guinea_pig(name, house, duration, tweeter, publisher)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
+    if metrics:
+        age_logger.info("Starting metrics publisher on port {0}.".format(port))
+        start_http_server(port)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
     final_stats = gp_machine.stats()

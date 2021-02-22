@@ -1,9 +1,10 @@
 import json
 import os
 
-from typing import List
+from typing import List, Optional
 
 from .age_logging import age_logger
+from .metrics import Metrics
 from .tweeter import Tweeter
 
 
@@ -13,7 +14,7 @@ class GuineaPig:
     """
 
     def __init__(self, name: str, save_file: str, lifespan: int, current_age: int, start_state: str, tired: int, hunger: int,
-                 thirst: int, tweeter: Tweeter) -> None:
+                 thirst: int, tweeter: Tweeter, metrics: Optional[Metrics]) -> None:
         """
         Initialise the guinea pig.
         :param name: Of the guinea pig
@@ -25,6 +26,7 @@ class GuineaPig:
         :param hunger: Initial value of hunger attribute
         :param thirst: Initial value of thirst attribute
         :param tweeter: To generate tweets with
+        :param metrics: To publish metrics with if set
         """
         self.__name = name
         self.__save_file = save_file
@@ -36,6 +38,7 @@ class GuineaPig:
         self.__hunger = hunger
         self.__thirst = thirst
         self.__tweeter = tweeter
+        self.__metrics = metrics
 
     def is_tired(self) -> bool:
         """
@@ -80,7 +83,7 @@ class GuineaPig:
         return self.__current_age >= self.__max_age
 
     @staticmethod
-    def __outside_bounds(attribute) -> bool:
+    def __outside_bounds(attribute: int) -> bool:
         """
         Reasonable check for guinea pig attribute.
         :param attribute: To check
@@ -97,13 +100,13 @@ class GuineaPig:
             self.__outside_bounds(self.__hunger) or \
             self.__outside_bounds(self.__thirst)
 
-    def save_state(self) -> None:
+    def save_state(self, internal_state: dict) -> None:
         """
         Save the guinea pig state.
         :return: No meaningful return
         """
         with open(self.__save_file, 'w') as file:
-            json.dump(self.repr_dict(), file, indent=4)
+            json.dump(internal_state, file, indent=4)
 
     def update(self, new_state: str, changes: List[int], duration: int) -> None:
         """
@@ -125,7 +128,10 @@ class GuineaPig:
             self.__tweeter.tweet_state(self.__state)
         self.__current_age += duration
         age_logger.debug(self.__str__())
-        self.save_state()
+        internal_state = self.repr_dict()
+        self.save_state(internal_state)
+        if self.__metrics:
+            self.__metrics.publish(internal_state)
 
     def rejuvenate(self) -> None:
         """
@@ -165,13 +171,14 @@ def build_save_filename(house: str, name: str) -> str:
     return os.path.join(house, name + '.json')
 
 
-def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter) -> GuineaPig:
+def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter, metrics: Optional[Metrics]) -> GuineaPig:
     """
     Create a new guinea pig instance or load from a previous save.
     :param name: Of the guinea pig
     :param house: Where the guinea pig state file is kept
     :param lifespan: How long the guinea pig will live
     :param tweeter: To generate tweet with
+    :param metrics: To publish metrics with if set
     :return: A new instance of a guinea pig
     """
     save_file = build_save_filename(house, name)
@@ -187,12 +194,13 @@ def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter) ->
                            gp_data["tired"],
                            gp_data["hunger"],
                            gp_data["thirst"],
-                           tweeter)
+                           tweeter,
+                           metrics)
             if gp.has_died():
                 age_logger.info("This is an ex guinea pig, rejuvenating!")
                 gp.rejuvenate()
     except FileNotFoundError:
         age_logger.info("No previous instance of guinea pig found, creating a new instance at '{0}'!".format(save_file))
-        gp = GuineaPig(name, save_file, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter)
-        gp.save_state()
+        gp = GuineaPig(name, save_file, lifespan, 0, "SLEEPING", 20, 10, 10, tweeter, metrics)
+        gp.save_state(gp.repr_dict())
     return gp
