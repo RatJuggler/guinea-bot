@@ -4,6 +4,7 @@ from random import randint
 import click
 
 from click import Context, Option
+from prometheus_client import start_http_server
 
 from .age_logging import configure_logging, age_logger
 from .guineapig import create_guinea_pig
@@ -59,12 +60,14 @@ def test_twitter_tokens(ctx, param, value):
               show_default=True)
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
+@click.option('-m', '--metrics', 'metrics', default=False, is_flag=True,
+              help="Make metrics available on the internal state.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
 @click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
               help="Test the Twitter access tokens and exit.", show_default=True)
 def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, interval: int, accelerated: bool, level: str,
-                        quiet: bool) -> None:
+                        metrics: bool, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
     :param name: Name of the bot
@@ -74,6 +77,7 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     :param interval: The time between changes in state, in minutes
     :param accelerated: Don't run in pseudo real-time
     :param level: Set a logging level; DEBUG, INFO or WARNING
+    :param metrics: Publish metrics on the internal state
     :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
     """
@@ -89,6 +93,8 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     tweeter = create_tweeter(photos, quiet)
     guinea_pig = create_guinea_pig(name, house, duration, tweeter)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
+    if metrics:
+        start_http_server(8000)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
     final_stats = gp_machine.stats()
