@@ -68,6 +68,10 @@ Options:
   -l, --log-level [DEBUG|INFO|WARNING]
                                   Show additional logging information.
                                   [default: INFO]
+  -m, --metrics                   Publish metrics on the internal state of the
+                                  bot.  [default: False]
+  -o, --port INTEGER RANGE        Port that any published metrics will be
+                                  available on.  [default: 8000]
   -q, --quiet                     Run without invoking the Twitter API.
                                   [default: False]
   -t, --test                      Test the Twitter access tokens and exit.
@@ -83,15 +87,17 @@ then need to be made available as environment variables for the bot to find. The
 
 The edited file should then look something like this (not real tokens):
 
-    TWITTER_CONSUMER_KEY="123abc456cde789fgh012ijkl"
-    TWITTER_CONSUMER_SECRET="456cde789fgh012ijkl123abc456cde789fgh012ijkl123abc"
-    TWITTER_ACCESS_TOKEN="789fgh012ijkl123abc456cde789fgh012ijkl123abc456cde"
-    TWITTER_ACCESS_TOKEN_SECRET="c456cde789fgh012ijkl123abc456cde789fgh012ijkl"
+    TWITTER_CONSUMER_KEY=123abc456cde789fgh012ijkl
+    TWITTER_CONSUMER_SECRET=456cde789fgh012ijkl123abc456cde789fgh012ijkl123abc
+    TWITTER_ACCESS_TOKEN=789fgh012ijkl123abc456cde789fgh012ijkl123abc456cde
+    TWITTER_ACCESS_TOKEN_SECRET=c456cde789fgh012ijkl123abc456cde789fgh012ijkl
 
 The bot will always start by looking for the file in the current directory and then searching upwards. Test that your tokens are 
 working by using:
 
     $ guineabot --test
+
+Metrics are available in the standard [Prometheus](https://prometheus.io/) format.
 
 ## Installing as a service under systemd
 
@@ -148,11 +154,13 @@ We need to be careful that any Twitter access tokens aren't included in the imag
 it's also just best practice). There are a number of ways to inject the tokens into the image but probably the easiest is to create 
 a `guinea-bot.env` file as described above and then run the image with the `--env-file` option.
 
-    docker run guinea-bot:local -d --env-file guinea-bot.env
+    docker run guinea-bot:local -d --env-file guinea-bot.env -p 8000:8000
+
+The image is configured with a simple health check, using the `--test` option, for running under orchestration and metrics enabled 
+on the default port. You can check they are running by pointing your browser to `http://localhost:8000`.
 
 Or just use the compose file to do everything:
 
     docker-compose up -d
 
-Environment variables can be used to configure image tagging (see the file), and a simple health check, using the `--test` option,
-is available if running under orchestration.
+Environment variables can be used to configure image tagging (see the file),
