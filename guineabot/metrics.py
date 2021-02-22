@@ -1,4 +1,4 @@
-from typing import List, Mapping
+from typing import List
 
 from prometheus_client import Enum, Gauge, Info
 
@@ -17,7 +17,7 @@ class Metrics:
         self.hunger = Gauge('guineapig_hunger', 'How hungry the guinea pig is')
         self.thirst = Gauge('guineapig_thirst', 'How thirsty the guinea pig is')
 
-    def publish(self, internal_state: Mapping[str, str]) -> None:
+    def publish(self, internal_state: dict) -> None:
         """
         Update the metrics.
         """

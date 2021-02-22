@@ -3,7 +3,6 @@ from random import randint
 
 import click
 
-from click import Context, Option
 from prometheus_client import start_http_server
 
 from .age_logging import configure_logging, age_logger
@@ -15,7 +14,7 @@ from .twitter_api import TwitterServiceLive
 
 
 # noinspection PyUnusedLocal
-def validate_name(ctx: Context, param: Option, value: str) -> str:
+def validate_name(ctx: click.Context, param: click.Option, value: str) -> str:
     """
     Validate that the name is a reasonable length.
     :param ctx: see callbacks for click options
@@ -29,7 +28,7 @@ def validate_name(ctx: Context, param: Option, value: str) -> str:
 
 
 # noinspection PyUnusedLocal
-def test_twitter_tokens(ctx, param, value):
+def test_twitter_tokens(ctx: click.Context, param: click.Option, value: bool):
     if not value or ctx.resilient_parsing:
         return
     try:

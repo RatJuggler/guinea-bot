@@ -1,7 +1,7 @@
 import json
 import os
 
-from typing import List
+from typing import List, Optional
 
 from .age_logging import age_logger
 from .metrics import Metrics
@@ -14,7 +14,7 @@ class GuineaPig:
     """
 
     def __init__(self, name: str, save_file: str, lifespan: int, current_age: int, start_state: str, tired: int, hunger: int,
-                 thirst: int, tweeter: Tweeter, metrics: Metrics) -> None:
+                 thirst: int, tweeter: Tweeter, metrics: Optional[Metrics]) -> None:
         """
         Initialise the guinea pig.
         :param name: Of the guinea pig
@@ -26,7 +26,7 @@ class GuineaPig:
         :param hunger: Initial value of hunger attribute
         :param thirst: Initial value of thirst attribute
         :param tweeter: To generate tweets with
-        :param metrics: To publish metrics with
+        :param metrics: To publish metrics with if set
         """
         self.__name = name
         self.__save_file = save_file
@@ -83,7 +83,7 @@ class GuineaPig:
         return self.__current_age >= self.__max_age
 
     @staticmethod
-    def __outside_bounds(attribute) -> bool:
+    def __outside_bounds(attribute: int) -> bool:
         """
         Reasonable check for guinea pig attribute.
         :param attribute: To check
@@ -171,14 +171,14 @@ def build_save_filename(house: str, name: str) -> str:
     return os.path.join(house, name + '.json')
 
 
-def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter, metrics: Metrics) -> GuineaPig:
+def create_guinea_pig(name: str, house: str, lifespan: int, tweeter: Tweeter, metrics: Optional[Metrics]) -> GuineaPig:
     """
     Create a new guinea pig instance or load from a previous save.
     :param name: Of the guinea pig
     :param house: Where the guinea pig state file is kept
     :param lifespan: How long the guinea pig will live
     :param tweeter: To generate tweet with
-    :param metrics: To publish metrics with
+    :param metrics: To publish metrics with if set
     :return: A new instance of a guinea pig
     """
     save_file = build_save_filename(house, name)
