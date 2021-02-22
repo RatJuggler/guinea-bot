@@ -5,10 +5,12 @@ ARG BUILD_TAG=local
 LABEL build_tag=${BUILD_TAG}
 LABEL description="guinea-bot - Python Application"
 
-# Run the guinea-bot.
-CMD ["guineabot", "-h", "/src"]
+# Run the guinea-bot with metrics.
+CMD ["guineabot", "-h", "/src", "-m"]
 HEALTHCHECK --interval=1h --timeout=30s --start-period=60s --retries=3 \
     CMD ["guineabot", "-t"]
+
+EXPOSE 8000
 
 # Create a folder to install the application from.
 WORKDIR /src
