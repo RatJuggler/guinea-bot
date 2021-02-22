@@ -21,7 +21,7 @@ class Metrics:
         """
         Update the metrics.
         """
-        self.info.info({'name': internal_state['name']})
+        self.info.info({'name': internal_state['name'], 'lifespan': str(internal_state['lifespan'])})
         self.current_age.set(internal_state['current_age'])
         self.state.state(internal_state['state'])
         self.tired.set(internal_state['tired'])
