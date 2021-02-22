@@ -1,5 +1,6 @@
 import os
 from random import randint
+from typing import Final
 
 import click
 
@@ -11,6 +12,9 @@ from .guineapig_states import build_guinea_pig_machine, GUINEAPIG_STATES
 from .metrics import Metrics
 from .tweeter import create_tweeter
 from .twitter_api import TwitterServiceLive
+
+
+METRICS_PORT: Final = 8000
 
 
 # noinspection PyUnusedLocal
@@ -95,7 +99,8 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     guinea_pig = create_guinea_pig(name, house, duration, tweeter, publisher)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     if metrics:
-        start_http_server(8000)
+        age_logger.info("Starting metrics publisher on port {0}.".format(METRICS_PORT))
+        start_http_server(METRICS_PORT)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
     final_stats = gp_machine.stats()
