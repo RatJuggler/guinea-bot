@@ -8,7 +8,8 @@ from prometheus_client import start_http_server
 
 from .age_logging import configure_logging, age_logger
 from .guineapig import create_guinea_pig
-from .guineapig_states import build_guinea_pig_machine
+from .guineapig_states import build_guinea_pig_machine, GUINEAPIG_STATES
+from .metrics import Metrics
 from .tweeter import create_tweeter
 from .twitter_api import TwitterServiceLive
 
@@ -91,7 +92,8 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     age_logger.info("Bot duration (guinea pig lifespan): {0} days".format(duration))
     age_logger.info("State interval (changes in guinea pig activity): {0} minutes".format(interval))
     tweeter = create_tweeter(photos, quiet)
-    guinea_pig = create_guinea_pig(name, house, duration, tweeter)
+    publisher = Metrics(GUINEAPIG_STATES) if metrics else None
+    guinea_pig = create_guinea_pig(name, house, duration, tweeter, publisher)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     if metrics:
         start_http_server(8000)

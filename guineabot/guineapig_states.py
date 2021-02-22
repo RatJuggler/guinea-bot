@@ -13,6 +13,8 @@ THINKING = "THINKING"
 POOING = "POOING"
 # The end state.
 DEAD = "DEAD"
+# Convenience list of states.
+GUINEAPIG_STATES = [SLEEPING, EATING, DRINKING, WANDERING, THINKING, POOING, DEAD]
 
 
 class GuineaPigState(State):
