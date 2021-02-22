@@ -1,6 +1,5 @@
 import os
 from random import randint
-from typing import Final
 
 import click
 
@@ -12,9 +11,6 @@ from .guineapig_states import build_guinea_pig_machine, GUINEAPIG_STATES
 from .metrics import Metrics
 from .tweeter import create_tweeter
 from .twitter_api import TwitterServiceLive
-
-
-METRICS_PORT: Final = 8000
 
 
 # noinspection PyUnusedLocal
@@ -65,13 +61,15 @@ def test_twitter_tokens(ctx: click.Context, param: click.Option, value: bool):
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
 @click.option('-m', '--metrics', 'metrics', default=False, is_flag=True,
-              help="Make metrics available on the internal state.", show_default=True)
+              help="Make metrics on the internal state available.", show_default=True)
+@click.option('-o', '--port', 'port', type=click.IntRange(1, 65536), default=8000,
+              help="Port that any published metrics will be available on.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
               help="Run without invoking the Twitter API.", show_default=True)
 @click.option('-t', '--test', 'test', default=False, is_flag=True, is_eager=True, callback=test_twitter_tokens, expose_value=False,
               help="Test the Twitter access tokens and exit.", show_default=True)
 def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, interval: int, accelerated: bool, level: str,
-                        metrics: bool, quiet: bool) -> None:
+                        metrics: bool, port: int, quiet: bool) -> None:
     """
     Guinea Pig Twitter bot.
     :param name: Name of the bot
@@ -82,6 +80,7 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     :param accelerated: Don't run in pseudo real-time
     :param level: Set a logging level; DEBUG, INFO or WARNING
     :param metrics: Publish metrics on the internal state
+    :param port: Port that any published metrics will be available on
     :param quiet: Run without invoking the Twitter API
     :return: No meaningful return.
     """
@@ -99,8 +98,8 @@ def simulate_guinea_pig(name: str, house: str, photos: str, duration: int, inter
     guinea_pig = create_guinea_pig(name, house, duration, tweeter, publisher)
     gp_machine = build_guinea_pig_machine(interval, accelerated)
     if metrics:
-        age_logger.info("Starting metrics publisher on port {0}.".format(METRICS_PORT))
-        start_http_server(METRICS_PORT)
+        age_logger.info("Starting metrics publisher on port {0}.".format(port))
+        start_http_server(port)
     age_logger.info("It's alive!")
     gp_machine.run(guinea_pig)
     final_stats = gp_machine.stats()
