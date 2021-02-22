@@ -3,9 +3,13 @@ import re
 from typing import List, Optional
 
 from environs import Env
+from prometheus_client import Counter
 from tweepy import API, Cursor, OAuthHandler, TweepError, User
 
 from .age_logging import age_logger
+
+# Create a metric to track the number of tweets.
+TWEETS = Counter('tweet_counter', 'Number of tweets sent', ['type'])
 
 
 class TwitterService:
@@ -137,6 +141,7 @@ class TwitterServiceLive(TwitterService):
         try:
             self.__api.update_status(message)
             age_logger.info("Tweeted: {0}".format(message))
+            TWEETS.labels('plain').inc()
         except TweepError as error:
             if error.api_code == 187:
                 age_logger.warning("Duplicate tweet discarded!")
@@ -149,6 +154,7 @@ class TwitterServiceLive(TwitterService):
             media = self.__api.media_upload(photo_path)
             self.__api.update_status(message, media_ids=[media.media_id])
             age_logger.info("Tweeted: {0} {1}".format(message, photo_path))
+            TWEETS.labels('photo').inc()
         except TweepError as error:
             if error.api_code == 187:
                 age_logger.warning("Duplicate photo tweet discarded!")
