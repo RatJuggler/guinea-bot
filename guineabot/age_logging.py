@@ -1,9 +1,9 @@
 import logging
-from typing import Dict, Final, TypeVar
+from typing import Dict, TypeVar
 
 T = TypeVar('T')
 
-AGE: Final = 'age'
+AGE = 'age'
 
 
 class AgeLoggerAdapter(logging.LoggerAdapter):

@@ -1,20 +1,20 @@
 from random import randint
-from typing import Final, List
+from typing import List
 
 from .guineapig import GuineaPig
 from .statemachine import StateMachine, State
 
 # Current guinea pig states.
-SLEEPING: Final = "SLEEPING"
-EATING: Final = "EATING"
-DRINKING: Final = "DRINKING"
-WANDERING: Final = "WANDERING"
-THINKING: Final = "THINKING"
-POOING: Final = "POOING"
+SLEEPING = "SLEEPING"
+EATING = "EATING"
+DRINKING = "DRINKING"
+WANDERING = "WANDERING"
+THINKING = "THINKING"
+POOING = "POOING"
 # The end state.
-DEAD: Final = "DEAD"
+DEAD = "DEAD"
 # Convenience list of states.
-GUINEAPIG_STATES: Final = [SLEEPING, EATING, DRINKING, WANDERING, THINKING, POOING, DEAD]
+GUINEAPIG_STATES = [SLEEPING, EATING, DRINKING, WANDERING, THINKING, POOING, DEAD]
 
 
 class GuineaPigState(State):
