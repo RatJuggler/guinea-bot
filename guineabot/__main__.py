@@ -61,7 +61,7 @@ def test_twitter_tokens(ctx: click.Context, param: click.Option, value: bool):
 @click.option('-l', '--log-level', 'level', type=click.Choice(["DEBUG", "INFO", "WARNING"]),
               help="Show additional logging information.", default="INFO", show_default=True)
 @click.option('-m', '--metrics', 'metrics', default=False, is_flag=True,
-              help="Make metrics on the internal state available.", show_default=True)
+              help="Publish metrics on the internal state of the bot.", show_default=True)
 @click.option('-o', '--port', 'port', type=click.IntRange(1, 65536), default=8000,
               help="Port that any published metrics will be available on.", show_default=True)
 @click.option('-q', '--quiet', 'quiet', default=False, is_flag=True,
