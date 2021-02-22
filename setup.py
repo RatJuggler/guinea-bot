@@ -32,6 +32,7 @@ setup(
         'click ==7.1.2',
         'environs ==9.3.0',
         'tweepy ==3.10.0',
+        'prometheus_client ==0.9.0'
     ],
     test_suite='tests',
     tests_require=[
