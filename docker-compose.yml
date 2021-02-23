@@ -12,6 +12,9 @@ services:
       dockerfile: ./docker/Dockerfile
       <<: *args
       target: guinea-bot
+    # To expose metrics on.
+    ports:
+      - "8000:8000"
     env_file:
       - guinea-bot.env
     restart: unless-stopped
